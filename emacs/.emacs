@@ -72,6 +72,15 @@
 
 ;; 自动补全 [company]
 ;; https://www.emacswiki.org/emacs/CompanyMode
+;; install company-mode
+;; (require-package 'company)
+;; include company
+(require 'company)
+;; 将显示延时关掉
+(setq company-idle-delay 0)
+;; 开启补全
+(setq company-mode t)
+;; 添加全局补全
 (add-hook 'after-init-hook 'global-company-mode)
 (global-set-key "\t" 'company-complete-common)
 
