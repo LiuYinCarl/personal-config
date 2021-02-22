@@ -53,15 +53,35 @@
 (electric-pair-mode t)
 
 ;; 注释/反注释
-(defun vscode-comment (beg end &optional arg)
-  (interactive (if (use-region-p)
-		   (list (region-beginning) (region-end) nil)
-		 (list (line-beginning-position)
-		       (line-beginning-position 2))))
-  (comment-or-uncomment-region beg end arg)
-)
-(global-set-key [remap comment-or-uncomment-region] 'vscode-comment)  
-(global-set-key (kbd "C-x /") 'comment-or-uncomment-region)
+;; (defun vscode-comment (beg end &optional arg)
+;;   (interactive (if (use-region-p)
+;; 		   (list (region-beginning) (region-end) nil)
+;; 		 (list (line-beginning-position)
+;; 		       (line-beginning-position 2))))
+;;   (comment-or-uncomment-region beg end arg)
+;; )
+;; (global-set-key [remap comment-or-uncomment-region] 'vscode-comment)  
+;; (global-set-key (kbd "C-x /") 'comment-or-uncomment-region)
+
+
+;; 注释/反注释 2.0
+(use-package newcomment
+  :ensure nil
+  :bind ([remap comment-dwim] . #'comment-or-uncomment)
+  :config
+  (defun comment-or-uncomment ()
+    (interactive)
+    (if (region-active-p)
+	(comment-or-uncomment-region (region-beginning) (region-end))
+      (if (save-excursion
+	    (beginning-of-line)
+	    (looking-at "\\s-*$"))
+	  (call-interactively 'comment-dwim)
+	(comment-or-uncomment-region (line-beginning-position) (line-end-position)))))
+  :custom
+  (comment-auto-fill-only-comments t))
+
+(global-set-key (kbd "C-x /") 'comment-or-uncomment)
 
 
 ;; 函数折叠
@@ -78,6 +98,38 @@
 	   '((c-mode "{" "}" "/[*/]" nil nil)
 	     (c++-mode "{" "}" "/[*/]" nil nil)
 	     (rust-mode "{" "}" "/[*/]" nil nil)))))
+
+;; 显示被折叠的行数
+;; 这里额外启用了 :box t 属性使得提示更加明显
+(defconst hideshow-folded-face '((t (:inherit 'font-lock-comment-face :box t))))
+
+(defun hideshow-folded-overlay-fn (ov)
+  (when (eq 'code (overlay-get ov 'hs))
+    (let* ((nlines (count-lines (overlay-start ov) (overlay-end ov)))
+	   (info (format " ... #%d " nlines)))
+      (overlay-put ov 'display (propertize info 'face hideshow-folded-face)))))
+
+(setq hs-set-up-overlay 'hideshow-folded-overlay-fn)
+
+
+
+
+
+;; 防止超长行卡死 emacs
+(use-package so-long
+  :ensure nil
+  :config (global-so-long-mode 1))
+
+;; Emacs 内部打开的文件如果被外部修改，可以自动更新对应的 buffer
+(use-package autorevert
+  :ensure nil
+  :hook (after-init . global-auto-revert-mode))
+
+
+;; 显示 isearch 的匹配个数
+;; 需要 Emacs 27+
+;; (setq isearch-lazy-count t
+;;       lazy-count-prefix-format "%s/%s ")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -137,7 +189,7 @@
  '(custom-enabled-themes (quote (misterioso)))
  '(package-selected-packages
    (quote
-    (company tabbar session pod-mode muttrc-mode mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode))))
+    (so-long company tabbar session pod-mode muttrc-mode mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
