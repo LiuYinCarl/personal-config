@@ -36,6 +36,9 @@
 ;; Emacs 内置功能的使用
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; 关闭备份文件功能
+(setq make-backup-files nil)
+
 ;; 行号的显示格式
 (setq linum-format "%4d\u2502 ")
 (global-linum-mode t)
