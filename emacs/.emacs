@@ -112,9 +112,6 @@
 (setq hs-set-up-overlay 'hideshow-folded-overlay-fn)
 
 
-
-
-
 ;; 防止超长行卡死 emacs
 (use-package so-long
   :ensure nil
@@ -172,12 +169,23 @@
 
 
 ;; 有道翻译
-;; 安装：M-x package-install
-;;       youdao-dictionary
+;; 安装：M-x package-install RET youdao-dictionary RET
 (setq url-automatic-caching t)
 (global-set-key (kbd "C-c y") 'youdao-dictionary-search-at-point)
 (setq youdao-dictionary-search-history-file "~/.emacs.d/.youdao")
 
+
+;; riggrep [rg]
+;; 安装 M-x pacgage-install RET rg RET
+;; 用法 https://rgel.readthedocs.io/en/2.0.3/usage.html#searching
+;; C-c s r (rg)
+;; C-c s t (rg-literal)
+;; C-c s p (rg-project)
+;; M-n / M-p Move to next/prev line with a match
+;; n / p Move to next/prev line with a match, show that file in other buffer
+;; M-N / M-P rg-next-file / rg-prev-file
+(require 'rg)
+(rg-enable-default-bindings)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -197,7 +205,7 @@
  '(custom-enabled-themes (quote (misterioso)))
  '(package-selected-packages
    (quote
-    (youdao-dictionary so-long company tabbar session pod-mode muttrc-mode mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode))))
+    (rg youdao-dictionary so-long company tabbar session pod-mode muttrc-mode mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
