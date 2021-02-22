@@ -18,7 +18,18 @@
 (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 (add-to-list 'package-archives '("gnu" . "http://mirrors.cloud.tencent.com/elpa/gnu/"))
 (add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
-(package-initialize)
+;; (package-initialize)
+
+(setq package-check-signature nil) ;;个别时候会出现签名校验失败
+(require 'package) ;; 初始化包管理器
+(unless (bound-and-true-p package--initialized)
+  (package-initialize)) ;; 刷新软件源索引
+(unless package-archive-contents
+  (package-refresh-contents))
+
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+      (package-install 'use-package))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -53,6 +64,22 @@
 (global-set-key (kbd "C-x /") 'comment-or-uncomment-region)
 
 
+;; 函数折叠
+(use-package hideshow
+  :ensure nil
+  :diminish hs-minor-mode
+  :bind (:map prog-mode-map
+	      ("ESC -" . hs-toggle-hiding)
+	      ("ESC =" . hs-show-all))
+  :hook (prog-mode . hs-minor-mode)
+  :custom
+  (hs-special-modes-alist
+   (mapcar 'purecopy
+	   '((c-mode "{" "}" "/[*/]" nil nil)
+	     (c++-mode "{" "}" "/[*/]" nil nil)
+	     (rust-mode "{" "}" "/[*/]" nil nil)))))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -84,7 +111,7 @@
 (add-hook 'after-init-hook 'global-company-mode)
 (global-set-key "\t" 'company-complete-common)
 
-;; markdown [markdown-mode]
+
 (autoload 'markdown-mode "markdown-mode"
   "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
