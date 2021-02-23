@@ -1,1 +1,1 @@
-plug.vim 放置在 ~/.vim/plugged/ 目录下
+plug.vim 放置在 ~/.vim/autoload/ 目录下
