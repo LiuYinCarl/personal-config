@@ -55,6 +55,30 @@
 ;; 括号补全
 (electric-pair-mode t)
 
+;; eshell 清屏
+(add-hook
+ 'eshell-mode-hook
+ (lambda ()
+   (local-set-key (kbd "C-l")
+		  (lambda ()
+		    (interactive)
+		    (let ((eshell-buffer-maximum-lines 0))
+		      (eshell-truncate-buffer))))))
+
+;; 退出 eshell
+(add-hook
+ 'eshell-mode-hook
+ (lambda ()
+   (local-set-key (kbd "C-d")
+     (lambda (arg)
+       "Delete a character or quit eshell if there's nothing to delete."
+       (interactive "p")
+       (if (and (eolp) (looking-back eshell-prompt-regexp nil))
+	   (eshell-life-is-too-much)
+	          (delete-char arg))))))
+
+
+
 ;; 注释/反注释
 ;; (defun vscode-comment (beg end &optional arg)
 ;;   (interactive (if (use-region-p)
