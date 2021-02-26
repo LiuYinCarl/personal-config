@@ -8,6 +8,8 @@
 ;; 开启括号自动补全模式
 ;; M-x electric-pair-mode
 
+;; 文件编码转换
+;; C-x RET r 编码类型(gbk,utf-8 ...)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 包加载配置
@@ -54,6 +56,17 @@
 
 ;; 括号补全
 (electric-pair-mode t)
+
+
+
+;; 最下面的作为最优先选择的编码类型
+(prefer-coding-system 'cp950)
+(prefer-coding-system 'gb2312)
+(prefer-coding-system 'cp936)
+(prefer-coding-system 'gb18030)
+(prefer-coding-system 'utf-16)
+(prefer-coding-system 'utf-8-dos)
+(prefer-coding-system 'utf-8-unix)
 
 ;; eshell 清屏
 (add-hook
