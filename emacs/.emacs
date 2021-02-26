@@ -23,7 +23,6 @@
 ;; (package-initialize)
 
 (setq package-check-signature nil) ;;个别时候会出现签名校验失败
-(require 'package) ;; 初始化包管理器
 (unless (bound-and-true-p package--initialized)
   (package-initialize)) ;; 刷新软件源索引
 (unless package-archive-contents
@@ -40,25 +39,17 @@
 
 ;; 关闭备份文件功能
 (setq make-backup-files nil)
-
 ;; 行号的显示格式
 (setq linum-format "%4d\u2502 ")
 (global-linum-mode t)
-
 ;; 记录上次打开文件时 cursor 停留的位置
 (save-place-mode 1)
-
 ;; 高亮当前行
 ;; (global-hl-line-mode 1)
-
 ;; 展示匹配的括号
 (show-paren-mode 1)
-
 ;; 括号补全
 (electric-pair-mode t)
-
-
-
 ;; 最下面的作为最优先选择的编码类型
 (prefer-coding-system 'cp950)
 (prefer-coding-system 'gb2312)
@@ -91,20 +82,7 @@
 	          (delete-char arg))))))
 
 
-
 ;; 注释/反注释
-;; (defun vscode-comment (beg end &optional arg)
-;;   (interactive (if (use-region-p)
-;; 		   (list (region-beginning) (region-end) nil)
-;; 		 (list (line-beginning-position)
-;; 		       (line-beginning-position 2))))
-;;   (comment-or-uncomment-region beg end arg)
-;; )
-;; (global-set-key [remap comment-or-uncomment-region] 'vscode-comment)  
-;; (global-set-key (kbd "C-x /") 'comment-or-uncomment-region)
-
-
-;; 注释/反注释 2.0
 (use-package newcomment
   :ensure nil
   :bind ([remap comment-dwim] . #'comment-or-uncomment)
@@ -151,7 +129,6 @@
 
 (setq hs-set-up-overlay 'hideshow-folded-overlay-fn)
 
-
 ;; 防止超长行卡死 emacs
 (use-package so-long
   :ensure nil
@@ -161,29 +138,6 @@
 (use-package autorevert
   :ensure nil
   :hook (after-init . global-auto-revert-mode))
-
-
-;; 显示 isearch 的匹配个数
-;; 需要 Emacs 27+
-;; (setq isearch-lazy-count t
-;;       lazy-count-prefix-format "%s/%s ")
-
-
-;; F9 设置透明效果
-;; (global-set-key [(f9)] 'loop-alpha)
-;; (setq alpha-list '((100 100) (95 65) (85 55) (75 45) (65 35)))
-;; (defun loop-alpha ()
-;;   (interactive)
-;;   (let ((h (car alpha-list)))                ;; head value will set to
-;;     ((lambda (a ab)
-;;        (set-frame-parameter (selected-frame) 'alpha (list a ab))
-;;        (add-to-list 'default-frame-alist (cons 'alpha (list a ab)))
-;;        ) (car h) (car (cdr h)))
-;;     (setq alpha-list (cdr (append alpha-list (list h))))
-;;     )
-;;   )
-
-
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -198,7 +152,6 @@
   "Minor mode for pseudo-structurally editing Lisp code."
   t)
 
-
 ;; 资源管理器 [NeoTree]
 ;; 快捷键 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
 (require 'neotree)
@@ -211,12 +164,8 @@
 (require 'parenface)
 (set-face-foreground 'paren-face "DimGray")
 
-
 ;; 自动补全 [company]
 ;; https://www.emacswiki.org/emacs/CompanyMode
-;; install company-mode
-;; (require-package 'company)
-;; include company
 (require 'company)
 ;; 将显示延时关掉
 (setq company-idle-delay 0)
@@ -226,23 +175,19 @@
 (add-hook 'after-init-hook 'global-company-mode)
 (global-set-key (kbd "C-x p") 'company-complete-common)
 
-
+;; markdowm 支持 [markdowm-mode]
 (autoload 'markdown-mode "markdown-mode"
   "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
-
-;; 有道翻译
-;; 安装：M-x package-install RET youdao-dictionary RET
+;; 有道翻译 [youdao-dictionary]
 (setq url-automatic-caching t)
 (global-set-key (kbd "C-c y") 'youdao-dictionary-search-at-point)
 (setq youdao-dictionary-search-history-file "~/.emacs.d/.youdao")
 
-
 ;; riggrep [rg]
-;; 安装 M-x pacgage-install RET rg RET
 ;; 用法 https://rgel.readthedocs.io/en/2.0.3/usage.html#searching
 ;; C-c s r (rg)
 ;; C-c s t (rg-literal)
