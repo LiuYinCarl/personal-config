@@ -198,6 +198,15 @@
   "Minor mode for pseudo-structurally editing Lisp code."
   t)
 
+
+;; 资源管理器 [NeoTree]
+;; 快捷键 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
+(require 'neotree)
+(global-set-key [f5] 'neotree-dir)
+(global-set-key [f6] 'neotree-show)
+(global-set-key [f7] 'neotree-hide)
+(global-set-key [f8] 'neotree-find)
+
 ;; 让括号变得不显眼 [parenface]
 (require 'parenface)
 (set-face-foreground 'paren-face "DimGray")
@@ -215,7 +224,7 @@
 (setq company-mode t)
 ;; 添加全局补全
 (add-hook 'after-init-hook 'global-company-mode)
-(global-set-key "\t" 'company-complete-common)
+(global-set-key (kbd "C-x p") 'company-complete-common)
 
 
 (autoload 'markdown-mode "markdown-mode"
@@ -262,7 +271,7 @@
  '(custom-enabled-themes (quote (misterioso)))
  '(package-selected-packages
    (quote
-    (rg youdao-dictionary so-long company tabbar session pod-mode muttrc-mode mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode))))
+    (neotree rg youdao-dictionary so-long company tabbar session pod-mode muttrc-mode mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
