@@ -11,6 +11,9 @@
 ;; 文件编码转换
 ;; C-x RET r 编码类型(gbk,utf-8 ...)
 
+;; 跳转到指定行
+;; M-g M-g
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 包加载配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -36,6 +39,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs 内置功能的使用
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; 默认 Tab 宽度
+(setq-default tab-width 4)
 
 ;; 关闭备份文件功能
 (setq make-backup-files nil)
@@ -203,9 +210,49 @@
 (color-theme-approximate-on)
 
 
+;; 将 shell 变量导入到 emacs [exec-path-from-shell]
+(require 'exec-path-from-shell)
+(setq exec-path-from-shell-variables '("PATH"))
+  (exec-path-from-shell-initialize)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 编程语言支持
+
+;;;;;; Golang
+
+;; 需要安装 Golang 工具
+;; go get -u golang.org/x/tools/cmd/goimports
+;; go get -u github.com/nsf/gocode
+;; go get github.com/rogpeppe/godef
+
+;; 需要将 GOPATH 添加到系统PATH中
+;; 如果使用的是 bash, 将下面添加到 ~/.bashrc
+;; export GOPATH="/home/xxxx/go"
+;; # add go commands to system path
+;; export PATH=$GOPATH/bin:$PATH
+
+;; 如果使用的是 fish, 将下面添加到 ~/.config/fish/config.fish
+;;  set -x PATH "/home/lzh/go/bin" $PATH
+
+(require 'go-mode)
+(add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
+;; Call Gofmt before saving
+(setq gofmt-command "goimports")
+(add-hook 'before-save-hook 'gofmt-before-save)
+
+;;autocomplete
+(set (make-local-variable 'company-backends) '(company-go))
+(company-mode)
+
+;; Godef jump key binding
+(local-set-key (kbd "M-s ,") 'godef-jump)
+ (local-set-key (kbd "M-s .") 'pop-tag-mark)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;XS
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq default-major-mode 'text-mode)
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
@@ -220,7 +267,7 @@
  '(custom-enabled-themes (quote (misterioso)))
  '(package-selected-packages
    (quote
-    (color-theme-approximate neotree rg youdao-dictionary so-long company tabbar session pod-mode muttrc-mode mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode))))
+    (exec-path-from-shell go-mode color-theme-approximate neotree rg youdao-dictionary so-long company tabbar session pod-mode muttrc-mode mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
