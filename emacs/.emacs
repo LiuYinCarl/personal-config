@@ -235,19 +235,19 @@
 ;; 如果使用的是 fish, 将下面添加到 ~/.config/fish/config.fish
 ;;  set -x PATH "/home/lzh/go/bin" $PATH
 
-(require 'go-mode)
-(add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
-;; Call Gofmt before saving
-(setq gofmt-command "goimports")
-(add-hook 'before-save-hook 'gofmt-before-save)
+;; (require 'go-mode)
+;; (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
+;; ;; Call Gofmt before saving
+;; (setq gofmt-command "goimports")
+;; (add-hook 'before-save-hook 'gofmt-before-save)
 
-;;autocomplete
-(set (make-local-variable 'company-backends) '(company-go))
-(company-mode)
+;; ;;autocomplete
+;; (set (make-local-variable 'company-backends) '(company-go))
+;; (company-mode)
 
-;; Godef jump key binding
-(local-set-key (kbd "M-s ,") 'godef-jump)
- (local-set-key (kbd "M-s .") 'pop-tag-mark)
+;; ;; Godef jump key binding
+;; (local-set-key (kbd "M-s ,") 'godef-jump)
+;;  (local-set-key (kbd "M-s .") 'pop-tag-mark)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
