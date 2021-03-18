@@ -25,6 +25,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 包加载配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 加快 Emacs 启动速度
+(setq use-package-always-defer t)
 
 (require 'package)
 ;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
