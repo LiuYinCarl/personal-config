@@ -1,3 +1,14 @@
+;; Use a hook so the message doesn't get clobbered by other messages.
+;; Emacs 启动时间
+(add-hook 'emacs-startup-hook
+	  (lambda ()
+	    (message "Emacs ready in %s with %d garbage collections."
+		     (format "%.2f seconds"
+			     (float-time
+			      (time-subtract after-init-time before-init-time)))
+		             gcs-done)))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 内置功能使用方法
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -11,9 +22,6 @@
 ;; 文件编码转换
 ;; C-x RET r 编码类型(gbk,utf-8 ...)
 
-;; 跳转到指定行
-;; M-g M-g
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 包加载配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -26,6 +34,7 @@
 ;; (package-initialize)
 
 (setq package-check-signature nil) ;;个别时候会出现签名校验失败
+(require 'package) ;; 初始化包管理器
 (unless (bound-and-true-p package--initialized)
   (package-initialize)) ;; 刷新软件源索引
 (unless package-archive-contents
@@ -40,23 +49,25 @@
 ;; Emacs 内置功能的使用
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-;; 默认 Tab 宽度
-(setq-default tab-width 4)
-
 ;; 关闭备份文件功能
 (setq make-backup-files nil)
+
 ;; 行号的显示格式
 (setq linum-format "%4d\u2502 ")
 (global-linum-mode t)
+
 ;; 记录上次打开文件时 cursor 停留的位置
 (save-place-mode 1)
+
 ;; 高亮当前行
 ;; (global-hl-line-mode 1)
+
 ;; 展示匹配的括号
 (show-paren-mode 1)
+
 ;; 括号补全
 (electric-pair-mode t)
+
 
 ;; 最下面的作为最优先选择的编码类型
 (prefer-coding-system 'cp950)
@@ -88,6 +99,19 @@
        (if (and (eolp) (looking-back eshell-prompt-regexp nil))
 	   (eshell-life-is-too-much)
 	          (delete-char arg))))))
+
+
+
+;; 注释/反注释
+;; (defun vscode-comment (beg end &optional arg)
+;;   (interactive (if (use-region-p)
+;; 		   (list (region-beginning) (region-end) nil)
+;; 		 (list (line-beginning-position)
+;; 		       (line-beginning-position 2))))
+;;   (comment-or-uncomment-region beg end arg)
+;; )
+;; (global-set-key [remap comment-or-uncomment-region] 'vscode-comment)  
+;; (global-set-key (kbd "C-x /") 'comment-or-uncomment-region)
 
 
 ;; 注释/反注释
@@ -137,6 +161,7 @@
 
 (setq hs-set-up-overlay 'hideshow-folded-overlay-fn)
 
+
 ;; 防止超长行卡死 emacs
 (use-package so-long
   :ensure nil
@@ -146,6 +171,12 @@
 (use-package autorevert
   :ensure nil
   :hook (after-init . global-auto-revert-mode))
+
+
+;; 显示 isearch 的匹配个数
+;; 需要 Emacs 27+
+;; (setq isearch-lazy-count t
+;;       lazy-count-prefix-format "%s/%s ")
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -201,7 +232,7 @@
 
 ;; 资源管理器 [NeoTree]
 ;; 快捷键 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
-(require 'neotree)
+(use-package neotree)
 (global-set-key [f5] 'neotree-dir)
 (global-set-key [f6] 'neotree-show)
 (global-set-key [f7] 'neotree-hide)
@@ -211,9 +242,13 @@
 (require 'parenface)
 (set-face-foreground 'paren-face "DimGray")
 
+
 ;; 自动补全 [company]
 ;; https://www.emacswiki.org/emacs/CompanyMode
-(require 'company)
+;; install company-mode
+;; (require-package 'company)
+;; include company
+(use-package company)
 ;; 将显示延时关掉
 (setq company-idle-delay 0)
 ;; 开启补全
@@ -222,19 +257,23 @@
 (add-hook 'after-init-hook 'global-company-mode)
 (global-set-key (kbd "C-x p") 'company-complete-common)
 
-;; markdowm 支持 [markdowm-mode]
+
 (autoload 'markdown-mode "markdown-mode"
   "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
-;; 有道翻译 [youdao-dictionary]
+
+;; 有道翻译
+;; 安装：M-x package-install RET youdao-dictionary RET
 (setq url-automatic-caching t)
 (global-set-key (kbd "C-c y") 'youdao-dictionary-search-at-point)
 (setq youdao-dictionary-search-history-file "~/.emacs.d/.youdao")
 
+
 ;; riggrep [rg]
+;; 安装 M-x pacgage-install RET rg RET
 ;; 用法 https://rgel.readthedocs.io/en/2.0.3/usage.html#searching
 ;; C-c s r (rg)
 ;; C-c s t (rg-literal)
@@ -242,57 +281,13 @@
 ;; M-n / M-p Move to next/prev line with a match
 ;; n / p Move to next/prev line with a match, show that file in other buffer
 ;; M-N / M-P rg-next-file / rg-prev-file
-(require 'rg)
+(use-package rg)
 (rg-enable-default-bindings)
-
-;; 修复 256 色不可用的终端下颜色显示异常 [color-theme-approximate]
-(require 'color-theme-approximate)
-(color-theme-approximate-on)
-
-
-;; 将 shell 变量导入到 emacs [exec-path-from-shell]
-(require 'exec-path-from-shell)
-(setq exec-path-from-shell-variables '("PATH"))
-  (exec-path-from-shell-initialize)
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 编程语言支持
-
-;;;;;; Golang
-
-;; 需要安装 Golang 工具
-;; go get -u golang.org/x/tools/cmd/goimports
-;; go get -u github.com/nsf/gocode
-;; go get github.com/rogpeppe/godef
-
-;; 需要将 GOPATH 添加到系统PATH中
-;; 如果使用的是 bash, 将下面添加到 ~/.bashrc
-;; export GOPATH="/home/xxxx/go"
-;; # add go commands to system path
-;; export PATH=$GOPATH/bin:$PATH
-
-;; 如果使用的是 fish, 将下面添加到 ~/.config/fish/config.fish
-;;  set -x PATH "/home/lzh/go/bin" $PATH
-
-;; (require 'go-mode)
-;; (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
-;; ;; Call Gofmt before saving
-;; (setq gofmt-command "goimports")
-;; (add-hook 'before-save-hook 'gofmt-before-save)
-
-;; ;;autocomplete
-;; (set (make-local-variable 'company-backends) '(company-go))
-;; (company-mode)
-
-;; ;; Godef jump key binding
-;; (local-set-key (kbd "M-s ,") 'godef-jump)
-;;  (local-set-key (kbd "M-s .") 'pop-tag-mark)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;XS
 
 (setq default-major-mode 'text-mode)
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
@@ -307,7 +302,7 @@
  '(custom-enabled-themes (quote (misterioso)))
  '(package-selected-packages
    (quote
-    (exec-path-from-shell go-mode color-theme-approximate neotree rg youdao-dictionary so-long company tabbar session pod-mode muttrc-mode mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode))))
+    (ggtags neotree rg youdao-dictionary so-long company tabbar session pod-mode muttrc-mode mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
