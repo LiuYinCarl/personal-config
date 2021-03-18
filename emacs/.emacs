@@ -58,7 +58,6 @@
 (electric-pair-mode t)
 
 
-
 ;; 最下面的作为最优先选择的编码类型
 (prefer-coding-system 'cp950)
 (prefer-coding-system 'gb2312)
@@ -199,6 +198,44 @@
   t)
 
 
+;; [etags]
+(defun create-tags (dir-name)
+  "Create tags file."
+  (interactive "DDirectory: ")
+  (eshell-command
+   (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
+
+(defadvice find-tag (around refresh-etags activate)
+     "Rerun etags and reload tags if tag not found and redo find-tag.              
+   If buffer is modified, ask about save before running etags."
+     (let ((extension (file-name-extension (buffer-file-name))))
+       (condition-case err
+	   ad-do-it
+	 (error (and (buffer-modified-p)
+		     (not (ding))
+		     (y-or-n-p "Buffer is modified, save it? ")
+		     (save-buffer))
+		(er-refresh-etags extension)
+		ad-do-it))))
+
+
+(defun er-refresh-etags (&optional extension)
+  "Run etags on all peer files in current dir and reload them silently."
+  (interactive)
+  (shell-command (format "etags *.%s" (or extension "el")))
+  (let ((tags-revert-without-query t))  ; don't query, revert silently
+        (visit-tags-table default-directory nil)))
+
+
+;; 为当前目录的 .h .c 文件生成 tags, find 参数含义 -o(or) -a(and) -not(not)
+;; find . -name "*.h" -o -name "*.c" | etags -
+
+;; etags 常用快捷键[Emacs version >= 25] https://www.emacswiki.org/emacs/EmacsTags
+;; 生成 etags 文件 https://www.emacswiki.org/emacs/BuildTags
+;; 在当前目录下寻找 etags 生成的 tags 文件
+;; (setq tags-file-name "./TAGS")
+
+
 ;; 资源管理器 [NeoTree]
 ;; 快捷键 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
 (require 'neotree)
@@ -271,7 +308,7 @@
  '(custom-enabled-themes (quote (misterioso)))
  '(package-selected-packages
    (quote
-    (neotree rg youdao-dictionary so-long company tabbar session pod-mode muttrc-mode mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode))))
+    (ggtags neotree rg youdao-dictionary so-long company tabbar session pod-mode muttrc-mode mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
