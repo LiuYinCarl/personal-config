@@ -12,6 +12,7 @@ export ALTERNATE_EDITOR=""
 在之后使用 em 命令即可打开 Emacs，shell 会检查有没有启动Emacs的daemon模式，
 没有启动的话会自动调用, 然后打开 Emacs 的 client 端， 大大加速了Emacs的启动速度。
 
+如果需要关闭 Emacs 后台进程，使用 `M-x save-buffers-kill-emacs` 命令
 
 ## elisp 资料
 

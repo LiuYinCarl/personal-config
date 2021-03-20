@@ -103,6 +103,10 @@
 	          (delete-char arg))))))
 
 
+;; 在菜单栏添加 imenu Index
+;; https://www.emacswiki.org/emacs/ImenuMode
+(add-hook 'c-mode-hook 'imenu-add-menubar-index)
+
 
 ;; 注释/反注释
 ;; (defun vscode-comment (beg end &optional arg)
