@@ -51,6 +51,9 @@
 ;; Emacs 内置功能的使用
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; 将yes/no 作为确认改成 y/n
+(fset 'yes-or-no-p 'y-or-n-p)
+
 ;; 关闭备份文件功能
 (setq make-backup-files nil)
 
@@ -189,6 +192,15 @@
 ;; 插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; [eglot]
+(require 'eglot)
+(add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-11"))
+(add-hook 'c-mode-hook 'eglot-ensure)
+(add-hook 'c++-mode-hook 'eglot-ensure)
+
+
+
+
 ;; 括号补全 [paredit]
 ;; 使用 M-x paredit-mode 开启
 (add-to-list 'load-path "~/.emacs.d/plugins")
@@ -308,7 +320,7 @@
  '(custom-enabled-themes (quote (misterioso)))
  '(package-selected-packages
    (quote
-    (ggtags neotree rg youdao-dictionary so-long company tabbar session pod-mode muttrc-mode mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode))))
+    (eglot ggtags neotree rg youdao-dictionary so-long company tabbar session pod-mode muttrc-mode mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
