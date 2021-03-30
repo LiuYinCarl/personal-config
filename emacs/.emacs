@@ -42,6 +42,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs 内置功能的使用
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun terminal-init-screen ()
+  "Terminal initialization function for screen."
+  ;; Use the xterm color initialization code.
+  (xterm-register-default-colors)
+     (tty-set-up-initial-frame-faces))
+
 ;; 将yes/no 作为确认改成 y/n
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -157,13 +163,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; [eglot]
 (require 'eglot)
-(add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd-11"))
+(add-to-list 'eglot-server-programs '((c-mode c++-mode) "clangd-11"))
 (add-hook 'c-mode-hook 'eglot-ensure)
-(add-hook 'c++-mode-hook 'eglot-ensure)
-
-;; [modern-cpp-font-lock]C++语法高亮
-(require 'modern-cpp-font-lock)
-(modern-c++-font-lock-global-mode t)
+;; (add-hook 'c++-mode-hook 'eglot-ensure)
 
 ;; [paredit]括号补全 使用 M-x paredit-mode 开启
 (add-to-list 'load-path "~/.emacs.d/plugins")
@@ -226,11 +228,7 @@
 (global-set-key (kbd "C-x p") 'company-complete-common)
 
 ;; [markdown-mode]
-(autoload 'markdown-mode "markdown-mode"
-  "Major mode for editing Markdown files" t)
-(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(use-package markdown-mode)
 
 ;; [youdao-dictionary]有道翻译
 (setq url-automatic-caching t)
@@ -248,23 +246,25 @@
 (use-package rg)
 (rg-enable-default-bindings)
 
+;; [atom-one-dark-theme]
+(require 'atom-one-dark-theme)
+(load-theme 'atom-one-dark t)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 针对文件类型设置模式
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
+;; (autoload 'c-mode "c" "c mode" t)
+;; (add-to-list 'auto-mode-alist '("\\.c\\'" . c+-mode))
+
+;; (autoload 'c++-mode "c++" "c++ mode" t)
+;; (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
+;; (add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-mode))
+;; (add-to-list 'auto-mode-alist '("\\.hpp\\'" . c++-mode))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;XS
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(custom-enabled-themes (quote (wombat)))
- '(package-selected-packages
-   (quote
-    (modern-cpp-font-lock color-theme eglot ggtags neotree rg youdao-dictionary so-long company tabbar session pod-mode muttrc-mode mutt-alias markdown-mode initsplit htmlize graphviz-dot-mode folding eproject diminish csv-mode browse-kill-ring boxquote bm bar-cursor apache-mode))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
