@@ -5,7 +5,7 @@
 		     (format "%.2f seconds"
 			     (float-time
 			      (time-subtract after-init-time before-init-time)))
-		             gcs-done)))
+		     gcs-done)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 内置功能使用方法
@@ -40,7 +40,7 @@
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
-      (package-install 'use-package))
+  (package-install 'use-package))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs 内置功能的使用
@@ -49,7 +49,7 @@
   "Terminal initialization function for screen."
   ;; Use the xterm color initialization code.
   (xterm-register-default-colors)
-     (tty-set-up-initial-frame-faces))
+  (tty-set-up-initial-frame-faces))
 
 ;; 将yes/no 作为确认改成 y/n
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -97,12 +97,12 @@
  'eshell-mode-hook
  (lambda ()
    (local-set-key (kbd "C-d")
-     (lambda (arg)
-       "Delete a character or quit eshell if there's nothing to delete."
-       (interactive "p")
-       (if (and (eolp) (looking-back eshell-prompt-regexp nil))
-	   (eshell-life-is-too-much)
-	          (delete-char arg))))))
+		  (lambda (arg)
+		    "Delete a character or quit eshell if there's nothing to delete."
+		    (interactive "p")
+		    (if (and (eolp) (looking-back eshell-prompt-regexp nil))
+			(eshell-life-is-too-much)
+		      (delete-char arg))))))
 
 ;; 一键切换 .h/.cpp 文件
 ;; https://blog.flowlore.com/passages/emacs-switch-cpp-h-file/
@@ -205,6 +205,13 @@
   :ensure nil
   :hook (after-init . global-auto-revert-mode))
 
+;; 向上/向下翻半页
+;; https://emacs.stackexchange.com/questions/27698/how-can-i-scroll-a-half-page-on-c-v-and-m-v
+(autoload 'View-scroll-half-page-forward "view")
+(autoload 'View-scroll-half-page-backward "view")
+(global-set-key (kbd "C-v") 'View-scroll-half-page-forward)
+(global-set-key (kbd "M-v") 'View-scroll-half-page-backward)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -229,24 +236,24 @@
    (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
 
 (defadvice find-tag (around refresh-etags activate)
-     "Rerun etags and reload tags if tag not found and redo find-tag.              
+  "Rerun etags and reload tags if tag not found and redo find-tag.              
    If buffer is modified, ask about save before running etags."
-     (let ((extension (file-name-extension (buffer-file-name))))
-       (condition-case err
-	   ad-do-it
-	 (error (and (buffer-modified-p)
-		     (not (ding))
-		     (y-or-n-p "Buffer is modified, save it? ")
-		     (save-buffer))
-		(er-refresh-etags extension)
-		ad-do-it))))
+  (let ((extension (file-name-extension (buffer-file-name))))
+    (condition-case err
+	ad-do-it
+      (error (and (buffer-modified-p)
+		  (not (ding))
+		  (y-or-n-p "Buffer is modified, save it? ")
+		  (save-buffer))
+	     (er-refresh-etags extension)
+	     ad-do-it))))
 
 (defun er-refresh-etags (&optional extension)
   "Run etags on all peer files in current dir and reload them silently."
   (interactive)
   (shell-command (format "etags *.%s" (or extension "el")))
   (let ((tags-revert-without-query t))  ; don't query, revert silently
-        (visit-tags-table default-directory nil)))
+    (visit-tags-table default-directory nil)))
 ;; 为当前目录的 .h .c 文件生成 tags, find 参数含义 -o(or) -a(and) -not(not)
 ;; find . -name "*.h" -o -name "*.c" | etags -
 ;; etags 常用快捷键[Emacs version >= 25] https://www.emacswiki.org/emacs/EmacsTags
