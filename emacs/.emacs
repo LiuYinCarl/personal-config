@@ -168,7 +168,8 @@
 (require 'eglot)
 (add-to-list 'eglot-server-programs '((c-mode c++-mode) "clangd-11"))
 (add-hook 'c-mode-hook 'eglot-ensure)
-;; (add-hook 'c++-mode-hook 'eglot-ensure)
+;; 不加下面的会跳转不到C++标准库文件
+(add-hook 'c++-mode-hook 'eglot-ensure)
 
 ;; [paredit]括号补全 使用 M-x paredit-mode 开启
 (add-to-list 'load-path "~/.emacs.d/plugins")
