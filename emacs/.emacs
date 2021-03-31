@@ -65,7 +65,7 @@
 (save-place-mode 1)
 
 ;; 高亮当前行
-;; (global-hl-line-mode 1)
+(global-hl-line-mode 1)
 
 ;; 展示匹配的括号
 (show-paren-mode 1)
@@ -151,7 +151,7 @@
 
 ;; 在菜单栏添加 imenu Index
 ;; https://www.emacswiki.org/emacs/ImenuMode
-(add-hook 'c-mode-hook 'imenu-add-menubar-index)
+;; (add-hook 'c-mode-hook 'imenu-add-menubar-index)
 
 ;; 注释/反注释
 (use-package newcomment
