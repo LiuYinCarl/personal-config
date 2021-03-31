@@ -254,6 +254,17 @@
 (require 'atom-one-dark-theme)
 (load-theme 'atom-one-dark t)
 
+;; [highlight-thing] 高亮光标下的单词
+(require 'highlight-thing)
+(global-highlight-thing-mode t)
+(setq highlight-thing-what-thing 'symbol)
+(setq highlight-thing-delay-seconds 0.1)
+(setq highlight-thing-limit-to-defun t)
+(setq highlight-thing-case-sensitive-p t)
+;; https://github.com/fgeller/highlight-thing.el/issues/9
+(set-face-foreground 'highlight-thing "green")
+(set-face-background 'highlight-thing "black")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 针对文件类型设置模式
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -279,7 +290,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (youdao-dictionary use-package so-long rg project neotree markdown-mode ggtags eglot company atom-one-dark-theme))))
+    (highlight-thing youdao-dictionary use-package so-long rg project neotree markdown-mode ggtags eglot company atom-one-dark-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
