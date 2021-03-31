@@ -104,6 +104,25 @@
 	   (eshell-life-is-too-much)
 	          (delete-char arg))))))
 
+;; 一键切换 .h/.cpp 文件
+;; https://blog.flowlore.com/passages/emacs-switch-cpp-h-file/
+(defun switch-cpp ()
+  (global-set-key [f9] 'ffap)
+  (global-set-key [f9] 'ff-find-other-file)
+  )
+(add-hook 'c-mode-hook 'switch-cpp)
+(add-hook 'c++-mode-hook 'switch-cpp)
+;; 一键开关eldoc-mode
+(global-set-key [f4] 'eldoc-mode)
+
+;; 一键格式化
+(defun indent-whole ()
+  (interactive)
+  (indent-region (point-min) (point-max))
+  (message "format successfully"))
+;;绑定到F10键
+(global-set-key [f10] 'indent-whole)
+
 ;; 显示文件总行数
 ;; https://stackoverflow.com/questions/8190277/how-do-i-display-the-total-number-of-lines-in-the-emacs-modeline
 ;; (defvar my-mode-line-buffer-line-count nil)
@@ -185,9 +204,6 @@
 (use-package autorevert
   :ensure nil
   :hook (after-init . global-auto-revert-mode))
-
-;; 一键开关eldoc-mode
-(global-set-key [f4] 'eldoc-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 插件
