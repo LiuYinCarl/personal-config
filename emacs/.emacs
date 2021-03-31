@@ -316,6 +316,12 @@
 (set-face-foreground 'highlight-thing "green")
 (set-face-background 'highlight-thing "black")
 
+;; [snails] 模糊搜索
+(add-to-list 'load-path "~/.emacs.d/plugins/snails") ; add snails to your load-path
+(require 'snails)
+;; 不使用浮动窗口， wsl下用不了
+(setq snails-show-with-frame 1)
+(global-set-key (kbd "M-p") 'snails)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 针对文件类型设置模式
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
