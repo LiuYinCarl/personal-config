@@ -212,6 +212,10 @@
 (global-set-key (kbd "C-v") 'View-scroll-half-page-forward)
 (global-set-key (kbd "M-v") 'View-scroll-half-page-backward)
 
+;; 设置换行，避免切分单词
+(visual-line-mode t)
+(setq-default word-wrap t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -287,7 +291,7 @@
 
 ;; [youdao-dictionary]有道翻译
 (setq url-automatic-caching t)
-(global-set-key (kbd "C-c y") 'youdao-dictionary-search-at-point)
+(global-set-key (kbd "C-x y") 'youdao-dictionary-search-at-point)
 (setq youdao-dictionary-search-history-file "~/.emacs.d/.youdao")
 
 ;; riggrep [rg]
