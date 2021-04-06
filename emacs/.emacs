@@ -328,6 +328,15 @@
 ;; 不使用浮动窗口， wsl下用不了
 (setq snails-show-with-frame 1)
 (global-set-key (kbd "M-p") 'snails)
+
+;; [awesome-tab] https://github.com/manateelazycat/awesome-tab
+(use-package awesome-tab
+  :load-path "~/.emacs.d/plugins/awesome-tab"
+  :config
+    (awesome-tab-mode t))
+(global-set-key (kbd "M-j") 'awesome-tab-forward-tab)
+(global-set-key (kbd "M-k") 'awesome-tab-backward-tab)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 针对文件类型设置模式
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
