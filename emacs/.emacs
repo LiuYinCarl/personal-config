@@ -268,10 +268,10 @@
 
 ;; [NeoTree]资源管理器 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
 (use-package neotree)
-(global-set-key [f5] 'neotree-dir)
-(global-set-key [f6] 'neotree-show)
-(global-set-key [f7] 'neotree-hide)
-(global-set-key [f8] 'neotree-find)
+;; (global-set-key [f5] 'neotree-dir)
+(global-set-key (kbd "C-c =") 'neotree-show)
+(global-set-key (kbd "C-c -") 'neotree-hide)
+;; (global-set-key [f8] 'neotree-find)
 
 ;; [parenface]让括号变得不显眼
 (require 'parenface)
