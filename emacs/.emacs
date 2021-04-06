@@ -45,6 +45,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs 内置功能的使用
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun terminal-init-screen ()
   "Terminal initialization function for screen."
   ;; Use the xterm color initialization code.
@@ -291,7 +292,8 @@
 
 ;; [youdao-dictionary]有道翻译
 (setq url-automatic-caching t)
-(global-set-key (kbd "C-x y") 'youdao-dictionary-search-at-point)
+(global-set-key (kbd "C-x y") 'youdao-dictionary-search-at-point+)
+(global-set-key (kbd "C-c y") 'youdao-dictionary-search-from-input)
 (setq youdao-dictionary-search-history-file "~/.emacs.d/.youdao")
 
 ;; riggrep [rg]
