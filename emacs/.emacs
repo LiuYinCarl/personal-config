@@ -238,7 +238,7 @@
   "Create tags file."
   (interactive "DDirectory: ")
   (eshell-command
-   (format "find %s -type f -name \"*.[ch]\" | etags -" dir-name)))
+   (format "find %s -type f -name \"*.c\" -o -name \"*.h\" -o -name \"*.cpp\" -o -name \"*.hpp\" | etags -" dir-name)))
 
 (defadvice find-tag (around refresh-etags activate)
   "Rerun etags and reload tags if tag not found and redo find-tag.              
@@ -264,7 +264,12 @@
 ;; etags 常用快捷键[Emacs version >= 25] https://www.emacswiki.org/emacs/EmacsTags
 ;; 生成 etags 文件 https://www.emacswiki.org/emacs/BuildTags
 ;; 在当前目录下寻找 etags 生成的 tags 文件
-;; (setq tags-file-name "./TAGS")
+;; (setq tags-file-name "/home/lzh/github/imgui/TAGS")
+;; 如何使用 tags 文件
+;; 1 使用 create_tag 函数创建 tags 文件
+;; 2 使用 visit-tags-table 函数找到 tags 文件
+;; 3 使用 find-tag(其他函数找不到，不知道为啥) 找到 tag
+(global-set-key (kbd "M-/") 'find-tag)
 
 ;; [NeoTree]资源管理器 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
 (use-package neotree)
@@ -292,8 +297,8 @@
 
 ;; [youdao-dictionary]有道翻译
 (setq url-automatic-caching t)
-(global-set-key (kbd "C-x y") 'youdao-dictionary-search-at-point+)
-(global-set-key (kbd "C-c y") 'youdao-dictionary-search-from-input)
+(global-set-key (kbd "C-c SPC") 'youdao-dictionary-search-at-point+)
+(global-set-key (kbd "C-c C-SPC") 'youdao-dictionary-search-from-input)
 (setq youdao-dictionary-search-history-file "~/.emacs.d/.youdao")
 
 ;; riggrep [rg]
@@ -362,7 +367,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (highlight-thing youdao-dictionary use-package so-long rg project neotree markdown-mode ggtags eglot company atom-one-dark-theme))))
+    (etable highlight-thing youdao-dictionary use-package so-long rg project neotree markdown-mode ggtags eglot company atom-one-dark-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
