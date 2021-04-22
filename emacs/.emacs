@@ -226,6 +226,9 @@
 (add-hook 'c-mode-hook 'eglot-ensure)
 ;; 不加下面的会跳转不到C++标准库文件
 (add-hook 'c++-mode-hook 'eglot-ensure)
+;; 关闭eldoc
+(global-eldoc-mode -1)
+
 
 ;; [paredit]括号补全 使用 M-x paredit-mode 开启
 (add-to-list 'load-path "~/.emacs.d/plugins")
@@ -238,7 +241,7 @@
   "Create tags file."
   (interactive "DDirectory: ")
   (eshell-command
-   (format "find %s -type f -name \"*.c\" -o -name \"*.h\" -o -name \"*.cpp\" -o -name \"*.hpp\" | etags -" dir-name)))
+   (format "find %s -type f -name \"*.c\" -o -name \"*.h\" -o -name \"*.cpp\" -o -name \"*.hpp\" | etags -C -" dir-name)))
 
 (defadvice find-tag (around refresh-etags activate)
   "Rerun etags and reload tags if tag not found and redo find-tag.              
@@ -339,8 +342,8 @@
   :load-path "~/.emacs.d/plugins/awesome-tab"
   :config
     (awesome-tab-mode t))
-(global-set-key (kbd "M-j") 'awesome-tab-forward-tab)
-(global-set-key (kbd "M-k") 'awesome-tab-backward-tab)
+(global-set-key (kbd "M-k") 'awesome-tab-forward-tab)
+(global-set-key (kbd "M-j") 'awesome-tab-backward-tab)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 针对文件类型设置模式
