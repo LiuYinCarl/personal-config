@@ -46,6 +46,11 @@
 ;; Emacs 内置功能的使用
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; 默认以只读模式打开文件
+(defun read-only-setup ()
+  (read-only-mode))
+(add-hook 'find-file-hook #'read-only-setup)
+
 (defun terminal-init-screen ()
   "Terminal initialization function for screen."
   ;; Use the xterm color initialization code.
