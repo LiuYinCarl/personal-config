@@ -294,6 +294,8 @@
 ;; 添加全局补全
 (add-hook 'after-init-hook 'global-company-mode)
 (global-set-key (kbd "C-x p") 'company-complete-common)
+;; 补全的时候区分大小写
+(setq company-dabbrev-downcase nil)
 
 ;; [markdown-mode]
 (use-package markdown-mode)
