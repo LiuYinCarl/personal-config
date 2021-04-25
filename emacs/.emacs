@@ -47,9 +47,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; 默认以只读模式打开文件
-(defun read-only-setup ()
-  (read-only-mode))
-(add-hook 'find-file-hook #'read-only-setup)
+;;(defun read-only-setup ()
+;;  (read-only-mode))
+;;(add-hook 'find-file-hook #'read-only-setup)
 
 (defun terminal-init-screen ()
   "Terminal initialization function for screen."
@@ -225,6 +225,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; [keyfreq] 按键统计
+;; use keyfreq-show to see how many times you used a command
+(require 'keyfreq)
+(keyfreq-mode 1)
+(keyfreq-autosave-mode 1)
+
 ;; [eglot]
 (require 'eglot)
 (add-to-list 'eglot-server-programs '((c-mode c++-mode) "clangd-11"))
@@ -233,7 +239,6 @@
 (add-hook 'c++-mode-hook 'eglot-ensure)
 ;; 关闭eldoc
 (global-eldoc-mode -1)
-
 
 ;; [paredit]括号补全 使用 M-x paredit-mode 开启
 (add-to-list 'load-path "~/.emacs.d/plugins")
@@ -377,7 +382,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (etable highlight-thing youdao-dictionary use-package so-long rg project neotree markdown-mode ggtags eglot company atom-one-dark-theme))))
+    (keyfreq etable highlight-thing youdao-dictionary use-package so-long rg project neotree markdown-mode ggtags eglot company atom-one-dark-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
