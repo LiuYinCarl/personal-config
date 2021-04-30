@@ -313,6 +313,13 @@
 ;; 补全的时候区分大小写
 (setq company-dabbrev-downcase nil)
 
+;; [company-ghci]  https://github.com/horellana/company-ghci
+(require 'company-ghci)
+(push 'company-ghci company-backends)
+(add-hook 'haskell-mode-hook 'company-mode)
+;;; To get completions in the REPL
+(add-hook 'haskell-interactive-mode-hook 'company-mode)
+
 ;; [markdown-mode]
 (use-package markdown-mode)
 
@@ -422,9 +429,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(haskell-mode-hook (quote (interactive-haskell-mode company-mode)))
  '(package-selected-packages
    (quote
-    (indent-guide haskell-mode keyfreq etable highlight-thing youdao-dictionary use-package so-long rg project neotree markdown-mode ggtags eglot company atom-one-dark-theme))))
+    (company-ghci indent-guide haskell-mode keyfreq etable highlight-thing youdao-dictionary use-package so-long rg project neotree markdown-mode ggtags eglot company atom-one-dark-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
