@@ -359,7 +359,7 @@
 (use-package awesome-tab
   :load-path "~/.emacs.d/plugins/awesome-tab"
   :config
-    (awesome-tab-mode t))
+  (awesome-tab-mode t))
 (global-set-key (kbd "M-k") 'awesome-tab-forward-tab)
 (global-set-key (kbd "M-j") 'awesome-tab-backward-tab)
 
@@ -377,6 +377,42 @@
 ;; (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
 ;; (add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-mode))
 ;; (add-to-list 'auto-mode-alist '("\\.hpp\\'" . c++-mode))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 使用 M-x align 进行缩进
+
+;; Align-region 规则
+(add-hook 'align-load-hook (lambda ()
+			     (add-to-list 'align-rules-list
+					  '(haskell-types
+					    (regexp . "\\(\\s-+\\)\\(::\\|∷\\)\\s-+")
+					    (modes quote (haskell-mode literate-haskell-mode))))))
+(add-hook 'align-load-hook (lambda ()
+			     (add-to-list 'align-rules-list
+					  '(haskell-assignment
+					    (regexp . "\\(\\s-+\\)=\\s-+")
+					    (modes quote (haskell-mode literate-haskell-mode))))))
+(add-hook 'align-load-hook (lambda ()
+			     (add-to-list 'align-rules-list
+					  '(haskell-arrows
+					    (regexp . "\\(\\s-+\\)\\(->\\|→\\)\\s-+")
+					    (modes quote (haskell-mode literate-haskell-mode))))))
+(add-hook 'align-load-hook (lambda ()
+			     (add-to-list 'align-rules-list
+					  '(haskell-left-arrows
+					    (regexp . "\\(\\s-+\\)\\(<-\\|←\\)\\s-+")
+					    (modes quote (haskell-mode literate-haskell-mode))))))
+
+
+
+
+
+
+
+
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
