@@ -26,10 +26,10 @@
 ;; 包加载配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
-;; (add-to-list 'package-archives '("gnu" . "http://mirrors.cloud.tencent.com/elpa/gnu/"))
-;; (add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
+;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
+(add-to-list 'package-archives '("gnu" . "http://mirrors.cloud.tencent.com/elpa/gnu/"))
+(add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
 
 (setq package-check-signature nil) ;;个别时候会出现签名校验失败
 (require 'package) ;; 初始化包管理器
@@ -225,6 +225,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; [indent-guide]
+(require 'indent-guide)
+(indent-guide-global-mode)
+;; (setq indent-guide-delay 0.1)
+(setq indent-guide-recursive t)
+
 ;; [keyfreq] 按键统计
 ;; use keyfreq-show to see how many times you used a command
 (require 'keyfreq)
@@ -382,7 +388,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (keyfreq etable highlight-thing youdao-dictionary use-package so-long rg project neotree markdown-mode ggtags eglot company atom-one-dark-theme))))
+    (indent-guide haskell-mode keyfreq etable highlight-thing youdao-dictionary use-package so-long rg project neotree markdown-mode ggtags eglot company atom-one-dark-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
