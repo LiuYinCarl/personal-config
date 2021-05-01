@@ -45,12 +45,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs 内置功能的使用
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; 默认以只读模式打开文件
-;;(defun read-only-setup ()
-;;  (read-only-mode))
-;;(add-hook 'find-file-hook #'read-only-setup)
-
 (defun terminal-init-screen ()
   "Terminal initialization function for screen."
   ;; Use the xterm color initialization code.
@@ -128,32 +122,6 @@
   (message "format successfully"))
 ;;绑定到F10键
 (global-set-key [f10] 'indent-whole)
-
-;; 显示文件总行数
-;; https://stackoverflow.com/questions/8190277/how-do-i-display-the-total-number-of-lines-in-the-emacs-modeline
-;; (defvar my-mode-line-buffer-line-count nil)
-;; (make-variable-buffer-local 'my-mode-line-buffer-line-count)
-
-;; (setq-default mode-line-format
-;; 	      '("  " mode-line-modified
-;; 		(list 'line-number-mode "  ")
-;; 		(:eval (when line-number-mode
-;; 			 (let ((str "L%l"))
-;; 			   (when (and (not (buffer-modified-p)) my-mode-line-buffer-line-count)
-;; 			     (setq str (concat str "/" my-mode-line-buffer-line-count)))
-;; 			   str)))
-;; 		"  %p"
-;; 		(list 'column-number-mode "  C%c")
-;; 		"  " mode-line-buffer-identification
-;; 		"  " mode-line-modes))
-
-;; (defun my-mode-line-count-lines ()
-;;   (setq my-mode-line-buffer-line-count (int-to-string (count-lines (point-min) (point-max)))))
-
-;; (add-hook 'find-file-hook 'my-mode-line-count-lines)
-;; (add-hook 'after-save-hook 'my-mode-line-count-lines)
-;; (add-hook 'after-revert-hook 'my-mode-line-count-lines)
-;; (add-hook 'dired-after-readin-hook 'my-mode-line-count-lines)
 
 ;; 在菜单栏添加 imenu Index
 ;; https://www.emacswiki.org/emacs/ImenuMode
@@ -246,6 +214,22 @@
 ;; 关闭eldoc
 (global-eldoc-mode -1)
 
+;; [dante] haskell 代码补全
+(use-package dante
+  :ensure t
+  :after haskell-mode
+  :commands 'dante-mode
+  :config
+  (flycheck-add-next-checker 'haskell-dante '(info . haskell-hlint))
+  :init
+  (add-hook 'haskell-mode-hook 'flycheck-mode)
+  ;; OR for flymake support:
+  (add-hook 'haskell-mode-hook 'flymake-mode)
+  (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
+
+  (add-hook 'haskell-mode-hook 'dante-mode)
+  )
+
 ;; [paredit]括号补全 使用 M-x paredit-mode 开启
 (add-to-list 'load-path "~/.emacs.d/plugins")
 (autoload 'paredit-mode "paredit"
@@ -295,7 +279,6 @@
 ;; (global-set-key [f5] 'neotree-dir)
 (global-set-key (kbd "C-c =") 'neotree-show)
 (global-set-key (kbd "C-c -") 'neotree-hide)
-;; (global-set-key [f8] 'neotree-find)
 
 ;; [parenface]让括号变得不显眼
 (require 'parenface)
@@ -312,13 +295,6 @@
 (global-set-key (kbd "C-x p") 'company-complete-common)
 ;; 补全的时候区分大小写
 (setq company-dabbrev-downcase nil)
-
-;; [company-ghci]  https://github.com/horellana/company-ghci
-(require 'company-ghci)
-(push 'company-ghci company-backends)
-(add-hook 'haskell-mode-hook 'company-mode)
-;;; To get completions in the REPL
-(add-hook 'haskell-interactive-mode-hook 'company-mode)
 
 ;; [markdown-mode]
 (use-package markdown-mode)
@@ -377,15 +353,6 @@
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
-;; (autoload 'c-mode "c" "c mode" t)
-;; (add-to-list 'auto-mode-alist '("\\.c\\'" . c+-mode))
-
-;; (autoload 'c++-mode "c++" "c++ mode" t)
-;; (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
-;; (add-to-list 'auto-mode-alist '("\\.cpp\\'" . c++-mode))
-;; (add-to-list 'auto-mode-alist '("\\.hpp\\'" . c++-mode))
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 使用 M-x align 进行缩进
 
@@ -411,16 +378,6 @@
 					    (regexp . "\\(\\s-+\\)\\(<-\\|←\\)\\s-+")
 					    (modes quote (haskell-mode literate-haskell-mode))))))
 
-
-
-
-
-
-
-
-
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -432,7 +389,7 @@
  '(haskell-mode-hook (quote (interactive-haskell-mode company-mode)))
  '(package-selected-packages
    (quote
-    (company-ghci indent-guide haskell-mode keyfreq etable highlight-thing youdao-dictionary use-package so-long rg project neotree markdown-mode ggtags eglot company atom-one-dark-theme))))
+    (dante company-ghci indent-guide haskell-mode keyfreq etable highlight-thing youdao-dictionary use-package so-long rg project neotree markdown-mode ggtags eglot company atom-one-dark-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
