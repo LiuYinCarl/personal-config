@@ -11,7 +11,7 @@
 ;; 内置功能使用方法
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 更换主题配色
-;; M-x customize-themes
+;; M-x customize-themes 
 
 ;; 开启括号自动补全模式
 ;; M-x electric-pair-mode
@@ -103,6 +103,12 @@
 		    (if (and (eolp) (looking-back eshell-prompt-regexp nil))
 			(eshell-life-is-too-much)
 		      (delete-char arg))))))
+
+;; [expand-region] 快速选中区块 拓展顺序 字符 单词 句子 代码块 函数 全文件
+;; 按一次快捷键拓展一次
+(require 'expand-region)
+(global-set-key (kbd "C-c p")'er/expand-region)
+
 
 ;; 一键切换 .h/.cpp 文件
 ;; https://blog.flowlore.com/passages/emacs-switch-cpp-h-file/
@@ -355,7 +361,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 使用 M-x align 进行缩进
-
 ;; Align-region 规则
 (add-hook 'align-load-hook (lambda ()
 			     (add-to-list 'align-rules-list
