@@ -212,12 +212,6 @@
 ;; (setq indent-guide-delay 0.1)
 (setq indent-guide-recursive t)
 
-;; [keyfreq] 按键统计
-;; use keyfreq-show to see how many times you used a command
-(require 'keyfreq)
-(keyfreq-mode 1)
-(keyfreq-autosave-mode 1)
-
 ;; [eglot]
 (require 'eglot)
 (add-to-list 'eglot-server-programs '((c-mode c++-mode) "clangd-11"))
@@ -401,7 +395,7 @@
  '(haskell-mode-hook (quote (interactive-haskell-mode company-mode)))
  '(package-selected-packages
    (quote
-    (dante company-ghci indent-guide haskell-mode keyfreq etable highlight-thing youdao-dictionary use-package so-long rg project neotree markdown-mode ggtags eglot company atom-one-dark-theme))))
+    (dante company-ghci indent-guide haskell-mode etable highlight-thing youdao-dictionary use-package so-long rg project neotree markdown-mode ggtags eglot company atom-one-dark-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
