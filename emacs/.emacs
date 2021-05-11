@@ -3,6 +3,13 @@
 ;; Less configuration, higher stability
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 常用快捷键
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; M-h 选中当前段
+
+
+
 ;; 统计 Emacs 启动时间
 (add-hook 'emacs-startup-hook
 	  (lambda ()
@@ -206,6 +213,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; [move-dup] 快捷移动文本段和复制文本段
+(require 'move-dup)
+(global-set-key (kbd "C-c <up>") 'move-dup-move-lines-up)
+(global-set-key (kbd "C-c <down>") 'move-dup-move-lines-down)
+(global-set-key (kbd "C-c c <up>") 'move-dup-duplicate-up)
+(global-set-key (kbd "C-c c <down>") 'move-dup-duplicate-down)
+
 ;; [indent-guide]
 (require 'indent-guide)
 (indent-guide-global-mode)
@@ -395,7 +409,7 @@
  '(haskell-mode-hook (quote (interactive-haskell-mode company-mode)))
  '(package-selected-packages
    (quote
-    (dante company-ghci indent-guide haskell-mode etable highlight-thing youdao-dictionary use-package so-long rg project neotree markdown-mode ggtags eglot company atom-one-dark-theme))))
+    (move-dup dante company-ghci indent-guide haskell-mode etable highlight-thing youdao-dictionary use-package so-long rg project neotree markdown-mode ggtags eglot company atom-one-dark-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
