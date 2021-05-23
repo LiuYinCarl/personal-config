@@ -1,3 +1,10 @@
+## 部分插件的介绍和用法
+
+[column-marker](https://www.emacswiki.org/emacs/column-marker.el)
+
+
+
+
 ## 将 Emacs 设置为后台进程
 
 在使用的 shell 的配置文件中添加如下配置(bash 在  ~/.bashrc, fish 在 ~/.config/fish/config.fish)
