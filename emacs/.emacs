@@ -213,6 +213,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; [column-marker]
+(add-to-list 'load-path "~/.emacs.d/plugins")
+(require 'column-marker)
+;; (global-set-key (kbd "C-c m") 'column-marker-1)
+(global-set-key (kbd "C-c m") '(lambda () (interactive) (column-marker-1 80)))
+;; 不知道怎么关掉，所以设置一个很大的值，眼不见为净
+(global-set-key (kbd "C-c C-m") '(lambda () (interactive) (column-marker-1 200)))
+
 ;; [move-dup] 快捷移动文本段和复制文本段
 (require 'move-dup)
 (global-set-key (kbd "C-c <up>") 'move-dup-move-lines-up)
