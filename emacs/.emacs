@@ -1,16 +1,4 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 更少的配置 更高的稳定性
-;; Less configuration, higher stability
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 常用快捷键
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; M-h 选中当前段
-
-
-
-;; 统计 Emacs 启动时间
+;; 统计 Emacs 启动时间，放在文件开头
 (add-hook 'emacs-startup-hook
 	  (lambda ()
 	    (message "Emacs ready in %s with %d garbage collections."
@@ -18,9 +6,24 @@
 			     (float-time
 			      (time-subtract after-init-time before-init-time)))
 		     gcs-done)))
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 内置功能使用方法
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 更少的配置 更高的稳定性                                                    ;;
+;; Less configuration, higher stability                                       ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; use-package 资料
+;; https://rand01ph.github.io/blog/use-package/
+;; https://phenix3443.github.io/notebook/emacs/modes/use-package-manual.html#orga40eccf
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 常用快捷键
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; M-h 选中当前段
+
 ;; 更换主题配色
 ;; M-x customize-themes 
 
@@ -33,9 +36,11 @@
 ;; 全量更新 melpa 包
 ;; M-x package-list-packages RET Ux
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 包加载配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (require 'package)
 ;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 ;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
@@ -53,17 +58,16 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs 内置功能的使用
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; 状态栏显示列数
 (column-number-mode 1)
 
-(defun terminal-init-screen ()
-  "Terminal initialization function for screen."
-  ;; Use the xterm color initialization code.
-  (xterm-register-default-colors)
-  (tty-set-up-initial-frame-faces))
+;; shift + 方向键实现在窗口之间跳转
+(windmove-default-keybindings)
 
 ;; 将yes/no 作为确认改成 y/n
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -96,56 +100,91 @@
 (prefer-coding-system 'utf-8-dos)
 (prefer-coding-system 'utf-8-unix)
 
-;; eshell 清屏
-(add-hook
- 'eshell-mode-hook
- (lambda ()
-   (local-set-key (kbd "C-l")
-		  (lambda ()
-		    (interactive)
-		    (let ((eshell-buffer-maximum-lines 0))
-		      (eshell-truncate-buffer))))))
-
-;; 退出 eshell
-(add-hook
- 'eshell-mode-hook
- (lambda ()
-   (local-set-key (kbd "C-d")
-		  (lambda (arg)
-		    "Delete a character or quit eshell if there's nothing to delete."
-		    (interactive "p")
-		    (if (and (eolp) (looking-back eshell-prompt-regexp nil))
-			(eshell-life-is-too-much)
-		      (delete-char arg))))))
-
-;; [expand-region] 快速选中区块 拓展顺序 字符 单词 句子 代码块 函数 全文件
-;; 按一次快捷键拓展一次
-(require 'expand-region)
-(global-set-key (kbd "C-c p")'er/expand-region)
-
-
-;; 一键切换 .h/.cpp 文件
-;; https://blog.flowlore.com/passages/emacs-switch-cpp-h-file/
-(defun switch-cpp ()
-  (global-set-key [f9] 'ffap)
-  (global-set-key [f9] 'ff-find-other-file)
-  )
-(add-hook 'c-mode-hook 'switch-cpp)
-(add-hook 'c++-mode-hook 'switch-cpp)
-;; 一键开关eldoc-mode
-(global-set-key [f4] 'eldoc-mode)
-
-;; 一键格式化
-(defun indent-whole ()
-  (interactive)
-  (indent-region (point-min) (point-max))
-  (message "format successfully"))
-;;绑定到F10键
-(global-set-key [f10] 'indent-whole)
-
 ;; 在菜单栏添加 imenu Index
 ;; https://www.emacswiki.org/emacs/ImenuMode
 ;; (add-hook 'c-mode-hook 'imenu-add-menubar-index)
+
+;; 向上/向下翻半页
+;; https://emacs.stackexchange.com/questions/27698/how-can-i-scroll-a-half-page-on-c-v-and-m-v
+(autoload 'View-scroll-half-page-forward "view")
+(autoload 'View-scroll-half-page-backward "view")
+(global-set-key (kbd "C-v") 'View-scroll-half-page-forward)
+(global-set-key (kbd "M-v") 'View-scroll-half-page-backward)
+
+;; 设置换行，避免切分单词
+(visual-line-mode t)
+(setq-default word-wrap t)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 插件
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; 自动安装系统没有的 package
+(setq use-package-always-ensure t)
+
+;; 主动更新安装的包
+;; (use-package auto-package-update
+;;   :config
+;;   (setq auto-package-update-delete-old-version t)
+;;   (setq quto-package-update-hide-results t)
+;;   (auto-package-update-maybe))
+
+;; M-x windresize 启动，然后使用方向键调整窗口大小
+;; 用 i 调整步长，o键或者M-S-<up>/<left>跳到其它窗口，? 显示帮助，调整完了按RET退出即可
+(use-package windresize
+  :defer t)
+
+(use-package cmake-mode
+  :defer t)
+
+(use-package go-mode
+  :defer t)
+
+;; 防止超长行卡死 emacs
+(use-package so-long
+  :ensure nil
+  :config (global-so-long-mode 1))
+
+;; Emacs 内部打开的文件如果被外部修改，可以自动更新对应的 buffer
+(use-package autorevert
+  :ensure nil
+  :hook (after-init . global-auto-revert-mode))
+
+;; 快速选中区块 拓展顺序 字符 单词 句子 代码块 函数 全文件，按一次快捷键拓展一次
+(use-package expand-region
+  :bind ("M-o" . er/expand-region))
+
+;; https://zhuanlan.zhihu.com/p/26471685
+;; 在 symbol-overlay-mode 中的时候，可使用如下快捷键操作
+;; "i" -> symbol-overlay-put                ; 高亮或取消高亮当前symbol
+;; "n" -> symbol-overlay-jump-next          ; 跳转到下一个位置
+;; "p" -> symbol-overlay-jump-prev          ; 跳转到上一个位置
+;; "w" -> symbol-overlay-save-symbol        ; 复制当前symbol
+;; "t" -> symbol-overlay-toggle-in-scope    ; 切换高亮范围到作用域
+;; "e" -> symbol-overlay-echo-mark          ; 撤销上一次跳转
+;; "d" -> symbol-overlay-jump-to-definition ; 跳转到定义
+;; "s" -> symbol-overlay-isearch-literally  ; 切换为isearch并搜索当前symbol
+;; "q" -> symbol-overlay-query-replace      ; 查找替换当前symbol
+;; "r" -> symbol-overlay-rename             ; 对symbol直接重命名
+(use-package symbol-overlay
+  :bind (("M-i"  . symbol-overlay-put)
+	 ("M-k"  . symbol-overlay-switch-forward)
+	 ("M-j"  . symbol-overlay-switch-backward)
+	 ("<f7>" . symbol-overlay-mode)
+	 ("<f8>" . symbol-overlay-remove-all)
+	 :map symbol-overlay-mode 
+	 ("i" . symbol-overlay-put)
+	 ("n" . symbol-overlay-jump-next)
+	 ("p" . symbol-overlay-jump-prev)
+	 ("w" . symbol-overlay-save-symbol)
+	 ("t" . symbol-overlay-toggle-in-scope)
+	 ("e" . symbol-overlay-echo-mark)
+	 ("d" . symbol-overlay-jump-to-definition)
+	 ("s" . symbol-overlay-isearch-literally)
+	 ("q" . symbol-overlay-query-replace)
+	 ("r" . symbol-overlay-rename))
+  )
 
 ;; 注释/反注释
 (use-package newcomment
@@ -163,88 +202,29 @@
 	(comment-or-uncomment-region (line-beginning-position) (line-end-position)))))
   :custom
   (comment-auto-fill-only-comments t))
-(global-set-key (kbd "C-x /") 'comment-or-uncomment)
+(global-set-key (kbd "C-c /") 'comment-or-uncomment)
 
-;; 函数折叠
-(use-package hideshow
-  :ensure nil
-  :diminish hs-minor-mode
-  :bind (:map prog-mode-map
-	      ("ESC -" . hs-toggle-hiding)
-	      ("ESC =" . hs-show-all))
-  :hook (prog-mode . hs-minor-mode)
-  :custom
-  (hs-special-modes-alist
-   (mapcar 'purecopy
-	   '((c-mode "{" "}" "/[*/]" nil nil)
-	     (c++-mode "{" "}" "/[*/]" nil nil)
-	     (rust-mode "{" "}" "/[*/]" nil nil)))))
-;; 显示被折叠的行数 这里额外启用了 :box t 属性使得提示更加明显
-(defconst hideshow-folded-face '((t (:inherit 'font-lock-comment-face :box t))))
+;; 快捷移动文本段和复制文本段
+(use-package move-dup
+  :bind (("C-c <up>"     . move-dup-move-lines-up)
+	 ("C-c <down>"   . move-dup-move-lines-down)
+	 ("C-c c <up>"   . move-dup-duplicate-up)
+	 ("C-c c <down>" . move-dup-duplicate-down)))
 
-(defun hideshow-folded-overlay-fn (ov)
-  (when (eq 'code (overlay-get ov 'hs))
-    (let* ((nlines (count-lines (overlay-start ov) (overlay-end ov)))
-	   (info (format " ... #%d " nlines)))
-      (overlay-put ov 'display (propertize info 'face hideshow-folded-face)))))
-(setq hs-set-up-overlay 'hideshow-folded-overlay-fn)
+(use-package indent-guide
+  :config
+  (indent-guide-global-mode t)
+  (setq indent-guide-delay 0.1  ;; 展示对齐线的延迟时间
+        indent-guide-recursive t))
 
-;; 防止超长行卡死 emacs
-(use-package so-long
-  :ensure nil
-  :config (global-so-long-mode 1))
+(use-package eglot
+  :config
+  (add-to-list 'eglot-server-programs '((c-mode c++-mode) "clangd-11"))
+  (add-hook 'c-mode-hook 'eglot-ensure)
+  ;; 不加下面的会跳转不到C++标准库文件
+  (add-hook 'c++-mode-hook 'eglot-ensure))
 
-;; Emacs 内部打开的文件如果被外部修改，可以自动更新对应的 buffer
-(use-package autorevert
-  :ensure nil
-  :hook (after-init . global-auto-revert-mode))
-
-;; 向上/向下翻半页
-;; https://emacs.stackexchange.com/questions/27698/how-can-i-scroll-a-half-page-on-c-v-and-m-v
-(autoload 'View-scroll-half-page-forward "view")
-(autoload 'View-scroll-half-page-backward "view")
-(global-set-key (kbd "C-v") 'View-scroll-half-page-forward)
-(global-set-key (kbd "M-v") 'View-scroll-half-page-backward)
-
-;; 设置换行，避免切分单词
-(visual-line-mode t)
-(setq-default word-wrap t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 插件
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; [column-marker]
-(add-to-list 'load-path "~/.emacs.d/plugins")
-(require 'column-marker)
-;; (global-set-key (kbd "C-c m") 'column-marker-1)
-(global-set-key (kbd "C-c m") '(lambda () (interactive) (column-marker-1 80)))
-;; 不知道怎么关掉，所以设置一个很大的值，眼不见为净
-(global-set-key (kbd "C-c C-m") '(lambda () (interactive) (column-marker-1 200)))
-
-;; [move-dup] 快捷移动文本段和复制文本段
-(require 'move-dup)
-(global-set-key (kbd "C-c <up>") 'move-dup-move-lines-up)
-(global-set-key (kbd "C-c <down>") 'move-dup-move-lines-down)
-(global-set-key (kbd "C-c c <up>") 'move-dup-duplicate-up)
-(global-set-key (kbd "C-c c <down>") 'move-dup-duplicate-down)
-
-;; [indent-guide]
-(require 'indent-guide)
-(indent-guide-global-mode)
-;; (setq indent-guide-delay 0.1)
-(setq indent-guide-recursive t)
-
-;; [eglot]
-(require 'eglot)
-(add-to-list 'eglot-server-programs '((c-mode c++-mode) "clangd-11"))
-(add-hook 'c-mode-hook 'eglot-ensure)
-;; 不加下面的会跳转不到C++标准库文件
-(add-hook 'c++-mode-hook 'eglot-ensure)
-;; 关闭eldoc
-(global-eldoc-mode -1)
-
-;; [dante] haskell 代码补全
+;; haskell 代码补全
 (use-package dante
   :ensure t
   :after haskell-mode
@@ -256,15 +236,113 @@
   ;; OR for flymake support:
   (add-hook 'haskell-mode-hook 'flymake-mode)
   (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
-
   (add-hook 'haskell-mode-hook 'dante-mode)
   )
 
-;; [paredit]括号补全 使用 M-x paredit-mode 开启
-(add-to-list 'load-path "~/.emacs.d/plugins")
-(autoload 'paredit-mode "paredit"
-  "Minor mode for pseudo-structurally editing Lisp code."
-  t)
+;; 资源管理器 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
+(use-package neotree
+  :bind (("C-c =" . neotree-show)
+	 ("C-c -" . neotree-hide)
+	 ("C-c 0" . neotree-dir)))
+
+;; 自动补全 https://www.emacswiki.org/emacs/CompanyMode
+(use-package company
+  :demand
+  :bind (("C-c p" . company-complete-common))
+  :config
+  (setq company-idle-delay       0     ;; 延迟补全时间
+	company-mode             t
+	company-dabbrev-downcase nil)  ;; 补全区分大小写
+  (add-hook 'after-init-hook 'global-company-mode)
+  )
+
+(use-package markdown-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+  )
+
+(use-package youdao-dictionary
+  :bind (("C-c SPC" . youdao-dictionary-search-at-point+)
+	 ("C-c C-SPC" . youdao-dictionary-search-from-input))
+  :config
+  (setq url-automatic-caching t
+	youdao-dictionary-search-history-file "~/.emacs.d/.youdao")
+  )
+
+;; 用法 https://rgel.readthedocs.io/en/2.0.3/usage.html#searching
+;; C-c s r (rg)
+;; C-c s t (rg-literal)
+;; C-c s p (rg-project)
+;; M-n / M-p Move to next/prev line with a match
+;; n / p Move to next/prev line with a match, show that file in other buffer
+;; M-N / M-P rg-next-file / rg-prev-file
+(use-package rg
+  :demand
+  :config
+  (rg-enable-default-bindings))
+
+(use-package atom-one-dark-theme
+  :demand
+  :config
+  (load-theme 'atom-one-dark t))
+
+;; 结构化括号编辑器
+;; (use-package paredit
+;;   :load-path "~/.emacs.d/plugins/"
+;;   :config
+;;   (paredit-mode t))
+
+;; 让括号变得不显眼
+(use-package parenface
+  :load-path "~/.emacs.d/plugins"
+  :config
+  (set-face-foreground 'paren-face "DimGray"))
+
+;; 模糊搜索
+(use-package snails
+  :load-path "~/.emacs.d/plugins/snails/"
+  :bind ("M-p" . snails)
+  :config (setq snails-show-with-frame t))
+
+;; https://github.com/manateelazycat/awesome-tab
+(use-package awesome-tab
+  :demand
+  :load-path "~/.emacs.d/plugins/awesome-tab"
+  :bind (("M-k" . awesome-tab-forward-tab)
+	 ("M-j" . awesome-tab-backward-tab))
+  :config (awesome-tab-mode t))
+
+(defun hideshow-folded-overlay-fn (ov)
+  (when (eq 'code (overlay-get ov 'hs))
+    (let* ((nlines (count-lines (overlay-start ov) (overlay-end ov)))
+	   (info (format " ... #%d " nlines)))
+      (overlay-put ov 'display (propertize info 'face hideshow-folded-face)))))
+
+;; 显示被折叠的行数 这里额外启用了 :box t 属性使得提示更加明显
+(defconst hideshow-folded-face '((t (:inherit 'font-lock-comment-face :box t))))
+
+;; 函数折叠
+(use-package hideshow
+  :ensure nil
+  :diminish hs-minor-mode
+  :bind (:map prog-mode-map
+	      ("ESC -" . hs-toggle-hiding)
+	      ("ESC =" . hs-show-all))
+  :hook (prog-mode . hs-minor-mode)
+  :config (setq hs-set-up-overlay 'hideshow-folded-overlay-fn)
+  :custom
+  (hs-special-modes-alist
+   (mapcar 'purecopy
+	   '((c-mode "{" "}" "/[*/]" nil nil)
+	     (c++-mode "{" "}" "/[*/]" nil nil)
+	     (rust-mode "{" "}" "/[*/]" nil nil)))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 未使用 use-package 的插件以及部分函数
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; [etags]
 (defun create-tags (dir-name)
@@ -304,88 +382,53 @@
 ;; 3 使用 find-tag(其他函数找不到，不知道为啥) 找到 tag
 (global-set-key (kbd "M-/") 'find-tag)
 
-;; [NeoTree]资源管理器 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
-(use-package neotree)
-;; (global-set-key [f5] 'neotree-dir)
-(global-set-key (kbd "C-c =") 'neotree-show)
-(global-set-key (kbd "C-c -") 'neotree-hide)
+;; eshell 清屏
+(add-hook
+ 'eshell-mode-hook
+ (lambda ()
+   (local-set-key (kbd "C-l")
+		  (lambda ()
+		    (interactive)
+		    (let ((eshell-buffer-maximum-lines 0))
+		      (eshell-truncate-buffer))))))
 
-;; [parenface]让括号变得不显眼
-(require 'parenface)
-(set-face-foreground 'paren-face "DimGray")
+;; 退出 eshell
+(add-hook
+ 'eshell-mode-hook
+ (lambda ()
+   (local-set-key (kbd "C-d")
+		  (lambda (arg)
+		    "Delete a character or quit eshell if there's nothing to delete."
+		    (interactive "p")
+		    (if (and (eolp) (looking-back eshell-prompt-regexp nil))
+			(eshell-life-is-too-much)
+		      (delete-char arg))))))
 
-;; [company]自动补全 https://www.emacswiki.org/emacs/CompanyMode
-(use-package company)
-;; 将显示延时关掉
-(setq company-idle-delay 0)
-;; 开启补全
-(setq company-mode t)
-;; 添加全局补全
-(add-hook 'after-init-hook 'global-company-mode)
-(global-set-key (kbd "C-x p") 'company-complete-common)
-;; 补全的时候区分大小写
-(setq company-dabbrev-downcase nil)
+;; 一键切换 .h/.cpp 文件
+;; https://blog.flowlore.com/passages/emacs-switch-cpp-h-file/
+(defun switch-cpp ()
+  (global-set-key [f9] 'ffap)
+  (global-set-key [f9] 'ff-find-other-file)
+  )
+(add-hook 'c-mode-hook 'switch-cpp)
+(add-hook 'c++-mode-hook 'switch-cpp)
 
-;; [markdown-mode]
-(use-package markdown-mode)
+;; 一键开关eldoc-mode
+(global-set-key [f4] 'eldoc-mode)
 
-;; [youdao-dictionary]有道翻译
-(setq url-automatic-caching t)
-(global-set-key (kbd "C-c SPC") 'youdao-dictionary-search-at-point+)
-(global-set-key (kbd "C-c C-SPC") 'youdao-dictionary-search-from-input)
-(setq youdao-dictionary-search-history-file "~/.emacs.d/.youdao")
+;; 一键格式化
+(defun indent-whole ()
+  (interactive)
+  (indent-region (point-min) (point-max))
+  (message "format successfully"))
+(global-set-key [f10] 'indent-whole)
 
-;; riggrep [rg]
-;; 用法 https://rgel.readthedocs.io/en/2.0.3/usage.html#searching
-;; C-c s r (rg)
-;; C-c s t (rg-literal)
-;; C-c s p (rg-project)
-;; M-n / M-p Move to next/prev line with a match
-;; n / p Move to next/prev line with a match, show that file in other buffer
-;; M-N / M-P rg-next-file / rg-prev-file
-(use-package rg)
-(rg-enable-default-bindings)
 
-;; [atom-one-dark-theme]
-(require 'atom-one-dark-theme)
-(load-theme 'atom-one-dark t)
-
-;; [highlight-thing] 高亮光标下的单词
-(require 'highlight-thing)
-(global-highlight-thing-mode t)
-(setq highlight-thing-what-thing 'symbol)
-(setq highlight-thing-delay-seconds 0.1)
-(setq highlight-thing-limit-to-defun t)
-(setq highlight-thing-case-sensitive-p t)
-;; https://github.com/fgeller/highlight-thing.el/issues/9
-(set-face-foreground 'highlight-thing "green")
-(set-face-background 'highlight-thing "black")
-
-;; [snails] 模糊搜索
-(add-to-list 'load-path "~/.emacs.d/plugins/snails") ; add snails to your load-path
-(require 'snails)
-;; 不使用浮动窗口， wsl下用不了
-(setq snails-show-with-frame 1)
-(global-set-key (kbd "M-p") 'snails)
-
-;; [awesome-tab] https://github.com/manateelazycat/awesome-tab
-(use-package awesome-tab
-  :load-path "~/.emacs.d/plugins/awesome-tab"
-  :config
-  (awesome-tab-mode t))
-(global-set-key (kbd "M-k") 'awesome-tab-forward-tab)
-(global-set-key (kbd "M-j") 'awesome-tab-backward-tab)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 针对文件类型设置模式
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 使用 M-x align 进行缩进
 ;; Align-region 规则
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (add-hook 'align-load-hook (lambda ()
 			     (add-to-list 'align-rules-list
 					  '(haskell-types
@@ -407,18 +450,19 @@
 					    (regexp . "\\(\\s-+\\)\\(<-\\|←\\)\\s-+")
 					    (modes quote (haskell-mode literate-haskell-mode))))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(haskell-mode-hook (quote (interactive-haskell-mode company-mode)))
  '(package-selected-packages
    (quote
-    (move-dup dante company-ghci indent-guide haskell-mode etable highlight-thing youdao-dictionary use-package so-long rg project neotree markdown-mode ggtags eglot company atom-one-dark-theme))))
+    (cmake-mode symbol-overlay windresize go-mode youdao-dictionary use-package so-long rg neotree move-dup indent-guide highlight-thing expand-region eglot dante company-ghci atom-one-dark-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
