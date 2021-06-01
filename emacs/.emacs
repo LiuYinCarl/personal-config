@@ -170,9 +170,16 @@
   :ensure nil
   :hook (after-init . global-auto-revert-mode))
 
-;; 快速选中区块 拓展顺序 字符 单词 句子 代码块 函数 全文件，按一次快捷键拓展一次
+;; 快速选中区块 拓展顺序 字符 单词 句子 代码块 函数 全文件，按一次快捷
+;; 键拓展一次
 (use-package expand-region
   :bind ("M-o" . er/expand-region))
+
+;; https://github.com/winterTTr/ace-jump-mode
+(use-package ace-jump-mode
+  :bind (("M-s j" . ace-jump-char-mode)
+	 ("M-s k" . ace-jump-word-mode)
+	 ("M-s l" . ace-jump-line-mode)))
 
 ;; https://zhuanlan.zhihu.com/p/26471685
 ;; 在 symbol-overlay-mode 中的时候，可使用如下快捷键操作
@@ -202,8 +209,7 @@
 	 ("d" . symbol-overlay-jump-to-definition)
 	 ("s" . symbol-overlay-isearch-literally)
 	 ("q" . symbol-overlay-query-replace)
-	 ("r" . symbol-overlay-rename))
-  )
+	 ("r" . symbol-overlay-rename)))
 
 ;; 注释/反注释
 (use-package newcomment
@@ -283,12 +289,11 @@
   )
 
 (use-package youdao-dictionary
-  :bind (("C-c SPC" . youdao-dictionary-search-at-point+)
-	 ("C-c C-SPC" . youdao-dictionary-search-from-input))
+  :bind (("C-c f" . youdao-dictionary-search-at-point+)
+	 ("C-c C-f" . youdao-dictionary-search-from-input))
   :config
   (setq url-automatic-caching t
-	youdao-dictionary-search-history-file "~/.emacs.d/.youdao")
-  )
+	youdao-dictionary-search-history-file "~/.emacs.d/.youdao"))
 
 ;; 用法 https://rgel.readthedocs.io/en/2.0.3/usage.html#searching
 ;; C-c s r (rg)
@@ -474,3 +479,17 @@
 ;; 自动生成的东西
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (ace-jump-mode youdao-dictionary use-package symbol-overlay so-long rg neotree move-dup markdown-mode indent-guide highlight-thing ggtags fill-column-indicator expand-region etable eglot dante company-ghci cmake-mode atom-one-dark-theme))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
