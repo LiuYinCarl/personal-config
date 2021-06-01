@@ -114,7 +114,8 @@
 (global-set-key (kbd "M-v") 'View-scroll-half-page-backward)
 
 ;; 设置换行，避免切分单词
-(visual-line-mode t)
+;; (visual-line-mode t)
+;; 不显示换行时最右边的 '\' 符号
 (setq-default word-wrap t)
 
 
