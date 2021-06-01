@@ -68,6 +68,8 @@
 
 ;; shift + 方向键实现在窗口之间跳转
 (windmove-default-keybindings)
+;; 在边缘的窗口进行循环跳转，最左窗口跳到最右窗口等
+(setq windmove-wrap-around t)
 
 ;; 将yes/no 作为确认改成 y/n
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -455,17 +457,3 @@
 ;; 自动生成的东西
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (cmake-mode symbol-overlay windresize go-mode youdao-dictionary use-package so-long rg neotree move-dup indent-guide highlight-thing expand-region eglot dante company-ghci atom-one-dark-theme))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
