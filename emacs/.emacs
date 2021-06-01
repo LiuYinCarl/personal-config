@@ -283,6 +283,7 @@
 
 (use-package markdown-mode
   :config
+  (setq markdown-fontify-code-blocks-natively t)  ;; 语法高亮
   (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
@@ -484,9 +485,21 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-names-vector
+   ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#e090d7" "#8cc4ff" "#eeeeec"])
+ '(custom-enabled-themes (quote (tsdh-dark)))
+ '(fci-rule-color "color-237")
  '(package-selected-packages
    (quote
-    (ace-jump-mode youdao-dictionary use-package symbol-overlay so-long rg neotree move-dup markdown-mode indent-guide highlight-thing ggtags fill-column-indicator expand-region etable eglot dante company-ghci cmake-mode atom-one-dark-theme))))
+    (ace-jump-mode youdao-dictionary use-package symbol-overlay so-long rg neotree move-dup markdown-mode indent-guide highlight-thing ggtags fill-column-indicator expand-region etable eglot dante company-ghci cmake-mode atom-one-dark-theme)))
+ '(tetris-x-colors
+   [[229 192 123]
+    [97 175 239]
+    [209 154 102]
+    [224 108 117]
+    [152 195 121]
+    [198 120 221]
+    [86 182 194]]))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
