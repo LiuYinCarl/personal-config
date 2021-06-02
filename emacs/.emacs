@@ -291,7 +291,7 @@
 
 (use-package youdao-dictionary
   :bind (("C-c f" . youdao-dictionary-search-at-point+)
-	 ("C-c C-f" . youdao-dictionary-search-from-input))
+	 ("C-c SPC" . youdao-dictionary-search-from-input))
   :config
   (setq url-automatic-caching t
 	youdao-dictionary-search-history-file "~/.emacs.d/.youdao"))
