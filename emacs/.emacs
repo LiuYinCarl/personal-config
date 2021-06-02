@@ -198,8 +198,8 @@
 	 ("M-k"  . symbol-overlay-switch-forward)
 	 ("M-j"  . symbol-overlay-switch-backward)
 	 ("<f7>" . symbol-overlay-mode)
-	 ("<f8>" . symbol-overlay-remove-all)
-	 :map symbol-overlay-mode 
+	 ("<f8>" . symbol-overlay-remove-all))
+   :bind (:map symbol-overlay-map 
 	 ("i" . symbol-overlay-put)
 	 ("n" . symbol-overlay-jump-next)
 	 ("p" . symbol-overlay-jump-prev)
@@ -487,11 +487,12 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-names-vector
    ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#e090d7" "#8cc4ff" "#eeeeec"])
- '(custom-enabled-themes (quote (tsdh-dark)))
+ '(custom-enabled-themes '(atom-one-dark))
+ '(custom-safe-themes
+   '("171d1ae90e46978eb9c342be6658d937a83aaa45997b1d7af7657546cae5985b" default))
  '(fci-rule-color "color-237")
  '(package-selected-packages
-   (quote
-    (ace-jump-mode youdao-dictionary use-package symbol-overlay so-long rg neotree move-dup markdown-mode indent-guide highlight-thing ggtags fill-column-indicator expand-region etable eglot dante company-ghci cmake-mode atom-one-dark-theme)))
+   '(ace-jump-mode youdao-dictionary use-package symbol-overlay so-long rg neotree move-dup markdown-mode indent-guide highlight-thing ggtags fill-column-indicator expand-region etable eglot dante company-ghci cmake-mode atom-one-dark-theme))
  '(tetris-x-colors
    [[229 192 123]
     [97 175 239]
