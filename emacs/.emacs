@@ -82,11 +82,6 @@
 ;; 状态栏显示列数
 (column-number-mode 1)
 
-;; shift + 方向键实现在窗口之间跳转
-(windmove-default-keybindings)
-;; 在边缘的窗口进行循环跳转，最左窗口跳到最右窗口等
-(setq windmove-wrap-around t)
-
 ;; 将yes/no 作为确认改成 y/n
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -162,7 +157,7 @@
 
 ;; 防止超长行卡死 emacs
 (use-package so-long
-  :ensure nil
+  :defer t
   :config (global-so-long-mode 1))
 
 ;; Emacs 内部打开的文件如果被外部修改，可以自动更新对应的 buffer
@@ -180,6 +175,15 @@
   :bind (("M-s j" . ace-jump-char-mode)
 	 ("M-s k" . ace-jump-word-mode)
 	 ("M-s l" . ace-jump-line-mode)))
+
+(use-package windmove
+  :ensure nil
+  :bind (("M-s <up>"    . windmove-up)
+	 ("M-s <down>"  . windmove-down)
+	 ("M-s <left>"  . windmove-left)
+	 ("M-s <right>" . windmove-right))
+  :config (setq windmove-wrap-around t)  ;; 在边缘的窗口进行循环跳转，最左窗口跳到最右窗口等 
+  )
 
 ;; https://zhuanlan.zhihu.com/p/26471685
 ;; 在 symbol-overlay-mode 中的时候，可使用如下快捷键操作
@@ -290,7 +294,7 @@
   )
 
 (use-package youdao-dictionary
-  :bind (("C-c f" . youdao-dictionary-search-at-point+)
+  :bind (("C-c f"   . youdao-dictionary-search-at-point+)
 	 ("C-c SPC" . youdao-dictionary-search-from-input))
   :config
   (setq url-automatic-caching t
