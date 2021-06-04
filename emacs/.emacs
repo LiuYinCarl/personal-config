@@ -243,7 +243,7 @@
 (use-package indent-guide
   :config
   (indent-guide-global-mode t)
-  (setq indent-guide-delay 0.1  ;; 展示对齐线的延迟时间
+  (setq indent-guide-delay 0.0  ;; 展示对齐线的延迟时间
         indent-guide-recursive t))
 
 (use-package eglot
