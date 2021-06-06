@@ -30,6 +30,10 @@
 ;; 开启括号自动补全模式
 ;; M-x electric-pair-mode
 
+;; 在一个 buffer 中保存与回到光标位置
+;; C-spc C-spc 设置一个 mark, 第二次是为了去掉高亮
+;; C-u C-spc 回到上一个 makr 的位置
+
 ;; 文件编码转换
 ;; C-x RET r 编码类型(gbk,utf-8 ...)
 
