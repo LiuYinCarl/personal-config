@@ -34,6 +34,9 @@
 ;; C-spc C-spc 设置一个 mark, 第二次是为了去掉高亮
 ;; C-u C-spc 回到上一个 makr 的位置
 
+;; 多行缩进
+;; C-spc 选中多行，然后 C-x TAB , 然后 left 或 right 进行移动
+
 ;; 文件编码转换
 ;; C-x RET r 编码类型(gbk,utf-8 ...)
 
@@ -83,6 +86,9 @@
 ;; Emacs 内置功能的使用
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; 选中即复制功能
+(setq x-select-enable-primary t)
+
 ;; 状态栏显示列数
 (column-number-mode 1)
 
@@ -98,6 +104,8 @@
 
 ;; 记录上次打开文件时 cursor 停留的位置
 (save-place-mode 1)
+
+(setq global-eldoc-mode nil)
 
 ;; 高亮当前行
 (global-hl-line-mode 1)
@@ -210,17 +218,17 @@
 	 ("M-j"  . symbol-overlay-switch-backward)
 	 ("<f7>" . symbol-overlay-mode)
 	 ("<f8>" . symbol-overlay-remove-all))
-   :bind (:map symbol-overlay-map 
-	 ("i" . symbol-overlay-put)
-	 ("n" . symbol-overlay-jump-next)
-	 ("p" . symbol-overlay-jump-prev)
-	 ("w" . symbol-overlay-save-symbol)
-	 ("t" . symbol-overlay-toggle-in-scope)
-	 ("e" . symbol-overlay-echo-mark)
-	 ("d" . symbol-overlay-jump-to-definition)
-	 ("s" . symbol-overlay-isearch-literally)
-	 ("q" . symbol-overlay-query-replace)
-	 ("r" . symbol-overlay-rename)))
+  :bind (:map symbol-overlay-map 
+	      ("i" . symbol-overlay-put)
+	      ("n" . symbol-overlay-jump-next)
+	      ("p" . symbol-overlay-jump-prev)
+	      ("w" . symbol-overlay-save-symbol)
+	      ("t" . symbol-overlay-toggle-in-scope)
+	      ("e" . symbol-overlay-echo-mark)
+	      ("d" . symbol-overlay-jump-to-definition)
+	      ("s" . symbol-overlay-isearch-literally)
+	      ("q" . symbol-overlay-query-replace)
+	      ("r" . symbol-overlay-rename)))
 
 ;; 注释/反注释
 (use-package newcomment
@@ -496,16 +504,16 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
  '(ansi-color-names-vector
    ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#e090d7" "#8cc4ff" "#eeeeec"])
- '(custom-enabled-themes (quote (atom-one-dark)))
+ '(custom-enabled-themes '(atom-one-dark))
  '(custom-safe-themes
-   (quote
-    ("171d1ae90e46978eb9c342be6658d937a83aaa45997b1d7af7657546cae5985b" default)))
+   '("171d1ae90e46978eb9c342be6658d937a83aaa45997b1d7af7657546cae5985b" default))
  '(fci-rule-color "color-237")
  '(package-selected-packages
-   (quote
-    (lua-mode ace-jump-mode youdao-dictionary use-package symbol-overlay so-long rg neotree move-dup markdown-mode indent-guide highlight-thing ggtags fill-column-indicator expand-region etable eglot dante company-ghci cmake-mode atom-one-dark-theme)))
+   '(lua-mode go-mode ace-jump-mode youdao-dictionary use-package symbol-overlay so-long rg neotree move-dup markdown-mode indent-guide highlight-thing ggtags fill-column-indicator expand-region etable eglot dante company-ghci cmake-mode atom-one-dark-theme))
  '(tetris-x-colors
    [[229 192 123]
     [97 175 239]
