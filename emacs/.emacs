@@ -105,7 +105,8 @@
 ;; 记录上次打开文件时 cursor 停留的位置
 (save-place-mode 1)
 
-(setq global-eldoc-mode nil)
+;; 设置 eldoc-mode 为 nil 不能阻止 eldoc-mode 生效，所以只能修改 eldoc-mode 的延迟时间 
+(setq eldoc-idle-delay 1000000)
 
 ;; 高亮当前行
 (global-hl-line-mode 1)
