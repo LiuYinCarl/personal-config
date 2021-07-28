@@ -1,3 +1,8 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 更少的配置 更高的稳定性
+;; Less configuration, higher stability
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; 统计 Emacs 启动时间，放在文件开头
 (add-hook 'emacs-startup-hook
 	  (lambda ()
@@ -7,22 +12,16 @@
 			      (time-subtract after-init-time before-init-time)))
 		     gcs-done)))
 
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 更少的配置 更高的稳定性
-;; Less configuration, higher stability
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;; use-package 资料
 ;; https://rand01ph.github.io/blog/use-package/
 ;; https://phenix3443.github.io/notebook/emacs/modes/use-package-manual.html#orga40eccf
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 常用快捷键
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; M-h 选中当前段
+;; M-g g 跳转到指定行, 当选择的行大于最大行数，会跳转到最后一行
 
 ;; 更换主题配色
 ;; M-x customize-themes 
@@ -65,8 +64,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'package)
+;; 官方源 安装 Emacs 的机器在外网时使用
 ;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 ;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
+;; 腾讯源 安装 Emacs 的机器在国内时使用
 (add-to-list 'package-archives '("gnu" . "http://mirrors.cloud.tencent.com/elpa/gnu/"))
 (add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
 
@@ -80,7 +81,6 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs 内置功能的使用
@@ -142,7 +142,6 @@
 ;; 不显示换行时最右边的 '\' 符号
 (setq-default word-wrap t)
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -181,8 +180,7 @@
   :ensure nil
   :hook (after-init . global-auto-revert-mode))
 
-;; 快速选中区块 拓展顺序 字符 单词 句子 代码块 函数 全文件，按一次快捷
-;; 键拓展一次
+;; 快速选中区块 拓展顺序 字符 单词 句子 代码块 函数 全文件，按一次快捷键拓展一次
 (use-package expand-region
   :bind ("M-o" . er/expand-region))
 
@@ -262,6 +260,9 @@
   (setq indent-guide-delay 0.0  ;; 展示对齐线的延迟时间
         indent-guide-recursive t))
 
+;; 给 clangd 生成项目配置文件的工具 compile_commands.json
+;; https://zhuanlan.zhihu.com/p/145430576
+;; https://github.com/rizsotto/Bear
 (use-package eglot
   :config
   (add-to-list 'eglot-server-programs '((c-mode c++-mode) "clangd-11"))
@@ -298,8 +299,7 @@
   (setq company-idle-delay       0     ;; 延迟补全时间
 	company-mode             t
 	company-dabbrev-downcase nil)  ;; 补全区分大小写
-  (add-hook 'after-init-hook 'global-company-mode)
-  )
+  (add-hook 'after-init-hook 'global-company-mode))
 
 (use-package markdown-mode
   :config
@@ -313,6 +313,7 @@
   :bind (("C-c f"   . youdao-dictionary-search-at-point+)
 	 ("C-c SPC" . youdao-dictionary-search-from-input))
   :config
+  (setq url-automatic-caching t)
   (setq url-automatic-caching t
 	youdao-dictionary-search-history-file "~/.emacs.d/.youdao"))
 
@@ -394,13 +395,14 @@
 ;; 未使用 use-package 的插件以及部分函数
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; [etags]
+;; [etags] 作为 eglog 的一个补充
 (defun create-tags (dir-name)
   "Create tags file."
   (interactive "DDirectory: ")
   (eshell-command
+   ;; 如果想要添加系统目录的 TAGS，可以给 etags 命令添加一个 --include 参数
    (format "find %s -type f -name \"*.c\" -o -name \"*.h\" -o -name \"*.cpp\" -o -name \"*.hpp\" | etags -C -" dir-name)))
-
+    
 (defadvice find-tag (around refresh-etags activate)
   "Rerun etags and reload tags if tag not found and redo find-tag.              
    If buffer is modified, ask about save before running etags."
@@ -463,9 +465,6 @@
 (add-hook 'c-mode-hook 'switch-cpp)
 (add-hook 'c++-mode-hook 'switch-cpp)
 
-;; 一键开关eldoc-mode
-(global-set-key [f4] 'eldoc-mode)
-
 ;; 一键格式化
 (defun indent-whole ()
   (interactive)
@@ -504,35 +503,3 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["#212526" "#ff4b4b" "#b4fa70" "#fce94f" "#729fcf" "#e090d7" "#8cc4ff" "#eeeeec"])
- '(custom-enabled-themes (quote (atom-one-dark)))
- '(custom-safe-themes
-   (quote
-    ("171d1ae90e46978eb9c342be6658d937a83aaa45997b1d7af7657546cae5985b" default)))
- '(fci-rule-color "color-237")
- '(package-selected-packages
-   (quote
-    (multiple-cursors lua-mode go-mode ace-jump-mode youdao-dictionary use-package symbol-overlay so-long rg neotree move-dup markdown-mode indent-guide highlight-thing ggtags fill-column-indicator expand-region etable eglot dante company-ghci cmake-mode atom-one-dark-theme)))
- '(tetris-x-colors
-   [[229 192 123]
-    [97 175 239]
-    [209 154 102]
-    [224 108 117]
-    [152 195 121]
-    [198 120 221]
-    [86 182 194]]))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
