@@ -16,6 +16,8 @@
 ;; https://rand01ph.github.io/blog/use-package/
 ;; https://phenix3443.github.io/notebook/emacs/modes/use-package-manual.html#orga40eccf
 
+;; melpa package lists https://melpa.org/#/
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 常用快捷键
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -329,6 +331,14 @@
   :config
   (rg-enable-default-bindings))
 
+
+;; I perfer solarized-zenburn theme
+(use-package solarized-theme
+  :demand
+)
+
+;; use this theme, you cannot use emacsclient -t to fast open emacs.
+;; I cannot solve the problem until now.
 (use-package atom-one-dark-theme
   :demand
   :config
