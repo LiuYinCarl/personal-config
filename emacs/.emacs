@@ -172,6 +172,9 @@
 (use-package lua-mode
   :defer t)
 
+(use-package rust-mode
+  :defer t)
+
 ;; 防止超长行卡死 emacs
 (use-package so-long
   :defer t
