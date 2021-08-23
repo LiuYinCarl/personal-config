@@ -101,7 +101,7 @@
 (setq make-backup-files nil)
 
 ;; 行号的显示格式
-(setq linum-format "%4d\u2502 ")
+(setq linum-format "%4d\u2502")
 (global-linum-mode t)
 
 ;; 记录上次打开文件时 cursor 停留的位置
