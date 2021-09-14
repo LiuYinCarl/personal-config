@@ -3,6 +3,10 @@
 ;; Less configuration, higher stability
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; 避免启动时 GC
+(setq gc-cons-threshold most-positive-fixnum ; 2^61 bytes
+      gc-cons-percentage 0.6)
+
 ;; 统计 Emacs 启动时间，放在文件开头
 (add-hook 'emacs-startup-hook
 	  (lambda ()
