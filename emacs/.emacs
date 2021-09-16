@@ -211,6 +211,20 @@
   :config (setq windmove-wrap-around t)  ;; 在边缘的窗口进行循环跳转，最左窗口跳到最右窗口等 
   )
 
+(use-package shell-pop
+  :init
+  (setq shell-pop-default-directory "~"
+        shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell))))
+        shell-pop-term-shell "/bin/fish"
+        shell-pop-universal-key "C-t"
+        shell-pop-window-size 30
+        shell-pop-full-span t
+        shell-pop-window-position "bottom"
+        shell-pop-autocd-to-working-dir t
+        shell-pop-restore-window-configuration t
+        shell-pop-cleanup-buffer-at-process-exit t)
+  )
+
 ;; https://zhuanlan.zhihu.com/p/26471685
 ;; 在 symbol-overlay-mode 中的时候，可使用如下快捷键操作
 ;; "i" -> symbol-overlay-put                ; 高亮或取消高亮当前symbol
@@ -345,7 +359,7 @@
 ;; I perfer solarized-zenburn theme
 (use-package solarized-theme
   :demand
-)
+  )
 
 ;; use this theme, you cannot use emacsclient -t to fast open emacs.
 ;; I cannot solve the problem until now.
@@ -422,7 +436,7 @@
   (eshell-command
    ;; 如果想要添加系统目录的 TAGS，可以给 etags 命令添加一个 --include 参数
    (format "find %s -type f -name \"*.c\" -o -name \"*.h\" -o -name \"*.cpp\" -o -name \"*.hpp\" | etags -C -" dir-name)))
-    
+
 (defadvice find-tag (around refresh-etags activate)
   "Rerun etags and reload tags if tag not found and redo find-tag.              
    If buffer is modified, ask about save before running etags."
@@ -506,16 +520,16 @@
 (defun wsl-clipboard-to-string ()
   "Return Windows clipboard as string."
   (let ((coding-system-for-read 'dos))
-(substring; remove added trailing \n
- (shell-command-to-string
-  "powershell.exe -Command Get-Clipboard") 0 -1)))
+    (substring; remove added trailing \n
+     (shell-command-to-string
+      "powershell.exe -Command Get-Clipboard") 0 -1)))
 
 (defun wsl-paste-from-clipboard (arg)
   "Insert Windows clipboard at point. With prefix ARG, also add to kill-ring"
   (interactive "P")
   (let ((clip (wsl-clipboard-to-string)))
-(insert clip)
-(if arg (kill-new clip))))
+    (insert clip)
+    (if arg (kill-new clip))))
 
 ;; (define-key global-map (kbd "C-x C-y") 'wsl-paste-from-clipboard)
 (define-key global-map (kbd "M-s M-c") 'wsl-copy-region-to-clipboard)
