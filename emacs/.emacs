@@ -26,6 +26,8 @@
 ;; 常用快捷键
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; C-x k 关闭 buffer
+
 ;; M-< 跳到文件开头
 ;; M-> 跳到文件结尾
 
@@ -74,11 +76,11 @@
 
 (require 'package)
 ;; 官方源 安装 Emacs 的机器在外网时使用
-;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 ;; 腾讯源 安装 Emacs 的机器在国内时使用
-(add-to-list 'package-archives '("gnu" . "http://mirrors.cloud.tencent.com/elpa/gnu/"))
-(add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
+;; (add-to-list 'package-archives '("gnu" . "http://mirrors.cloud.tencent.com/elpa/gnu/"))
+;; (add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
 
 (setq package-check-signature nil) ;;个别时候会出现签名校验失败
 (require 'package) ;; 初始化包管理器
@@ -134,10 +136,6 @@
 (prefer-coding-system 'utf-16)
 (prefer-coding-system 'utf-8-dos)
 (prefer-coding-system 'utf-8-unix)
-
-;; 在菜单栏添加 imenu Index
-;; https://www.emacswiki.org/emacs/ImenuMode
-;; (add-hook 'c-mode-hook 'imenu-add-menubar-index)
 
 ;; 向上/向下翻半页
 ;; https://emacs.stackexchange.com/questions/27698/how-can-i-scroll-a-half-page-on-c-v-and-m-v
@@ -319,7 +317,6 @@
 
 ;; 自动补全 https://www.emacswiki.org/emacs/CompanyMode
 (use-package company
-  :demand
   :bind (("C-c p" . company-complete-common))
   :config
   (setq company-idle-delay       0     ;; 延迟补全时间
@@ -343,36 +340,28 @@
   (setq url-automatic-caching t
 	youdao-dictionary-search-history-file "~/.emacs.d/.youdao"))
 
-;; 用法 https://rgel.readthedocs.io/en/2.0.3/usage.html#searching
-;; C-c s r (rg)
-;; C-c s t (rg-literal)
-;; C-c s p (rg-project)
-;; M-n / M-p Move to next/prev line with a match
-;; n / p Move to next/prev line with a match, show that file in other buffer
-;; M-N / M-P rg-next-file / rg-prev-file
-(use-package rg
-  :demand
-  :config
-  (rg-enable-default-bindings))
+;; RET 在当前窗口打开文件
+;; o   在其他窗口打开文件
+;; n/p      上下移动，以行为单位
+;; M-n/M-p  上下移动，以文件为单位
 
+;; S 改变搜索关键字
+;; D 改变搜索目录
+;; g 重新搜索
+;; C-c C-k 停止搜索
+(use-package deadgrep
+  :bind (("C-c s" . deadgrep))
+ )
 
 ;; I perfer solarized-zenburn theme
 (use-package solarized-theme
-  :demand
-  )
+ )
 
 ;; use this theme, you cannot use emacsclient -t to fast open emacs.
 ;; I cannot solve the problem until now.
 (use-package atom-one-dark-theme
-  :demand
   :config
   (load-theme 'atom-one-dark t))
-
-;; 结构化括号编辑器
-;; (use-package paredit
-;;   :load-path "~/.emacs.d/plugins/"
-;;   :config
-;;   (paredit-mode t))
 
 ;; 让括号变得不显眼
 (use-package parenface
@@ -385,15 +374,8 @@
 	("C-c j" . mc/mark-previous-like-this)
 	("C-c k" . mc/mark-next-like-this)))
 
-;; 模糊搜索
-(use-package snails
-  :load-path "~/.emacs.d/plugins/snails/"
-  :bind ("M-p" . snails)
-  :config (setq snails-show-with-frame t))
-
 ;; https://github.com/manateelazycat/awesome-tab
 (use-package awesome-tab
-  :demand
   :load-path "~/.emacs.d/plugins/awesome-tab"
   :bind (("M-k" . awesome-tab-forward-tab)
 	 ("M-j" . awesome-tab-backward-tab))
