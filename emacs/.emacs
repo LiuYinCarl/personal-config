@@ -209,6 +209,10 @@
   :config (setq windmove-wrap-around t)  ;; 在边缘的窗口进行循环跳转，最左窗口跳到最右窗口等 
   )
 
+;; shell-pop 是在 Term Mode 之下的 term-char-mode
+;; 如果想要操作 buffer，比如看历史记录，需要切换到 term-line-mode
+;; C-c C-j 切换到 term-line-mode
+;; C-c C-k 切换到 term-char-mode
 (use-package shell-pop
   :init
   (setq shell-pop-default-directory "~"
