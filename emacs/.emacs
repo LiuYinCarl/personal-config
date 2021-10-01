@@ -69,7 +69,6 @@
 ;; r      重命名当前书签;
 ;; w      将当前书签的位置显示在minibuffer里。
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 包加载配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -206,8 +205,7 @@
 	 ("M-s <down>"  . windmove-down)
 	 ("M-s <left>"  . windmove-left)
 	 ("M-s <right>" . windmove-right))
-  :config (setq windmove-wrap-around t)  ;; 在边缘的窗口进行循环跳转，最左窗口跳到最右窗口等 
-  )
+  :config (setq windmove-wrap-around t))  ;; 在边缘的窗口进行循环跳转，最左窗口跳到最右窗口等 
 
 ;; shell-pop 是在 Term Mode 之下的 term-char-mode
 ;; 如果想要操作 buffer，比如看历史记录，需要切换到 term-line-mode
@@ -224,8 +222,7 @@
         shell-pop-window-position "bottom"
         shell-pop-autocd-to-working-dir t
         shell-pop-restore-window-configuration t
-        shell-pop-cleanup-buffer-at-process-exit t)
-  )
+        shell-pop-cleanup-buffer-at-process-exit t))
 
 ;; https://zhuanlan.zhihu.com/p/26471685
 ;; 在 symbol-overlay-mode 中的时候，可使用如下快捷键操作
@@ -354,12 +351,10 @@
 ;; g 重新搜索
 ;; C-c C-k 停止搜索
 (use-package deadgrep
-  :bind (("C-c s" . deadgrep))
- )
+  :bind (("C-c s" . deadgrep)))
 
 ;; I perfer solarized-zenburn theme
-(use-package solarized-theme
- )
+(use-package solarized-theme)
 
 ;; use this theme, you cannot use emacsclient -t to fast open emacs.
 ;; I cannot solve the problem until now.
@@ -369,7 +364,7 @@
 
 ;; 让括号变得不显眼
 (use-package parenface
-  :load-path "~/.emacs.d/plugins"
+  :load-path "~/.emacs.d/plugins/parenface"
   :config
   (set-face-foreground 'paren-face "DimGray"))
 
@@ -384,6 +379,21 @@
   :bind (("M-k" . awesome-tab-forward-tab)
 	 ("M-j" . awesome-tab-backward-tab))
   :config (awesome-tab-mode t))
+
+;; M-x hl-todo-mode 启动
+(use-package hl-todo
+  :load-path "~/.emacs.d/plugins/parenface"
+  :bind (("C-c p" . hl-todo-previous)
+	 ("C-c n" . hl-todo-next)
+	 ("C-c o" . hl-todo-occur)
+	 ("C-c i" . hl-todo-insert))
+  :config
+  (setq hl-todo-keyword-faces
+	'(("TODO"   . "#FF0000")
+	  ("FIXME"  . "#FF0000")
+	  ("DEBUG"  . "#A020F0")
+	  ("GOTCHA" . "#FF4500")
+	  ("STUB"   . "#1E90FF"))))
 
 (defun hideshow-folded-overlay-fn (ov)
   (when (eq 'code (overlay-get ov 'hs))
@@ -409,7 +419,6 @@
 	   '((c-mode "{" "}" "/[*/]" nil nil)
 	     (c++-mode "{" "}" "/[*/]" nil nil)
 	     (rust-mode "{" "}" "/[*/]" nil nil)))))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 未使用 use-package 的插件以及部分函数
@@ -520,7 +529,6 @@
 ;; (define-key global-map (kbd "C-x C-y") 'wsl-paste-from-clipboard)
 (define-key global-map (kbd "M-s M-c") 'wsl-copy-region-to-clipboard)
 ;; (define-key global-map (kbd "C-x C-w") 'wsl-cut-region-to-clipboard)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 使用 M-x align 进行缩进
