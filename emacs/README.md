@@ -1,8 +1,13 @@
+## 使用本 Emacs 配置的方式
+
+1. 将本目录下的 `.emacs` 文件复制到 `~/` 目录下
+2. 执行本目录下的 `install_github_package.sh` 脚本，用于安装部分不在 melpa 上的包
+3. 启动 Emacs，自动安装 melpa 上的包
+
+
 ## 部分插件的介绍和用法
 
 [column-marker](https://www.emacswiki.org/emacs/column-marker.el)
-
-
 
 
 ## 将 Emacs 设置为后台进程
