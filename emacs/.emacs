@@ -75,11 +75,11 @@
 
 (require 'package)
 ;; 官方源 安装 Emacs 的机器在外网时使用
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
+;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 ;; 腾讯源 安装 Emacs 的机器在国内时使用
-;; (add-to-list 'package-archives '("gnu" . "http://mirrors.cloud.tencent.com/elpa/gnu/"))
-;; (add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
+(add-to-list 'package-archives '("gnu" . "http://mirrors.cloud.tencent.com/elpa/gnu/"))
+(add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
 
 (setq package-check-signature nil) ;;个别时候会出现签名校验失败
 (require 'package) ;; 初始化包管理器
@@ -184,6 +184,12 @@
   :defer t
   :config (global-so-long-mode 1))
 
+;; 优化终端色彩显示不足
+(use-package color-theme-approximate
+  :unless (or window-system (getenv "MLTERM"))
+  :config
+  (color-theme-approximate-on))
+
 ;; Emacs 内部打开的文件如果被外部修改，可以自动更新对应的 buffer
 (use-package autorevert
   :ensure nil
@@ -215,7 +221,7 @@
   :init
   (setq shell-pop-default-directory "~"
         shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell))))
-        shell-pop-term-shell "/bin/fish"
+        shell-pop-term-shell "/bin/bash"
         shell-pop-universal-key "C-t"
         shell-pop-window-size 30
         shell-pop-full-span t
@@ -290,7 +296,7 @@
 ;; https://github.com/rizsotto/Bear
 (use-package eglot
   :config
-  (add-to-list 'eglot-server-programs '((c-mode c++-mode) "clangd-11"))
+  (add-to-list 'eglot-server-programs '((c-mode c++-mode) "clangd"))
   (add-hook 'c-mode-hook 'eglot-ensure)
   ;; 不加下面的会跳转不到C++标准库文件
   (add-hook 'c++-mode-hook 'eglot-ensure))
@@ -318,7 +324,8 @@
 
 ;; 自动补全 https://www.emacswiki.org/emacs/CompanyMode
 (use-package company
-  :bind (("C-c p" . company-complete-common))
+  :demand
+  :bind (("C-c TAB" . company-complete-common))
   :config
   (setq company-idle-delay       0     ;; 延迟补全时间
 	company-mode             t
