@@ -96,6 +96,14 @@
 ;; Emacs 内置功能的使用
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
+;; 设置默认字体大小
+(set-face-attribute 'default nil :height 180) ;; 1 = 1/10 pt
+
+
+;; 默认开启折行
+(global-visual-line-mode 1)
+
 ;; 选中即复制功能
 (setq x-select-enable-primary t)
 
@@ -147,6 +155,14 @@
 ;; (visual-line-mode t)
 ;; 不显示换行时最右边的 '\' 符号
 (setq-default word-wrap t)
+
+;; org-mode
+;; 高亮 latex 代码段
+(setq org-highlight-latex-and-related '(latex))
+
+;; 高亮 markdown 中的 latex
+(setq markdown-enable-highlighting-syntax t)
+(setq markdown-enable-math t)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 插件
