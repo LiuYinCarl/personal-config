@@ -9,3 +9,5 @@ git clone --depth=1 git@github.com:manateelazycat/awesome-tab.git
 git clone --depth=1 git@github.com:tarsius/hl-todo.git
 
 git clone --depth=1 git@github.com:scottjad/parenface.git
+
+git clone --depth=1 git@github.com:redguardtoo/find-file-in-project.git

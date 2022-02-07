@@ -235,7 +235,7 @@
 ;; C-c C-k 切换到 term-char-mode
 (use-package shell-pop
   :init
-  (setq shell-pop-default-directory "~"
+  (setq shell-pop-default-directory "./"
         shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell))))
         shell-pop-term-shell "/bin/bash"
         shell-pop-universal-key "C-t"
@@ -348,7 +348,15 @@
 	company-dabbrev-downcase nil)  ;; 补全区分大小写
   (add-hook 'after-init-hook 'global-company-mode))
 
+
+(defun insert-latex-tag ()
+  (interactive)
+  (insert "$$")
+  (backward-char 1)
+  )
+
 (use-package markdown-mode
+  :bind (("C-c 0" . insert-latex-tag))
   :config
   (setq markdown-fontify-code-blocks-natively t)  ;; 语法高亮
   (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
@@ -395,6 +403,21 @@
   :bind(("C-c l" . mc/edit-lines)
 	("C-c j" . mc/mark-previous-like-this)
 	("C-c k" . mc/mark-next-like-this)))
+
+(setq ffip-diff-backends
+      '(ffip-diff-backend-git-show-commit
+        "cd $(git rev-parse --show-toplevel) && git diff"
+        "cd $(git rev-parse --show-toplevel) && git diff --cached"
+        ffip-diff-backend-hg-show-commit
+        ("Diff from `kill-ring'" . (car kill-ring))
+        "cd $(hg root) && hg diff"
+        "svn diff"))
+
+(use-package find-file-in-project
+  :load-path "~/.emacs.d/plugins/find-file-in-project"
+  :bind (("M-s f f" . find-file-in-project-by-selected)
+	 ("M-s f d" . find-file-in-current-directory)
+	 ("M-s f i" . ffip-show-diff)))
 
 ;; https://github.com/manateelazycat/awesome-tab
 (use-package awesome-tab
@@ -552,6 +575,7 @@
 ;; (define-key global-map (kbd "C-x C-y") 'wsl-paste-from-clipboard)
 (define-key global-map (kbd "M-s M-c") 'wsl-copy-region-to-clipboard)
 ;; (define-key global-map (kbd "C-x C-w") 'wsl-cut-region-to-clipboard)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 使用 M-x align 进行缩进
