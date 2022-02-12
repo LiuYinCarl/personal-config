@@ -5,6 +5,14 @@
 3. 启动 Emacs，自动安装 melpa 上的包
 
 
+## 快捷键
+
+C-x C-b 打开 *Buffer List* 缓冲区
+
+
+
+
+
 ## 部分插件的介绍和用法
 
 [column-marker](https://www.emacswiki.org/emacs/column-marker.el)
