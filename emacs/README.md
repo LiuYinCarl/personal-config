@@ -9,6 +9,8 @@
 
 C-x C-b 打开 *Buffer List* 缓冲区
 
+C-x h 全选
+C-w 删除
 
 
 
