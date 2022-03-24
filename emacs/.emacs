@@ -75,11 +75,11 @@
 
 (require 'package)
 ;; 官方源 安装 Emacs 的机器在外网时使用
-;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 ;; 腾讯源 安装 Emacs 的机器在国内时使用
-(add-to-list 'package-archives '("gnu" . "http://mirrors.cloud.tencent.com/elpa/gnu/"))
-(add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
+;; (add-to-list 'package-archives '("gnu" . "http://mirrors.cloud.tencent.com/elpa/gnu/"))
+;; (add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
 
 (setq package-check-signature nil) ;;个别时候会出现签名校验失败
 (require 'package) ;; 初始化包管理器
@@ -336,7 +336,11 @@
 (use-package neotree
   :bind (("C-c =" . neotree-show)
 	 ("C-c -" . neotree-hide)
-	 ("C-c 0" . neotree-dir)))
+	 ("C-c d" . neotree-dir)))
+
+;; https://www.gnu.org/software/emacs/manual/html_node/speedbar/index.html
+(use-package speedbar
+  :bind (([f11] . speedbar)))
 
 ;; 自动补全 https://www.emacswiki.org/emacs/CompanyMode
 (use-package company
@@ -348,15 +352,7 @@
 	company-dabbrev-downcase nil)  ;; 补全区分大小写
   (add-hook 'after-init-hook 'global-company-mode))
 
-
-(defun insert-latex-tag ()
-  (interactive)
-  (insert "$$")
-  (backward-char 1)
-  )
-
 (use-package markdown-mode
-  :bind (("C-c 0" . insert-latex-tag))
   :config
   (setq markdown-fontify-code-blocks-natively t)  ;; 语法高亮
   (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
@@ -371,6 +367,7 @@
   (setq url-automatic-caching t)
   (setq url-automatic-caching t
 	youdao-dictionary-search-history-file "~/.emacs.d/.youdao"))
+
 
 ;; RET 在当前窗口打开文件
 ;; o   在其他窗口打开文件
@@ -575,7 +572,6 @@
 ;; (define-key global-map (kbd "C-x C-y") 'wsl-paste-from-clipboard)
 (define-key global-map (kbd "M-s M-c") 'wsl-copy-region-to-clipboard)
 ;; (define-key global-map (kbd "C-x C-w") 'wsl-cut-region-to-clipboard)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 使用 M-x align 进行缩进
