@@ -364,7 +364,6 @@
   :bind (("C-c f"   . youdao-dictionary-search-at-point+)
 	 ("C-c SPC" . youdao-dictionary-search-from-input))
   :config
-  (setq url-automatic-caching t)
   (setq url-automatic-caching t
 	youdao-dictionary-search-history-file "~/.emacs.d/.youdao"))
 
@@ -425,7 +424,7 @@
 
 ;; M-x hl-todo-mode 启动
 (use-package hl-todo
-  :load-path "~/.emacs.d/plugins/parenface"
+  :load-path "~/.emacs.d/plugins/hl-todo"
   :bind (("C-c p" . hl-todo-previous)
 	 ("C-c n" . hl-todo-next)
 	 ("C-c o" . hl-todo-occur)
