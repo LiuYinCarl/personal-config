@@ -1,28 +1,4 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 更少的配置 更高的稳定性
-;; Less configuration, higher stability
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; 避免启动时 GC
-(setq gc-cons-threshold most-positive-fixnum ; 2^61 bytes
-      gc-cons-percentage 0.6)
-
-;; 统计 Emacs 启动时间，放在文件开头
-(add-hook 'emacs-startup-hook
-	  (lambda ()
-	    (message "Emacs ready in %s with %d garbage collections."
-		     (format "%.2f seconds"
-			     (float-time
-			      (time-subtract after-init-time before-init-time)))
-		     gcs-done)))
-
-;; use-package 资料
-;; https://rand01ph.github.io/blog/use-package/
-;; https://phenix3443.github.io/notebook/emacs/modes/use-package-manual.html#orga40eccf
-
-;; melpa package lists https://melpa.org/#/
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 常用快捷键
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -69,8 +45,29 @@
 ;; r      重命名当前书签;
 ;; w      将当前书签的位置显示在minibuffer里。
 
+
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 包加载配置
+;; 启动优化配置
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; 避免启动时 GC
+(setq gc-cons-threshold most-positive-fixnum ; 2^61 bytes
+      gc-cons-percentage 0.6)
+
+;; 统计 Emacs 启动时间，放在文件开头
+(add-hook 'emacs-startup-hook
+	  (lambda ()
+	    (message "Emacs ready in %s with %d garbage collections."
+		     (format "%.2f seconds"
+			     (float-time
+			      (time-subtract after-init-time before-init-time)))
+		     gcs-done)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 包管理配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (require 'package)
@@ -92,14 +89,16 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+;; 自动安装系统没有的 package
+(setq use-package-always-ensure t)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Emacs 内置功能的使用
+;; 全局配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
-;; 设置默认字体大小
-(set-face-attribute 'default nil :height 180) ;; 1 = 1/10 pt
-
+;; 设置默认字体大小 1 = 1/10 pt
+(set-face-attribute 'default nil :height 180)
 
 ;; 默认开启折行
 (global-visual-line-mode 1)
@@ -153,47 +152,26 @@
 
 ;; 设置换行，避免切分单词
 ;; (visual-line-mode t)
+
 ;; 不显示换行时最右边的 '\' 符号
 (setq-default word-wrap t)
 
-;; org-mode
-;; 高亮 latex 代码段
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 特殊配置
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; org-mode 高亮 latex 代码段
 (setq org-highlight-latex-and-related '(latex))
 
 ;; 高亮 markdown 中的 latex
 (setq markdown-enable-highlighting-syntax t)
 (setq markdown-enable-math t)
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 插件
+;; Emacs 优化插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; 自动安装系统没有的 package
-(setq use-package-always-ensure t)
-
-;; 主动更新安装的包
-;; (use-package auto-package-update
-;;   :config
-;;   (setq auto-package-update-delete-old-version t)
-;;   (setq quto-package-update-hide-results t)
-;;   (auto-package-update-maybe))
-
-;; M-x windresize 启动，然后使用方向键调整窗口大小
-;; 用 i 调整步长，o键或者M-S-<up>/<left>跳到其它窗口，? 显示帮助，调整完了按RET退出即可
-(use-package windresize
-  :defer t)
-
-(use-package cmake-mode
-  :defer t)
-
-(use-package go-mode
-  :defer t)
-
-(use-package lua-mode
-  :defer t)
-
-(use-package rust-mode
-  :defer t)
 
 ;; 防止超长行卡死 emacs
 (use-package so-long
@@ -211,6 +189,49 @@
   :ensure nil
   :hook (after-init . global-auto-revert-mode))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 编程语言插件
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package cmake-mode
+  :defer t)
+
+(use-package go-mode
+  :defer t)
+
+(use-package lua-mode
+  :defer t)
+
+(use-package rust-mode
+  :defer t)
+
+;; haskell 代码补全
+;; (use-package dante
+;;   :ensure t
+;;   :after haskell-mode
+;;   :commands 'dante-mode
+;;   :config
+;;   (flycheck-add-next-checker 'haskell-dante '(info . haskell-hlint))
+;;   :init
+;;   (add-hook 'haskell-mode-hook 'flycheck-mode)
+;;   ;; OR for flymake support:
+;;   (add-hook 'haskell-mode-hook 'flymake-mode)
+;;   (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
+;;   (add-hook 'haskell-mode-hook 'dante-mode))
+
+(use-package markdown-mode
+  :config
+  (setq markdown-fontify-code-blocks-natively t)  ;; 语法高亮
+  (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 文本编辑插件
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; 快速选中区块 拓展顺序 字符 单词 句子 代码块 函数 全文件，按一次快捷键拓展一次
 (use-package expand-region
   :bind ("M-o" . er/expand-region))
@@ -221,6 +242,46 @@
 	 ("M-s k" . ace-jump-word-mode)
 	 ("M-s l" . ace-jump-line-mode)))
 
+;; 注释/反注释
+(use-package newcomment
+  :ensure nil
+  :bind ([remap comment-dwim] . #'comment-or-uncomment)
+  :config
+  (defun comment-or-uncomment ()
+    (interactive)
+    (if (region-active-p)
+	(comment-or-uncomment-region (region-beginning) (region-end))
+      (if (save-excursion
+	    (beginning-of-line)
+	    (looking-at "\\s-*$"))
+	  (call-interactively 'comment-dwim)
+	(comment-or-uncomment-region (line-beginning-position) (line-end-position)))))
+  :custom
+  (comment-auto-fill-only-comments t))
+(global-set-key (kbd "C-c /") 'comment-or-uncomment)
+
+;; 快捷移动文本段和复制文本段
+(use-package move-dup
+  :bind (("C-c <up>"     . move-dup-move-lines-up)
+	 ("C-c <down>"   . move-dup-move-lines-down)
+	 ("C-c c <up>"   . move-dup-duplicate-up)
+	 ("C-c c <down>" . move-dup-duplicate-down)))
+
+(use-package multiple-cursors
+  :bind(("C-c l" . mc/edit-lines)
+	("C-c j" . mc/mark-previous-like-this)
+	("C-c k" . mc/mark-next-like-this)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 窗口布局，文件管理，buffer 管理插件
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; M-x windresize 启动，然后使用方向键调整窗口大小
+;; 用 i 调整步长，o键或者M-S-<up>/<left>跳到其它窗口，? 显示帮助，调整完了按RET退出即可
+(use-package windresize
+  :defer t)
+
 (use-package windmove
   :ensure nil
   :bind (("M-s <up>"    . windmove-up)
@@ -228,6 +289,27 @@
 	 ("M-s <left>"  . windmove-left)
 	 ("M-s <right>" . windmove-right))
   :config (setq windmove-wrap-around t))  ;; 在边缘的窗口进行循环跳转，最左窗口跳到最右窗口等 
+
+(use-package indent-guide
+  :config
+  (indent-guide-global-mode t)
+  (setq indent-guide-delay 0.0  ;; 展示对齐线的延迟时间
+        indent-guide-recursive t))
+
+;; 资源管理器 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
+(use-package neotree
+  :bind (("C-c =" . neotree-show)
+	 ("C-c -" . neotree-hide)
+	 ("C-c d" . neotree-dir)))
+
+;; https://www.gnu.org/software/emacs/manual/html_node/speedbar/index.html
+(use-package speedbar
+  :bind (([f11] . speedbar)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 程序交互插件
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; shell-pop 是在 Term Mode 之下的 term-char-mode
 ;; 如果想要操作 buffer，比如看历史记录，需要切换到 term-line-mode
@@ -245,6 +327,11 @@
         shell-pop-autocd-to-working-dir t
         shell-pop-restore-window-configuration t
         shell-pop-cleanup-buffer-at-process-exit t))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 符号管理插件
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; https://zhuanlan.zhihu.com/p/26471685
 ;; 在 symbol-overlay-mode 中的时候，可使用如下快捷键操作
@@ -276,37 +363,6 @@
 	      ("q" . symbol-overlay-query-replace)
 	      ("r" . symbol-overlay-rename)))
 
-;; 注释/反注释
-(use-package newcomment
-  :ensure nil
-  :bind ([remap comment-dwim] . #'comment-or-uncomment)
-  :config
-  (defun comment-or-uncomment ()
-    (interactive)
-    (if (region-active-p)
-	(comment-or-uncomment-region (region-beginning) (region-end))
-      (if (save-excursion
-	    (beginning-of-line)
-	    (looking-at "\\s-*$"))
-	  (call-interactively 'comment-dwim)
-	(comment-or-uncomment-region (line-beginning-position) (line-end-position)))))
-  :custom
-  (comment-auto-fill-only-comments t))
-(global-set-key (kbd "C-c /") 'comment-or-uncomment)
-
-;; 快捷移动文本段和复制文本段
-(use-package move-dup
-  :bind (("C-c <up>"     . move-dup-move-lines-up)
-	 ("C-c <down>"   . move-dup-move-lines-down)
-	 ("C-c c <up>"   . move-dup-duplicate-up)
-	 ("C-c c <down>" . move-dup-duplicate-down)))
-
-(use-package indent-guide
-  :config
-  (indent-guide-global-mode t)
-  (setq indent-guide-delay 0.0  ;; 展示对齐线的延迟时间
-        indent-guide-recursive t))
-
 ;; 给 clangd 生成项目配置文件的工具 compile_commands.json
 ;; https://zhuanlan.zhihu.com/p/145430576
 ;; https://github.com/rizsotto/Bear
@@ -316,31 +372,6 @@
   (add-hook 'c-mode-hook 'eglot-ensure)
   ;; 不加下面的会跳转不到C++标准库文件
   (add-hook 'c++-mode-hook 'eglot-ensure))
-
-;; haskell 代码补全
-(use-package dante
-  :ensure t
-  :after haskell-mode
-  :commands 'dante-mode
-  :config
-  (flycheck-add-next-checker 'haskell-dante '(info . haskell-hlint))
-  :init
-  (add-hook 'haskell-mode-hook 'flycheck-mode)
-  ;; OR for flymake support:
-  (add-hook 'haskell-mode-hook 'flymake-mode)
-  (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
-  (add-hook 'haskell-mode-hook 'dante-mode)
-  )
-
-;; 资源管理器 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
-(use-package neotree
-  :bind (("C-c =" . neotree-show)
-	 ("C-c -" . neotree-hide)
-	 ("C-c d" . neotree-dir)))
-
-;; https://www.gnu.org/software/emacs/manual/html_node/speedbar/index.html
-(use-package speedbar
-  :bind (([f11] . speedbar)))
 
 ;; 自动补全 https://www.emacswiki.org/emacs/CompanyMode
 (use-package company
@@ -352,13 +383,49 @@
 	company-dabbrev-downcase nil)  ;; 补全区分大小写
   (add-hook 'after-init-hook 'global-company-mode))
 
-(use-package markdown-mode
-  :config
-  (setq markdown-fontify-code-blocks-natively t)  ;; 语法高亮
-  (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-  (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-  )
+;; [etags] 作为 eglog 的一个补充
+(defun create-tags (dir-name)
+  "Create tags file."
+  (interactive "DDirectory: ")
+  (eshell-command
+   ;; 如果想要添加系统目录的 TAGS，可以给 etags 命令添加一个 --include 参数
+   (format "find %s -type f -name \"*.c\" -o -name \"*.h\" -o -name \"*.cpp\" -o -name \"*.hpp\" | etags -C -" dir-name)))
+
+(defadvice find-tag (around refresh-etags activate)
+  "Rerun etags and reload tags if tag not found and redo find-tag.              
+   If buffer is modified, ask about save before running etags."
+  (let ((extension (file-name-extension (buffer-file-name))))
+    (condition-case err
+	ad-do-it
+      (error (and (buffer-modified-p)
+		  (not (ding))
+		  (y-or-n-p "Buffer is modified, save it? ")
+		  (save-buffer))
+	     (er-refresh-etags extension)
+	     ad-do-it))))
+
+(defun er-refresh-etags (&optional extension)
+  "Run etags on all peer files in current dir and reload them silently."
+  (interactive)
+  (shell-command (format "etags *.%s" (or extension "el")))
+  (let ((tags-revert-without-query t))  ; don't query, revert silently
+    (visit-tags-table default-directory nil)))
+;; 为当前目录的 .h .c 文件生成 tags, find 参数含义 -o(or) -a(and) -not(not)
+;; find . -name "*.h" -o -name "*.c" | etags -
+;; etags 常用快捷键[Emacs version >= 25] https://www.emacswiki.org/emacs/EmacsTags
+;; 生成 etags 文件 https://www.emacswiki.org/emacs/BuildTags
+;; 在当前目录下寻找 etags 生成的 tags 文件
+;; (setq tags-file-name "/home/lzh/github/imgui/TAGS")
+;; 如何使用 tags 文件
+;; 1 使用 create_tag 函数创建 tags 文件
+;; 2 使用 visit-tags-table 函数找到 tags 文件
+;; 3 使用 find-tag(其他函数找不到，不知道为啥) 找到 tag
+(global-set-key (kbd "M-/") 'find-tag)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 搜索功能插件
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package youdao-dictionary
   :bind (("C-c f"   . youdao-dictionary-search-at-point+)
@@ -366,7 +433,6 @@
   :config
   (setq url-automatic-caching t
 	youdao-dictionary-search-history-file "~/.emacs.d/.youdao"))
-
 
 ;; RET 在当前窗口打开文件
 ;; o   在其他窗口打开文件
@@ -380,11 +446,13 @@
 (use-package deadgrep
   :bind (("C-c s" . deadgrep)))
 
-;; I perfer solarized-zenburn theme
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 主题配置插件
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (use-package solarized-theme)
 
-;; use this theme, you cannot use emacsclient -t to fast open emacs.
-;; I cannot solve the problem until now.
 (use-package atom-one-dark-theme
   :config
   (load-theme 'atom-one-dark t))
@@ -395,10 +463,9 @@
   :config
   (set-face-foreground 'paren-face "DimGray"))
 
-(use-package multiple-cursors
-  :bind(("C-c l" . mc/edit-lines)
-	("C-c j" . mc/mark-previous-like-this)
-	("C-c k" . mc/mark-next-like-this)))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 版本管理插件
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (setq ffip-diff-backends
       '(ffip-diff-backend-git-show-commit
@@ -414,6 +481,11 @@
   :bind (("M-s f f" . find-file-in-project-by-selected)
 	 ("M-s f d" . find-file-in-current-directory)
 	 ("M-s f i" . ffip-show-diff)))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 未分类插件
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; https://github.com/manateelazycat/awesome-tab
 (use-package awesome-tab
@@ -461,49 +533,6 @@
 	   '((c-mode "{" "}" "/[*/]" nil nil)
 	     (c++-mode "{" "}" "/[*/]" nil nil)
 	     (rust-mode "{" "}" "/[*/]" nil nil)))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 未使用 use-package 的插件以及部分函数
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; [etags] 作为 eglog 的一个补充
-(defun create-tags (dir-name)
-  "Create tags file."
-  (interactive "DDirectory: ")
-  (eshell-command
-   ;; 如果想要添加系统目录的 TAGS，可以给 etags 命令添加一个 --include 参数
-   (format "find %s -type f -name \"*.c\" -o -name \"*.h\" -o -name \"*.cpp\" -o -name \"*.hpp\" | etags -C -" dir-name)))
-
-(defadvice find-tag (around refresh-etags activate)
-  "Rerun etags and reload tags if tag not found and redo find-tag.              
-   If buffer is modified, ask about save before running etags."
-  (let ((extension (file-name-extension (buffer-file-name))))
-    (condition-case err
-	ad-do-it
-      (error (and (buffer-modified-p)
-		  (not (ding))
-		  (y-or-n-p "Buffer is modified, save it? ")
-		  (save-buffer))
-	     (er-refresh-etags extension)
-	     ad-do-it))))
-
-(defun er-refresh-etags (&optional extension)
-  "Run etags on all peer files in current dir and reload them silently."
-  (interactive)
-  (shell-command (format "etags *.%s" (or extension "el")))
-  (let ((tags-revert-without-query t))  ; don't query, revert silently
-    (visit-tags-table default-directory nil)))
-;; 为当前目录的 .h .c 文件生成 tags, find 参数含义 -o(or) -a(and) -not(not)
-;; find . -name "*.h" -o -name "*.c" | etags -
-;; etags 常用快捷键[Emacs version >= 25] https://www.emacswiki.org/emacs/EmacsTags
-;; 生成 etags 文件 https://www.emacswiki.org/emacs/BuildTags
-;; 在当前目录下寻找 etags 生成的 tags 文件
-;; (setq tags-file-name "/home/lzh/github/imgui/TAGS")
-;; 如何使用 tags 文件
-;; 1 使用 create_tag 函数创建 tags 文件
-;; 2 使用 visit-tags-table 函数找到 tags 文件
-;; 3 使用 find-tag(其他函数找不到，不知道为啥) 找到 tag
-(global-set-key (kbd "M-/") 'find-tag)
 
 ;; eshell 清屏
 (add-hook
@@ -571,32 +600,6 @@
 ;; (define-key global-map (kbd "C-x C-y") 'wsl-paste-from-clipboard)
 (define-key global-map (kbd "M-s M-c") 'wsl-copy-region-to-clipboard)
 ;; (define-key global-map (kbd "C-x C-w") 'wsl-cut-region-to-clipboard)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 使用 M-x align 进行缩进
-;; Align-region 规则
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(add-hook 'align-load-hook (lambda ()
-			     (add-to-list 'align-rules-list
-					  '(haskell-types
-					    (regexp . "\\(\\s-+\\)\\(::\\|∷\\)\\s-+")
-					    (modes quote (haskell-mode literate-haskell-mode))))))
-(add-hook 'align-load-hook (lambda ()
-			     (add-to-list 'align-rules-list
-					  '(haskell-assignment
-					    (regexp . "\\(\\s-+\\)=\\s-+")
-					    (modes quote (haskell-mode literate-haskell-mode))))))
-(add-hook 'align-load-hook (lambda ()
-			     (add-to-list 'align-rules-list
-					  '(haskell-arrows
-					    (regexp . "\\(\\s-+\\)\\(->\\|→\\)\\s-+")
-					    (modes quote (haskell-mode literate-haskell-mode))))))
-(add-hook 'align-load-hook (lambda ()
-			     (add-to-list 'align-rules-list
-					  '(haskell-left-arrows
-					    (regexp . "\\(\\s-+\\)\\(<-\\|←\\)\\s-+")
-					    (modes quote (haskell-mode literate-haskell-mode))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
