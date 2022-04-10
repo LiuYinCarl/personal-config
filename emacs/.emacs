@@ -134,6 +134,14 @@
 ;; 括号补全
 (electric-pair-mode t)
 
+;; 自动清除行位空格
+;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
+;; (add-hook 'before-save-hook 'whitespace-cleanup)
+;; 自动清除行之间的空白行
+;; (add-hook 'before-save-hook 'delete-blank-lines)
+;; 显示空格
+;; (global-set-key [f1] 'whitespace-newline-mode)
+
 ;; 字符编码优先级设置，最下面的作为最优先选择的编码类型
 (prefer-coding-system 'cp950)
 (prefer-coding-system 'gb2312)
