@@ -100,6 +100,9 @@
 ;; 设置默认字体大小 1 = 1/10 pt
 (set-face-attribute 'default nil :height 180)
 
+;; 设置光标颜色
+(set-cursor-color "white")
+
 ;; 默认开启折行
 (global-visual-line-mode 1)
 
@@ -376,7 +379,7 @@
 ;; https://github.com/rizsotto/Bear
 (use-package eglot
   :config
-  (add-to-list 'eglot-server-programs '((c-mode c++-mode) "clangd"))
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
   (add-hook 'c-mode-hook 'eglot-ensure)
   ;; 不加下面的会跳转不到C++标准库文件
   (add-hook 'c++-mode-hook 'eglot-ensure))
