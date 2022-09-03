@@ -75,8 +75,8 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 ;; 腾讯源 安装 Emacs 的机器在国内时使用
-;; (add-to-list 'package-archives '("gnu" . "http://mirrors.cloud.tencent.com/elpa/gnu/"))
-;; (add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
+(add-to-list 'package-archives '("gnu" . "http://mirrors.cloud.tencent.com/elpa/gnu/"))
+(add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
 
 (setq package-check-signature nil) ;;个别时候会出现签名校验失败
 (require 'package) ;; 初始化包管理器
@@ -492,6 +492,55 @@
   :config
   (set-face-foreground 'paren-face "DimGray"))
 
+;; 修改光标所在括号内的块的背景颜色
+(use-package highlight-blocks
+  :config
+  (setq highlight-blocks-delay 0.05)
+  ;; 设置背景颜色，第一个是显示的颜色
+  (setq highlight-blocks--rainbow-colors
+	'("#464641" "#000000" "#464646" "#FFCACA" "#FFFFBA"))
+  (setq highlight-blocks-max-face-count
+	(length highlight-blocks--rainbow-colors)))
+
+(defun highlight-blocks--get-bounds ()
+  "Get the bounds of the nested blocks the point is in.
+The returned value is a list of conses, where car is the start of a
+block and cdr is the end of a block, starting from the outermost
+block."
+  (let ((result '())
+        (parse-sexp-ignore-comments t))
+    (condition-case nil
+        (let* ((parse-state (syntax-ppss))
+               (starting-pos (if (or (nth 3 parse-state)
+                                     (nth 4 parse-state))
+                                 (nth 8 parse-state)
+                               (point)))
+               (begins (nreverse (nth 9 parse-state)))
+               (end starting-pos)
+               (i 0))
+          (while (or (eq highlight-blocks-max-innermost-block-count t)
+                     (< i highlight-blocks-max-innermost-block-count))
+            (setq end (scan-lists end 1 1))
+            (push (cons (pop begins) end) result)
+            (setq i (1+ i))))
+      (scan-error))
+    (last result)))
+
+(defun highlight-blocks--define-rainbow-colors (colors)
+  (dotimes (i (length colors))
+    (face-spec-set
+     (intern (format "highlight-blocks-depth-%d-face" (1+ i)))
+     `((((class color) (background dark))  :background ,(nth i colors))
+       (((class color) (background light)) :background ,(nth i colors)))
+     'face-defface-spec)))
+
+(highlight-blocks--define-rainbow-colors highlight-blocks--rainbow-colors)
+
+(add-hook 'emacs-lisp-mode-hook       'highlight-blocks-mode)
+(add-hook 'lisp-interaction-mode-hook 'highlight-blocks-mode)
+(add-hook 'lisp-mode-hook             'highlight-blocks-mode)
+
+
 ;; 切换窗口时未获得焦点的窗口失去高光
 (use-package dimmer
   :load-path "~/.emacs.d/plugins/dimmer.el"
@@ -633,7 +682,7 @@
     (if arg (kill-new clip))))
 
 ;; (define-key global-map (kbd "C-x C-y") 'wsl-paste-from-clipboard)
-(define-key global-map (kbd "M-s M-c") 'wsl-copy-region-to-clipboard)
+(define-key global-map (kbd "C-c M-c") 'wsl-copy-region-to-clipboard)
 ;; (define-key global-map (kbd "C-x C-w") 'wsl-cut-region-to-clipboard)
 
 
