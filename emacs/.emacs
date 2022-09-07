@@ -72,8 +72,8 @@
 
 (require 'package)
 ;; 官方源 安装 Emacs 的机器在外网时使用
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
+;;(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 ;; 腾讯源 安装 Emacs 的机器在国内时使用
 (add-to-list 'package-archives '("gnu" . "http://mirrors.cloud.tencent.com/elpa/gnu/"))
 (add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
@@ -261,6 +261,14 @@
 ;; 文本编辑插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; tree-sitter 进行语法高亮
+(use-package tree-sitter
+  :config
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+  )
+(use-package tree-sitter-langs)
+
 ;; 快速选中区块 拓展顺序 字符 单词 句子 代码块 函数 全文件，按一次快捷键拓展一次
 (use-package expand-region
   :bind ("M-o" . er/expand-region))
@@ -301,6 +309,10 @@
 	("C-c j" . mc/mark-previous-like-this)
 	("C-c k" . mc/mark-next-like-this)))
 
+;; 打开文件时默认只读，使用 C-x C-q 解除只读
+(add-hook 'find-file-hook
+	  (lambda ()
+	    (read-only-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 窗口布局，文件管理，buffer 管理插件
@@ -475,6 +487,24 @@
 (use-package deadgrep
   :bind (("C-c s" . deadgrep)))
 
+(use-package ivy
+  :config
+  (ivy-mode 1))
+
+(setq ffip-diff-backends
+      '(ffip-diff-backend-git-show-commit
+        "cd $(git rev-parse --show-toplevel) && git diff"
+        "cd $(git rev-parse --show-toplevel) && git diff --cached"
+        ffip-diff-backend-hg-show-commit
+        ("Diff from `kill-ring'" . (car kill-ring))
+        "cd $(hg root) && hg diff"
+        "svn diff"))
+
+(use-package find-file-in-project
+  :load-path "~/.emacs.d/plugins/find-file-in-project"
+  :bind (("M-s f f" . find-file-in-project-by-selected)
+	 ("M-s f d" . find-file-in-current-directory)
+	 ("M-s f i" . ffip-show-diff)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 主题配置插件
@@ -540,7 +570,6 @@ block."
 (add-hook 'lisp-interaction-mode-hook 'highlight-blocks-mode)
 (add-hook 'lisp-mode-hook             'highlight-blocks-mode)
 
-
 ;; 切换窗口时未获得焦点的窗口失去高光
 (use-package dimmer
   :load-path "~/.emacs.d/plugins/dimmer.el"
@@ -550,21 +579,6 @@ block."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 版本管理插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(setq ffip-diff-backends
-      '(ffip-diff-backend-git-show-commit
-        "cd $(git rev-parse --show-toplevel) && git diff"
-        "cd $(git rev-parse --show-toplevel) && git diff --cached"
-        ffip-diff-backend-hg-show-commit
-        ("Diff from `kill-ring'" . (car kill-ring))
-        "cd $(hg root) && hg diff"
-        "svn diff"))
-
-(use-package find-file-in-project
-  :load-path "~/.emacs.d/plugins/find-file-in-project"
-  :bind (("M-s f f" . find-file-in-project-by-selected)
-	 ("M-s f d" . find-file-in-current-directory)
-	 ("M-s f i" . ffip-show-diff)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
