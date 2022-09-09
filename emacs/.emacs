@@ -166,7 +166,8 @@
 ;; (visual-line-mode t)
 
 ;; 不显示换行时最右边的 '\' 符号
-(set-display-table-slot standard-display-table 'wrap ?\ )
+;; (set-display-table-slot standard-display-table 'wrap ?\ )
+(setq-default word-wrap t)
 
 ;; 解决粘贴中文出现乱码的问题
 (set-clipboard-coding-system 'utf-8)
