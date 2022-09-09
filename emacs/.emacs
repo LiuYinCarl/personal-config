@@ -577,6 +577,38 @@ block."
   :config
   (dimmer-mode t))
 
+(use-package bm
+  :ensure t
+  :demand t
+  :init
+  ;; restore on load (even before you require bm)
+  (setq bm-restore-repository-on-load t)
+  :config
+  ;; Allow cross-buffer 'next'
+  (setq bm-cycle-all-buffers t)
+  ;; where to store persistant files
+  (setq bm-repository-file "~/.emacs.d/bm-repository")
+
+  (setq-default bm-buffer-persistence t)
+  (add-hook 'after-init-hook 'bm-repository-load)
+  (add-hook 'kill-buffer-hook #'bm-buffer-save)
+  (add-hook 'kill-emacs-hook #'(lambda nil
+                                 (bm-buffer-save-all)
+                                 (bm-repository-save)))
+  (add-hook 'after-save-hook #'bm-buffer-save)
+  (add-hook 'find-file-hooks   #'bm-buffer-restore)
+  (add-hook 'after-revert-hook #'bm-buffer-restore)
+  (add-hook 'vc-before-checkin-hook #'bm-buffer-save)
+  :bind (("<f2>" . bm-next)
+         ("S-<f2>" . bm-previous)
+         ("C-<f2>" . bm-toggle)))
+
+;; 高亮光标下的符号并前后跳转
+(use-package highlight-symbol
+  :bind(("C-<f3>" . highlight-symbol)
+        ("<f3>" . highlight-symbol-next)
+        ("<f4>" . highlight-symbol-prev)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 版本管理插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
