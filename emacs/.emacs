@@ -599,9 +599,11 @@ block."
   (add-hook 'find-file-hooks   #'bm-buffer-restore)
   (add-hook 'after-revert-hook #'bm-buffer-restore)
   (add-hook 'vc-before-checkin-hook #'bm-buffer-save)
-  :bind (("<f2>" . bm-next)
-         ("S-<f2>" . bm-previous)
-         ("C-<f2>" . bm-toggle)))
+  :bind (("M-<right>" . bm-next)
+         ("M-<left>" . bm-previous)
+         ("<f2>" . bm-toggle)
+	 ("M-<up>" . bm-show-all)
+	 ("M-<down>" . bm-show-quit-window)))
 
 ;; 高亮光标下的符号并前后跳转
 (use-package highlight-symbol
