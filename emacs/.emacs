@@ -11,7 +11,7 @@
 ;; M-g g 跳转到指定行, 当选择的行大于最大行数，会跳转到最后一行
 
 ;; 更换主题配色
-;; M-x customize-themes 
+;; M-x customize-themes
 
 ;; 开启括号自动补全模式
 ;; M-x electric-pair-mode
@@ -46,8 +46,6 @@
 ;; w      将当前书签的位置显示在minibuffer里。
 
 
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 启动优化配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -64,7 +62,6 @@
 			     (float-time
 			      (time-subtract after-init-time before-init-time)))
 		     gcs-done)))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 包管理配置
@@ -103,7 +100,6 @@
 ;; 设置光标颜色
 (set-cursor-color "white")
 
-
 ;; 默认开启折行
 (global-visual-line-mode 1)
 
@@ -126,9 +122,6 @@
 ;; 记录上次打开文件时 cursor 停留的位置
 (save-place-mode 1)
 
-;; 设置 eldoc-mode 为 nil 不能阻止 eldoc-mode 生效，所以只能修改 eldoc-mode 的延迟时间 
-(setq eldoc-idle-delay 1000000)
-
 ;; 高亮当前行
 (global-hl-line-mode 1)
 
@@ -138,7 +131,7 @@
 ;; 括号补全
 (electric-pair-mode t)
 
-;; 自动清除行位空格
+;; 自动清除行尾空格
 ;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;; (add-hook 'before-save-hook 'whitespace-cleanup)
 ;; 自动清除行之间的空白行
@@ -166,7 +159,6 @@
 ;; (visual-line-mode t)
 
 ;; 不显示换行时最右边的 '\' 符号
-;; (set-display-table-slot standard-display-table 'wrap ?\ )
 (setq-default word-wrap t)
 
 ;; 解决粘贴中文出现乱码的问题
@@ -180,13 +172,9 @@
 ;; 特殊配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; org-mode 高亮 latex 代码段
-(setq org-highlight-latex-and-related '(latex))
-
 ;; 高亮 markdown 中的 latex
 (setq markdown-enable-highlighting-syntax t)
 (setq markdown-enable-math t)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs 优化插件
@@ -207,7 +195,6 @@
 (use-package autorevert
   :ensure nil
   :hook (after-init . global-auto-revert-mode))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 编程语言插件
@@ -266,8 +253,8 @@
 (use-package tree-sitter
   :config
   (global-tree-sitter-mode)
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
-  )
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+
 (use-package tree-sitter-langs)
 
 ;; 快速选中区块 拓展顺序 字符 单词 句子 代码块 函数 全文件，按一次快捷键拓展一次
@@ -311,9 +298,9 @@
 	("C-c k" . mc/mark-next-like-this)))
 
 ;; 打开文件时默认只读，使用 C-x C-q 解除只读
-(add-hook 'find-file-hook
-	  (lambda ()
-	    (read-only-mode)))
+;; (add-hook 'find-file-hook
+;;	  (lambda ()
+;;	    (read-only-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 窗口布局，文件管理，buffer 管理插件
@@ -330,13 +317,13 @@
 	 ("M-s <down>"  . windmove-down)
 	 ("M-s <left>"  . windmove-left)
 	 ("M-s <right>" . windmove-right))
-  :config (setq windmove-wrap-around t))  ;; 在边缘的窗口进行循环跳转，最左窗口跳到最右窗口等 
+  :config (setq windmove-wrap-around t))  ;; 在边缘的窗口进行循环跳转，最左窗口跳到最右窗口等
 
 (use-package indent-guide
   :config
   (indent-guide-global-mode t)
   (setq indent-guide-delay 0.0  ;; 展示对齐线的延迟时间
-        indent-guide-recursive t))
+	indent-guide-recursive t))
 
 ;; 资源管理器 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
 (use-package neotree
@@ -347,7 +334,6 @@
 ;; https://www.gnu.org/software/emacs/manual/html_node/speedbar/index.html
 (use-package speedbar
   :bind (([f11] . speedbar)))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 程序交互插件
@@ -360,16 +346,15 @@
 (use-package shell-pop
   :init
   (setq shell-pop-default-directory "./"
-        shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell))))
-        shell-pop-term-shell "/bin/bash"
-        shell-pop-universal-key "C-t"
-        shell-pop-window-size 30
-        shell-pop-full-span t
-        shell-pop-window-position "bottom"
-        shell-pop-autocd-to-working-dir t
-        shell-pop-restore-window-configuration t
-        shell-pop-cleanup-buffer-at-process-exit t))
-
+	shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell))))
+	shell-pop-term-shell "/bin/bash"
+	shell-pop-universal-key "C-t"
+	shell-pop-window-size 30
+	shell-pop-full-span t
+	shell-pop-window-position "bottom"
+	shell-pop-autocd-to-working-dir t
+	shell-pop-restore-window-configuration t
+	shell-pop-cleanup-buffer-at-process-exit t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 符号管理插件
@@ -393,7 +378,7 @@
 	 ("M-j"  . symbol-overlay-switch-backward)
 	 ("<f7>" . symbol-overlay-mode)
 	 ("<f8>" . symbol-overlay-remove-all))
-  :bind (:map symbol-overlay-map 
+  :bind (:map symbol-overlay-map
 	      ("i" . symbol-overlay-put)
 	      ("n" . symbol-overlay-jump-next)
 	      ("p" . symbol-overlay-jump-prev)
@@ -409,11 +394,20 @@
 ;; https://zhuanlan.zhihu.com/p/145430576
 ;; https://github.com/rizsotto/Bear
 (use-package eglot
+  :demand
+  :bind (("C-c h" . eldoc))
   :config
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
   (add-hook 'c-mode-hook 'eglot-ensure)
   ;; 不加下面的会跳转不到C++标准库文件
-  (add-hook 'c++-mode-hook 'eglot-ensure))
+  (add-hook 'c++-mode-hook 'eglot-ensure)
+  ;; 修改 eldoc-mode 的展示延迟时间，避免光标移动一下 eldoc 就展示新的内容，影响阅读
+  (setq eldoc-idle-delay 1000000))
+
+(use-package yasnippet
+  :ensure t
+  :config
+  (yas-global-mode 1))
 
 ;; 自动补全 https://www.emacswiki.org/emacs/CompanyMode
 (use-package company
@@ -425,45 +419,12 @@
 	company-dabbrev-downcase nil)  ;; 补全区分大小写
   (add-hook 'after-init-hook 'global-company-mode))
 
-;; [etags] 作为 eglog 的一个补充
-(defun create-tags (dir-name)
-  "Create tags file."
-  (interactive "DDirectory: ")
-  (eshell-command
-   ;; 如果想要添加系统目录的 TAGS，可以给 etags 命令添加一个 --include 参数
-   (format "find %s -type f -name \"*.c\" -o -name \"*.h\" -o -name \"*.cpp\" -o -name \"*.hpp\" | etags -C -" dir-name)))
-
-(defadvice find-tag (around refresh-etags activate)
-  "Rerun etags and reload tags if tag not found and redo find-tag.              
-   If buffer is modified, ask about save before running etags."
-  (let ((extension (file-name-extension (buffer-file-name))))
-    (condition-case err
-	ad-do-it
-      (error (and (buffer-modified-p)
-		  (not (ding))
-		  (y-or-n-p "Buffer is modified, save it? ")
-		  (save-buffer))
-	     (er-refresh-etags extension)
-	     ad-do-it))))
-
-(defun er-refresh-etags (&optional extension)
-  "Run etags on all peer files in current dir and reload them silently."
-  (interactive)
-  (shell-command (format "etags *.%s" (or extension "el")))
-  (let ((tags-revert-without-query t))  ; don't query, revert silently
-    (visit-tags-table default-directory nil)))
-;; 为当前目录的 .h .c 文件生成 tags, find 参数含义 -o(or) -a(and) -not(not)
-;; find . -name "*.h" -o -name "*.c" | etags -
-;; etags 常用快捷键[Emacs version >= 25] https://www.emacswiki.org/emacs/EmacsTags
-;; 生成 etags 文件 https://www.emacswiki.org/emacs/BuildTags
-;; 在当前目录下寻找 etags 生成的 tags 文件
-;; (setq tags-file-name "/home/lzh/github/imgui/TAGS")
-;; 如何使用 tags 文件
-;; 1 使用 create_tag 函数创建 tags 文件
-;; 2 使用 visit-tags-table 函数找到 tags 文件
-;; 3 使用 find-tag(其他函数找不到，不知道为啥) 找到 tag
-(global-set-key (kbd "M-/") 'find-tag)
-
+(use-package lsp-pyright
+  :ensure t
+  :config
+  :hook (python-mode . (lambda ()
+			 (require 'lsp-pyright)
+			 (lsp))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 搜索功能插件
@@ -494,12 +455,12 @@
 
 (setq ffip-diff-backends
       '(ffip-diff-backend-git-show-commit
-        "cd $(git rev-parse --show-toplevel) && git diff"
-        "cd $(git rev-parse --show-toplevel) && git diff --cached"
-        ffip-diff-backend-hg-show-commit
-        ("Diff from `kill-ring'" . (car kill-ring))
-        "cd $(hg root) && hg diff"
-        "svn diff"))
+	"cd $(git rev-parse --show-toplevel) && git diff"
+	"cd $(git rev-parse --show-toplevel) && git diff --cached"
+	ffip-diff-backend-hg-show-commit
+	("Diff from `kill-ring'" . (car kill-ring))
+	"cd $(hg root) && hg diff"
+	"svn diff"))
 
 (use-package find-file-in-project
   :load-path "~/.emacs.d/plugins/find-file-in-project"
@@ -534,26 +495,22 @@
 	(length highlight-blocks--rainbow-colors)))
 
 (defun highlight-blocks--get-bounds ()
-  "Get the bounds of the nested blocks the point is in.
-The returned value is a list of conses, where car is the start of a
-block and cdr is the end of a block, starting from the outermost
-block."
   (let ((result '())
-        (parse-sexp-ignore-comments t))
+	(parse-sexp-ignore-comments t))
     (condition-case nil
-        (let* ((parse-state (syntax-ppss))
-               (starting-pos (if (or (nth 3 parse-state)
-                                     (nth 4 parse-state))
-                                 (nth 8 parse-state)
-                               (point)))
-               (begins (nreverse (nth 9 parse-state)))
-               (end starting-pos)
-               (i 0))
-          (while (or (eq highlight-blocks-max-innermost-block-count t)
-                     (< i highlight-blocks-max-innermost-block-count))
-            (setq end (scan-lists end 1 1))
-            (push (cons (pop begins) end) result)
-            (setq i (1+ i))))
+	(let* ((parse-state (syntax-ppss))
+	       (starting-pos (if (or (nth 3 parse-state)
+				     (nth 4 parse-state))
+				 (nth 8 parse-state)
+			       (point)))
+	       (begins (nreverse (nth 9 parse-state)))
+	       (end starting-pos)
+	       (i 0))
+	  (while (or (eq highlight-blocks-max-innermost-block-count t)
+		     (< i highlight-blocks-max-innermost-block-count))
+	    (setq end (scan-lists end 1 1))
+	    (push (cons (pop begins) end) result)
+	    (setq i (1+ i))))
       (scan-error))
     (last result)))
 
@@ -593,23 +550,23 @@ block."
   (add-hook 'after-init-hook 'bm-repository-load)
   (add-hook 'kill-buffer-hook #'bm-buffer-save)
   (add-hook 'kill-emacs-hook #'(lambda nil
-                                 (bm-buffer-save-all)
-                                 (bm-repository-save)))
+				 (bm-buffer-save-all)
+				 (bm-repository-save)))
   (add-hook 'after-save-hook #'bm-buffer-save)
   (add-hook 'find-file-hooks   #'bm-buffer-restore)
   (add-hook 'after-revert-hook #'bm-buffer-restore)
   (add-hook 'vc-before-checkin-hook #'bm-buffer-save)
   :bind (("M-<right>" . bm-next)
-         ("M-<left>" . bm-previous)
-         ("<f2>" . bm-toggle)
+	 ("M-<left>" . bm-previous)
+	 ("<f2>" . bm-toggle)
 	 ("M-<up>" . bm-show-all)
 	 ("M-<down>" . bm-show-quit-window)))
 
 ;; 高亮光标下的符号并前后跳转
 (use-package highlight-symbol
   :bind(("C-<f3>" . highlight-symbol)
-        ("<f3>" . highlight-symbol-next)
-        ("<f4>" . highlight-symbol-prev)))
+	("<f3>" . highlight-symbol-next)
+	("<f4>" . highlight-symbol-prev)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 版本管理插件
@@ -733,7 +690,6 @@ block."
 ;; (define-key global-map (kbd "C-x C-y") 'wsl-paste-from-clipboard)
 (define-key global-map (kbd "C-c M-c") 'wsl-copy-region-to-clipboard)
 ;; (define-key global-map (kbd "C-x C-w") 'wsl-cut-region-to-clipboard)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
