@@ -45,6 +45,15 @@
 ;; r      重命名当前书签;
 ;; w      将当前书签的位置显示在minibuffer里。
 
+;; Usage package 文档
+;; https://phenix3443.github.io/notebook/emacs/modes/use-package-manual.html
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 此配置的外部程序依赖
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; apt install clang clangd
+;; pip3 install pyright
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 启动优化配置
@@ -182,7 +191,6 @@
 
 ;; 防止超长行卡死 emacs
 (use-package so-long
-  :defer t
   :config (global-so-long-mode 1))
 
 ;; 优化终端色彩显示不足
@@ -390,28 +398,28 @@
 	      ("q" . symbol-overlay-query-replace)
 	      ("r" . symbol-overlay-rename)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; LSP
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; 给 clangd 生成项目配置文件的工具 compile_commands.json
 ;; https://zhuanlan.zhihu.com/p/145430576
 ;; https://github.com/rizsotto/Bear
 (use-package eglot
-  :demand
+  :ensure t
+  :demand t
   :bind (("C-c h" . eldoc))
   :config
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
   (add-hook 'c-mode-hook 'eglot-ensure)
-  ;; 不加下面的会跳转不到C++标准库文件
   (add-hook 'c++-mode-hook 'eglot-ensure)
   ;; 修改 eldoc-mode 的展示延迟时间，避免光标移动一下 eldoc 就展示新的内容，影响阅读
   (setq eldoc-idle-delay 1000000))
 
-(use-package yasnippet
-  :ensure t
-  :config
-  (yas-global-mode 1))
-
 ;; 自动补全 https://www.emacswiki.org/emacs/CompanyMode
 (use-package company
-  :demand
+  :ensure t
+  :demand t
   :bind (("C-c TAB" . company-complete-common))
   :config
   (setq company-idle-delay       0     ;; 延迟补全时间
@@ -419,12 +427,16 @@
 	company-dabbrev-downcase nil)  ;; 补全区分大小写
   (add-hook 'after-init-hook 'global-company-mode))
 
+;; 删除多余的代码目录 lsp-workspace-folders-remove
+;; 刷新 lsp-workspace-restart
+;; 有时候打开项目会无法启动 lsp，还未找到原因
 (use-package lsp-pyright
   :ensure t
-  :config
-  :hook (python-mode . (lambda ()
-			 (require 'lsp-pyright)
-			 (lsp))))
+  :demand t ;; 保证一开始就加载
+  :init     ;; 初始化的时候就添加钩子，防止初始化的时候漏事件
+  (add-hook 'python-mode-hook (lambda ()
+				(require 'lsp-pyright)
+				(lsp))))  ; or lsp-deferred
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 搜索功能插件
