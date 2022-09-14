@@ -594,7 +594,17 @@
   :load-path "~/.emacs.d/plugins/awesome-tab"
   :bind (("M-k" . awesome-tab-forward-tab)
 	 ("M-j" . awesome-tab-backward-tab))
-  :config (awesome-tab-mode t))
+  :config
+  (awesome-tab-mode t)
+  ;; 颜色配置
+  (setq awesome-tab-terminal-dark-select-background-color    "#708090")
+  (setq awesome-tab-terminal-dark-select-foreground-color    "#FFFAFA")
+  (setq awesome-tab-terminal-dark-unselect-background-color  "#1C1C1C")
+  (setq awesome-tab-terminal-dark-unselect-foreground-color  "#FFFAFA")
+  (setq awesome-tab-terminal-light-select-background-color   "#708090")
+  (setq awesome-tab-terminal-light-select-foreground-color   "#FFFAFA")
+  (setq awesome-tab-terminal-light-unselect-background-color "#1C1C1C")
+  (setq awesome-tab-terminal-light-unselect-foreground-color "#FFFAFA"))
 
 ;; M-x hl-todo-mode 启动
 (use-package hl-todo
