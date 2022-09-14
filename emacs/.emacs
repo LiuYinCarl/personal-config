@@ -411,8 +411,10 @@
   :bind (("C-c h" . eldoc))
   :config
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+  (add-to-list 'eglot-server-programs '((python-mode)  "pyright-langserver" "--stdio"))
   (add-hook 'c-mode-hook 'eglot-ensure)
   (add-hook 'c++-mode-hook 'eglot-ensure)
+  (add-hook 'python-mode-hook 'eglot-ensure)
   ;; 修改 eldoc-mode 的展示延迟时间，避免光标移动一下 eldoc 就展示新的内容，影响阅读
   (setq eldoc-idle-delay 1000000))
 
@@ -426,17 +428,6 @@
 	company-mode             t
 	company-dabbrev-downcase nil)  ;; 补全区分大小写
   (add-hook 'after-init-hook 'global-company-mode))
-
-;; 删除多余的代码目录 lsp-workspace-folders-remove
-;; 刷新 lsp-workspace-restart
-;; 有时候打开项目会无法启动 lsp，还未找到原因
-(use-package lsp-pyright
-  :ensure t
-  :demand t ;; 保证一开始就加载
-  :init     ;; 初始化的时候就添加钩子，防止初始化的时候漏事件
-  (add-hook 'python-mode-hook (lambda ()
-				(require 'lsp-pyright)
-				(lsp))))  ; or lsp-deferred
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 搜索功能插件
