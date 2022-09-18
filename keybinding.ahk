@@ -22,6 +22,7 @@
 ; 按键映射
 ; https://wyagd001.github.io/zh-cn/docs/misc/Remap.htm
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; 工具函数
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -32,7 +33,7 @@ BlockKeyboardInputs()
     ; 定义除了快捷键 Pause 之外的所有按键
     static keys
     keys = Space,Enter,Tab,Esc,BackSpace,Del,Ins,Home,End,PgDn,PgUp,Up,DownS
-    ,Left,Right,CtrlBreak,ScrollLock,PrintScreen,CapsLock,AppsKey,LWin,LWin,NumLock
+    ,Left,Right,CtrlBreak,ScrollLock,PrintScreen,CapsLock,AppsKey,LWin,RWin,NumLock
     ,Numpad0,Numpad1,Numpad2,Numpad3,Numpad4,Numpad5,Numpad6,Numpad7,Numpad8
     ,Numpad9,NumpadDot,NumpadDiv,NumpadMult,NumpadAdd,NumpadSub,NumpadEnter
     ,NumpadIns,NumpadEnd,NumpadDown,NumpadPgDn,NumpadLeft,NumpadClear
@@ -48,9 +49,9 @@ BlockKeyboardInputs()
     ; blockKeyBoard 只能设置为 "On" 或者 "Off"
     static blockKeyBoard := "Off"
     if (blockKeyBoard == "Off") {
-        blockKeyBoard = "On"
+        blockKeyBoard := "On"
     } else {
-        blockKeyBoard = "Off"
+        blockKeyBoard := "Off"
     }
 
     ; 解析 keys 字符串, `, 表示解析的分隔符是 ","
