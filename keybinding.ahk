@@ -5,7 +5,7 @@
 ; 将该脚本的快捷方式放置于 C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp
 ; 即可实现开机启动
 
-; Realforce 机械键盘内置快捷键
+; Realforce 键盘内置快捷键
 ; Fn+F1，开启默认浏览器
 ; Fn+F2，开启默认邮件客户端
 ; Fn+F3，计算器
