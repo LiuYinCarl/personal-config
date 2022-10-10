@@ -266,7 +266,7 @@
 
 (use-package tree-sitter-langs
   :if (fboundp 'module-load) ; 需要Emacs 支持 Dynamic Module
-)
+  )
 
 ;; 快速选中区块 拓展顺序 字符 单词 句子 代码块 函数 全文件，按一次快捷键拓展一次
 (use-package expand-region
@@ -408,19 +408,20 @@
 ;; 给 clangd 生成项目配置文件的工具 compile_commands.json
 ;; https://zhuanlan.zhihu.com/p/145430576
 ;; https://github.com/rizsotto/Bear
-(use-package eglot
-  :if (version<= emacs-version "26.1")
-  :ensure t
-  :demand t
-  :bind (("C-c h" . eldoc))
-  :config
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
-  (add-to-list 'eglot-server-programs '((python-mode)  "pyright-langserver" "--stdio"))
-  (add-hook 'c-mode-hook 'eglot-ensure)
-  (add-hook 'c++-mode-hook 'eglot-ensure)
-  (add-hook 'python-mode-hook 'eglot-ensure)
-  ;; 修改 eldoc-mode 的展示延迟时间，避免光标移动一下 eldoc 就展示新的内容，影响阅读
-  (setq eldoc-idle-delay 1000000))
+(when (not (version<= emacs-version "26.1"))
+  (use-package eglot
+    :ensure t
+    :demand t
+    :bind (("C-c h" . eldoc))
+    :config
+    (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+    (add-to-list 'eglot-server-programs '((python-mode)  "pyright-langserver" "--stdio"))
+    (add-hook 'c-mode-hook 'eglot-ensure)
+    (add-hook 'c++-mode-hook 'eglot-ensure)
+    (add-hook 'python-mode-hook 'eglot-ensure)
+    ;; 修改 eldoc-mode 的展示延迟时间，避免光标移动一下 eldoc 就展示新的内容，影响阅读
+    (setq eldoc-idle-delay 1000000))
+  )
 
 ;; 自动补全 https://www.emacswiki.org/emacs/CompanyMode
 (use-package company
