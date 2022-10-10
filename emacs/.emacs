@@ -259,11 +259,14 @@
 
 ;; tree-sitter 进行语法高亮
 (use-package tree-sitter
+  :if (fboundp 'module-load) ; 需要 Emacs 支持 Dynamic module
   :config
   (global-tree-sitter-mode)
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
-(use-package tree-sitter-langs)
+(use-package tree-sitter-langs
+  :if (fboundp 'module-load) ; 需要Emacs 支持 Dynamic Module
+)
 
 ;; 快速选中区块 拓展顺序 字符 单词 句子 代码块 函数 全文件，按一次快捷键拓展一次
 (use-package expand-region
@@ -406,6 +409,7 @@
 ;; https://zhuanlan.zhihu.com/p/145430576
 ;; https://github.com/rizsotto/Bear
 (use-package eglot
+  :if (version<= emacs-version "26.1")
   :ensure t
   :demand t
   :bind (("C-c h" . eldoc))
