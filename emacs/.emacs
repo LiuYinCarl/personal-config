@@ -29,21 +29,7 @@
 ;; 全量更新 melpa 包
 ;; M-x package-list-packages RET Ux
 
-;; Emacs 自带书签的快捷键
-;; C-x r m      ; bookmark-set
-;; C-x r l      ; bookmark-bmenu-list
-;; C-x r b      ; bookmark-jump
-
-;; 在 Bookmark List buffer 中的快捷键
-;; a      显示当前书签的标注信息;
-;; A      在另一个buffer中显示所有书签的所有标注信息;
-;; d      标记书签，以便用来删除 (x – 执行删除);
-;; e      编辑当前书签的标注信息;
-;; m      标记书签，以便用于进一步显示和其他操作 (v – 访问这个书签);
-;; o      选中当前书签，并显示在另一个window中;
-;; C-o    在另一个window中切换到当前这个书签;
-;; r      重命名当前书签;
-;; w      将当前书签的位置显示在minibuffer里。
+;; 书签使用 bm 插件
 
 ;; Dired Mode
 ;; C-x d 进入Dired Mode
