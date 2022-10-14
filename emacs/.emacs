@@ -349,6 +349,12 @@
 	 ("C-c +" . neotree-find)
 	 ("C-c _" . neotree-ffip-project-dir)))
 
+;; 将代码结构展示在右侧窗口
+;; C-c C-j 可以在下方打开一个 imenu 窗口快速查找
+(use-package imenu-list
+  :bind ("C-c ." . imenu-list-smart-toggle)
+  :config (setq imenu-list-focus-after-activation t))
+
 ;; https://www.gnu.org/software/emacs/manual/html_node/speedbar/index.html
 (use-package speedbar
   :bind (([f11] . speedbar)))
@@ -377,6 +383,12 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 符号管理插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; 高亮光标下的符号并前后跳转
+;; (use-package highlight-symbol
+;;   :bind(("C-<f3>" . highlight-symbol)
+;; 	("<f3>" . highlight-symbol-next)
+	;; ("<f4>" . highlight-symbol-prev)))
 
 ;; https://zhuanlan.zhihu.com/p/26471685
 ;; 在 symbol-overlay-mode 中的时候，可使用如下快捷键操作
@@ -427,8 +439,7 @@
     (add-hook 'c++-mode-hook 'eglot-ensure)
     (add-hook 'python-mode-hook 'eglot-ensure)
     ;; 修改 eldoc-mode 的展示延迟时间，避免光标移动一下 eldoc 就展示新的内容，影响阅读
-    (setq eldoc-idle-delay 1000000))
-  )
+    (setq eldoc-idle-delay 1000000)))
 
 ;; 自动补全 https://www.emacswiki.org/emacs/CompanyMode
 (use-package company
@@ -577,12 +588,6 @@
 	 ("M-<up>" . bm-show-all)
 	 ("M-<down>" . bm-show-quit-window)))
 
-;; 高亮光标下的符号并前后跳转
-(use-package highlight-symbol
-  :bind(("C-<f3>" . highlight-symbol)
-	("<f3>" . highlight-symbol-next)
-	("<f4>" . highlight-symbol-prev)))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 版本管理插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -627,7 +632,7 @@
 (defun hideshow-folded-overlay-fn (ov)
   (when (eq 'code (overlay-get ov 'hs))
     (let* ((nlines (count-lines (overlay-start ov) (overlay-end ov)))
-	   (info (format " ... #%d " nlines)))
+	   (info (format "[%d]" nlines)))
       (overlay-put ov 'display (propertize info 'face hideshow-folded-face)))))
 
 ;; 显示被折叠的行数 这里额外启用了 :box t 属性使得提示更加明显
