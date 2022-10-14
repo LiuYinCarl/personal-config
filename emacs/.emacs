@@ -45,6 +45,18 @@
 ;; r      重命名当前书签;
 ;; w      将当前书签的位置显示在minibuffer里。
 
+;; Dired Mode
+;; C-x d 进入Dired Mode
+;; q 退出Dired Mode
+;; + 创建目录
+;; g 刷新目录
+;; D 删除目录
+;; C 拷贝
+;; R 重命名
+;; d 标记删除
+;; u 取消标记
+;; x 执行所有的标记
+
 ;; Usage package 文档
 ;; https://phenix3443.github.io/notebook/emacs/modes/use-package-manual.html
 
@@ -97,7 +109,6 @@
 
 ;; 自动安装系统没有的 package
 (setq use-package-always-ensure t)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 全局配置
@@ -337,10 +348,20 @@
 	indent-guide-recursive t))
 
 ;; 资源管理器 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
+;; neotree 窗口有效
+;; g       刷新树。
+;; A       最大/最小化 NeoTree 窗口
+;; H       切换显示隐藏文件。
+;; C-c C-n 创建文件，若以 / 结尾则表示创建文件夹。
+;; C-c C-d 删除文件或目录。
+;; C-c C-r 重命名文件或目录。
+;; C-c C-c 改变根目录
 (use-package neotree
   :bind (("C-c =" . neotree-show)
 	 ("C-c -" . neotree-hide)
-	 ("C-c d" . neotree-dir)))
+	 ("C-c d" . neotree-dir)
+	 ("C-c +" . neotree-find)
+	 ("C-c _" . neotree-ffip-project-dir)))
 
 ;; https://www.gnu.org/software/emacs/manual/html_node/speedbar/index.html
 (use-package speedbar
