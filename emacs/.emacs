@@ -101,7 +101,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; 设置默认字体大小 1 = 1/10 pt
-(set-face-attribute 'default nil :height 180)
+(set-face-attribute 'default nil :height 130)
 
 ;; 设置光标颜色
 (set-cursor-color "white")
@@ -388,7 +388,7 @@
 ;; (use-package highlight-symbol
 ;;   :bind(("C-<f3>" . highlight-symbol)
 ;; 	("<f3>" . highlight-symbol-next)
-	;; ("<f4>" . highlight-symbol-prev)))
+;; ("<f4>" . highlight-symbol-prev)))
 
 ;; https://zhuanlan.zhihu.com/p/26471685
 ;; 在 symbol-overlay-mode 中的时候，可使用如下快捷键操作
@@ -458,6 +458,7 @@
 
 (use-package youdao-dictionary
   :bind (("C-c f"   . youdao-dictionary-search-at-point+)
+	 ("C-c w"   . youdao-dictionary-search-at-point-tooltip)
 	 ("C-c SPC" . youdao-dictionary-search-from-input))
   :config
   (setq url-automatic-caching t
@@ -490,9 +491,11 @@
 
 (use-package find-file-in-project
   :load-path "~/.emacs.d/plugins/find-file-in-project"
-  :bind (("M-s f f" . find-file-in-project-by-selected)
+  :bind (("M-p"     . find-file-in-project)
+	 ("M-s f f" . find-file-in-project-by-selected)
 	 ("M-s f d" . find-file-in-current-directory)
-	 ("M-s f i" . ffip-show-diff)))
+	 ("M-s f i" . ffip-show-diff))
+  :config (ivy-mode 1))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 主题配置插件
