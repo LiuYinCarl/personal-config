@@ -478,11 +478,10 @@
   (ivy-mode 1))
 
 (use-package fzf
-  :bind (("M-p" . fzf-find-file))
+  :bind (("M-p" . fzf-find-file)
+	 ("M-s p" . fzf-git))
   :config
-  (setq fzf/args "-x --print-query --margin=1,0 --no-hscroll
-                  --color fg:-1,bg:-1,hl:230,fg+:3,bg+:233,hl+:229
-                  --color info:150,prompt:110,spinner:150,pointer:167,marker:174"
+  (setq fzf/args "-x --print-query --margin=0,0"
         fzf/executable "fzf"
         fzf/git-grep-args "-i --line-number %s"
         ;; command used for `fzf-grep-*` functions
