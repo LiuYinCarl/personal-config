@@ -50,7 +50,7 @@
 ;; 此配置的外部程序依赖
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; apt install clang clangd
+;; apt install clang clangd fzf
 ;; pip3 install pyright
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -335,6 +335,7 @@
 
 ;; 资源管理器 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
 ;; neotree 窗口有效
+;; U       进入上层目录
 ;; g       刷新树。
 ;; A       最大/最小化 NeoTree 窗口
 ;; H       切换显示隐藏文件。
@@ -354,10 +355,6 @@
 (use-package imenu-list
   :bind ("C-c ." . imenu-list-smart-toggle)
   :config (setq imenu-list-focus-after-activation t))
-
-;; https://www.gnu.org/software/emacs/manual/html_node/speedbar/index.html
-(use-package speedbar
-  :bind (([f11] . speedbar)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 程序交互插件
@@ -480,28 +477,26 @@
   :config
   (ivy-mode 1))
 
-(setq ffip-diff-backends
-      '(ffip-diff-backend-git-show-commit
-	"cd $(git rev-parse --show-toplevel) && git diff"
-	"cd $(git rev-parse --show-toplevel) && git diff --cached"
-	ffip-diff-backend-hg-show-commit
-	("Diff from `kill-ring'" . (car kill-ring))
-	"cd $(hg root) && hg diff"
-	"svn diff"))
-
-(use-package find-file-in-project
-  :load-path "~/.emacs.d/plugins/find-file-in-project"
-  :bind (("M-p"     . find-file-in-project)
-	 ("M-s f f" . find-file-in-project-by-selected)
-	 ("M-s f d" . find-file-in-current-directory)
-	 ("M-s f i" . ffip-show-diff))
-  :config (ivy-mode 1))
+(use-package fzf
+  :bind (("M-p" . fzf-find-file))
+  :config
+  (setq fzf/args "-x --print-query --margin=1,0 --no-hscroll
+                  --color fg:-1,bg:-1,hl:230,fg+:3,bg+:233,hl+:229
+                  --color info:150,prompt:110,spinner:150,pointer:167,marker:174"
+        fzf/executable "fzf"
+        fzf/git-grep-args "-i --line-number %s"
+        ;; command used for `fzf-grep-*` functions
+        ;; example usage for ripgrep:
+        fzf/grep-command "rg --no-heading -nH"
+        ;; fzf/grep-command "grep -nrH"
+        fzf/position-bottom t
+        fzf/window-height 15))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 主题配置插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package solarized-theme)
+;; (use-package solarized-theme)
 
 (use-package atom-one-dark-theme
   :config
@@ -590,6 +585,8 @@
 	 ("<f2>" . bm-toggle)
 	 ("M-<up>" . bm-show-all)
 	 ("M-<down>" . bm-show-quit-window)))
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 版本管理插件
@@ -723,6 +720,21 @@
 ;; (define-key global-map (kbd "C-x C-y") 'wsl-paste-from-clipboard)
 (define-key global-map (kbd "C-c M-c") 'wsl-copy-region-to-clipboard)
 ;; (define-key global-map (kbd "C-x C-w") 'wsl-cut-region-to-clipboard)
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 外观配置
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ ;; bm 插件
+ '(bm-face ((t (:background "DimGray"))))
+ '(bm-fringe-face ((t (:background "DimGray"))))
+ '(bm-fringe-persistent-face ((t (:background "DimGray"))))
+ '(bm-persistent-face ((t (:background "DimGray")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
