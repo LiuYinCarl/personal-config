@@ -29,6 +29,9 @@
 ;; 全量更新 melpa 包
 ;; M-x package-list-packages RET Ux
 
+;; 查看选中的区域内的行数、单词数、字符数
+;; M-=
+
 ;; 书签使用 bm 插件
 
 ;; Dired Mode
