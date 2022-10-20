@@ -26,11 +26,11 @@
 ;; 文件编码转换
 ;; C-x RET r 编码类型(gbk,utf-8 ...)
 
-;; 全量更新 melpa 包
-;; M-x package-list-packages RET Ux
-
 ;; 查看选中的区域内的行数、单词数、字符数
 ;; M-=
+
+;; 全量更新 melpa 包
+;; M-x package-list-packages RET Ux
 
 ;; 书签使用 bm 插件
 
@@ -139,6 +139,12 @@
 
 ;; 括号补全
 (electric-pair-mode t)
+
+;; 保存最近打开的文件
+(recentf-mode 1)
+(setq recentf-max-menu-items 100)
+(setq recentf-max-saved-items 100)
+;; (global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
 ;; 自动清除行尾空格
 ;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -480,9 +486,12 @@
   :config
   (ivy-mode 1))
 
+
+
 (use-package fzf
-  :bind (("M-p" . fzf-find-file)
-	 ("M-s p" . fzf-git))
+  :bind (("M-s p" . fzf-find-file)
+	 ("M-s -" . fzf-git)
+	 ("M-s =" . fzf-recentf))
   :config
   (setq fzf/args "-x --print-query --margin=0,0"
         fzf/executable "fzf"
