@@ -102,8 +102,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 全局配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; mode-line show current function
-(which-func-mode 1)
 
 ;; 设置默认字体大小 1 = 1/10 pt
 (set-face-attribute 'default nil :height 130)
@@ -154,10 +152,6 @@
 ;; 自动清除行尾空格
 ;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;; (add-hook 'before-save-hook 'whitespace-cleanup)
-;; 自动清除行之间的空白行
-;; (add-hook 'before-save-hook 'delete-blank-lines)
-;; 显示空格
-;; (global-set-key [f1] 'whitespace-newline-mode)
 
 ;; 字符编码优先级设置，最下面的作为最优先选择的编码类型
 (prefer-coding-system 'cp950)
@@ -169,14 +163,10 @@
 (prefer-coding-system 'utf-8-unix)
 
 ;; 向上/向下翻半页
-;; https://emacs.stackexchange.com/questions/27698/how-can-i-scroll-a-half-page-on-c-v-and-m-v
 (autoload 'View-scroll-half-page-forward "view")
 (autoload 'View-scroll-half-page-backward "view")
 (global-set-key (kbd "C-v") 'View-scroll-half-page-forward)
 (global-set-key (kbd "M-v") 'View-scroll-half-page-backward)
-
-;; 设置换行，避免切分单词
-;; (visual-line-mode t)
 
 ;; 不显示换行时最右边的 '\' 符号
 (setq-default word-wrap t)
@@ -189,26 +179,12 @@
 (setq default-process-coding-system '(utf-8 . utf-8))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 特殊配置
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; 高亮 markdown 中的 latex
-(setq markdown-enable-highlighting-syntax t)
-(setq markdown-enable-math t)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs 优化插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; 防止超长行卡死 emacs
 (use-package so-long
   :config (global-so-long-mode 1))
-
-;; 优化终端色彩显示不足
-(use-package color-theme-approximate
-  :unless (or window-system (getenv "MLTERM"))
-  :config
-  (color-theme-approximate-on))
 
 ;; Emacs 内部打开的文件如果被外部修改，可以自动更新对应的 buffer
 (use-package autorevert
@@ -253,16 +229,16 @@
   (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
 
 ;; OCaml
-(let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
-  (when (and opam-share (file-directory-p opam-share))
-    ;; Register Merlin
-    (add-to-list 'load-path (expand-file-name "emacs/site-lisp" opam-share))
-    (autoload 'merlin-mode "merlin" nil t nil)
-    ;; Automatically start it in OCaml buffers
-    (add-hook 'tuareg-mode-hook 'merlin-mode t)
-    (add-hook 'caml-mode-hook 'merlin-mode t)
-    ;; Use opam switch to lookup ocamlmerlin binary
-    (setq merlin-command 'opam)))
+;; (let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
+;;   (when (and opam-share (file-directory-p opam-share))
+;;     ;; Register Merlin
+;;     (add-to-list 'load-path (expand-file-name "emacs/site-lisp" opam-share))
+;;     (autoload 'merlin-mode "merlin" nil t nil)
+;;     ;; Automatically start it in OCaml buffers
+;;     (add-hook 'tuareg-mode-hook 'merlin-mode t)
+;;     (add-hook 'caml-mode-hook 'merlin-mode t)
+;;     ;; Use opam switch to lookup ocamlmerlin binary
+;;     (setq merlin-command 'opam)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 文本编辑插件
@@ -318,11 +294,6 @@
   :bind(("C-c l" . mc/edit-lines)
 	("C-c j" . mc/mark-previous-like-this)
 	("C-c k" . mc/mark-next-like-this)))
-
-;; 打开文件时默认只读，使用 C-x C-q 解除只读
-;; (add-hook 'find-file-hook
-;;	  (lambda ()
-;;	    (read-only-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 窗口布局，文件管理，buffer 管理插件
@@ -479,7 +450,6 @@
 ;; o   在其他窗口打开文件
 ;; n/p      上下移动，以行为单位
 ;; M-n/M-p  上下移动，以文件为单位
-
 ;; S 改变搜索关键字
 ;; D 改变搜索目录
 ;; g 重新搜索
@@ -512,8 +482,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 主题配置插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; (use-package solarized-theme)
 
 (use-package atom-one-dark-theme
   :config
@@ -603,8 +571,6 @@
 	 ("M-<up>" . bm-show-all)
 	 ("M-<down>" . bm-show-quit-window)))
 
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 版本管理插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -630,21 +596,6 @@
   (setq awesome-tab-terminal-light-select-foreground-color   "#FFFAFA")
   (setq awesome-tab-terminal-light-unselect-background-color "#1C1C1C")
   (setq awesome-tab-terminal-light-unselect-foreground-color "#FFFAFA"))
-
-;; M-x hl-todo-mode 启动
-(use-package hl-todo
-  :load-path "~/.emacs.d/plugins/hl-todo"
-  :bind (("C-c p" . hl-todo-previous)
-	 ("C-c n" . hl-todo-next)
-	 ("C-c o" . hl-todo-occur)
-	 ("C-c i" . hl-todo-insert))
-  :config
-  (setq hl-todo-keyword-faces
-	'(("TODO"   . "#FF0000")
-	  ("FIXME"  . "#FF0000")
-	  ("DEBUG"  . "#A020F0")
-	  ("GOTCHA" . "#FF4500")
-	  ("STUB"   . "#1E90FF"))))
 
 (defun hideshow-folded-overlay-fn (ov)
   (when (eq 'code (overlay-get ov 'hs))
@@ -693,15 +644,6 @@
 			(eshell-life-is-too-much)
 		      (delete-char arg))))))
 
-;; 一键切换 .h/.cpp 文件
-;; https://blog.flowlore.com/passages/emacs-switch-cpp-h-file/
-(defun switch-cpp ()
-  (global-set-key [f9] 'ffap)
-  (global-set-key [f9] 'ff-find-other-file)
-  )
-(add-hook 'c-mode-hook 'switch-cpp)
-(add-hook 'c++-mode-hook 'switch-cpp)
-
 ;; 一键格式化
 (defun indent-whole ()
   (interactive)
@@ -737,7 +679,6 @@
 ;; (define-key global-map (kbd "C-x C-y") 'wsl-paste-from-clipboard)
 (define-key global-map (kbd "C-c M-c") 'wsl-copy-region-to-clipboard)
 ;; (define-key global-map (kbd "C-x C-w") 'wsl-cut-region-to-clipboard)
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 外观配置
