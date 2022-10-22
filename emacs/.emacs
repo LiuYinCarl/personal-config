@@ -79,8 +79,8 @@
 
 (require 'package)
 ;; 官方源 安装 Emacs 的机器在外网时使用
-;;(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-;;(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
+;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 ;; 腾讯源 安装 Emacs 的机器在国内时使用
 (add-to-list 'package-archives '("gnu" . "http://mirrors.cloud.tencent.com/elpa/gnu/"))
 (add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
@@ -123,6 +123,9 @@
 
 ;; 关闭备份文件功能
 (setq make-backup-files nil)
+
+;; 关闭自动保存文件功能
+(setq auto-save-default nil)
 
 ;; 行号的显示格式
 (setq linum-format "%4d\u2502")
@@ -486,12 +489,13 @@
   :config
   (ivy-mode 1))
 
-
-
 (use-package fzf
+  :load-path "~/.emacs.d/plugins/fzf.el/"
+  :demand t
   :bind (("M-s p" . fzf-find-file)
 	 ("M-s -" . fzf-git)
-	 ("M-s =" . fzf-recentf))
+	 ("M-s =" . fzf-recentf)
+	 ("M-s b" . fzf-find-in-buffer))
   :config
   (setq fzf/args "-x --print-query --margin=0,0"
         fzf/executable "fzf"

@@ -13,3 +13,5 @@ git clone --depth=1 git@github.com:scottjad/parenface.git
 git clone --depth=1 git@github.com:redguardtoo/find-file-in-project.git
 
 git clone --depth=1 git@github.com:gonewest818/dimmer.el.git
+
+git clone --depth=1 git@github.com:LiuYinCarl/fzf.el.git
