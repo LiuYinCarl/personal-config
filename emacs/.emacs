@@ -457,9 +457,41 @@
 (use-package deadgrep
   :bind (("C-c s" . deadgrep)))
 
-(use-package ivy
-  :config
-  (ivy-mode 1))
+(if (version< emacs-version "27.1")
+    (use-package ivy
+      :init
+      (ivy-mode 1))
+  (use-package vertico
+    :init
+    (vertico-mode 1)
+    :config
+    (setq vertico-scroll-margin 0)
+    (setq vertico-count 10)
+    ;; (setq vertico-resize t)
+    ;; (setq vertico-cycle t)
+    ))
+
+;; Persist history over Emacs restarts. Vertico sorts by history position.
+(use-package savehist
+  :init
+  (savehist-mode 1))
+
+(use-package emacs
+  :init
+  (defun crm-indicator (args)
+    (cons (format "[CRM%s] %s"
+                  (replace-regexp-in-string
+                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                   crm-separator)
+                  (car args))
+          (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+  ;; Do not allow the cursor in the minibuffer prompt
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+  ;; Enable recursive minibuffers
+  (setq enable-recursive-minibuffers t))
 
 (use-package fzf
   :load-path "~/.emacs.d/plugins/fzf.el/"
@@ -467,7 +499,8 @@
   :bind (("M-s p" . fzf-find-file)
 	 ("M-s -" . fzf-git)
 	 ("M-s =" . fzf-recentf)
-	 ("M-s b" . fzf-find-in-buffer))
+	 ("M-s b" . fzf-find-in-buffer)
+	 ("M-s d" . fzf-find-file-current-dir))
   :config
   (setq fzf/args "-x --print-query --margin=0,0"
         fzf/executable "fzf"
@@ -688,7 +721,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- ;; bm 插件
  '(bm-face ((t (:background "DimGray"))))
  '(bm-fringe-face ((t (:background "DimGray"))))
  '(bm-fringe-persistent-face ((t (:background "DimGray"))))
