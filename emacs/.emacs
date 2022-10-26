@@ -615,6 +615,7 @@
 
 ;; https://github.com/manateelazycat/awesome-tab
 (use-package awesome-tab
+  :demand t
   :load-path "~/.emacs.d/plugins/awesome-tab"
   :bind (("M-k" . awesome-tab-forward-tab)
 	 ("M-j" . awesome-tab-backward-tab))
