@@ -106,6 +106,9 @@
 ;; 设置默认字体大小 1 = 1/10 pt
 (set-face-attribute 'default nil :height 130)
 
+;; 退出 Emacs 时保存工程状态
+(desktop-save-mode 1)
+
 ;; 设置光标颜色
 (set-cursor-color "white")
 
