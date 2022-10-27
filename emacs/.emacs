@@ -459,8 +459,12 @@
 
 (if (version< emacs-version "27.1")
     (use-package ivy
-      :init
-      (ivy-mode 1))
+      :config
+      (ivy-mode 1)
+      ;; Add recent files and bookmarks to the ivy-switch-buffer
+      ;; (setq ivy-use-virtual-buffers t)
+      (setq ivy-count-format "%d/%d ")
+      )
   (use-package vertico
     :init
     (vertico-mode 1)
