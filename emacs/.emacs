@@ -115,6 +115,12 @@
 ;; 默认开启折行
 (global-visual-line-mode 1)
 
+;; 不显示工具栏
+(tool-bar-mode -1)
+
+;; 不显示菜单栏
+(menu-bar-mode -1)
+
 ;; 选中即复制功能
 (setq x-select-enable-primary t)
 
@@ -156,14 +162,19 @@
 ;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;; (add-hook 'before-save-hook 'whitespace-cleanup)
 
-;; 字符编码优先级设置，最下面的作为最优先选择的编码类型
-(prefer-coding-system 'cp950)
-(prefer-coding-system 'gb2312)
-(prefer-coding-system 'cp936)
-(prefer-coding-system 'gb18030)
-(prefer-coding-system 'utf-16)
-(prefer-coding-system 'utf-8-dos)
+;; utf-8 everywhere
+(set-charset-priority 'unicode)
 (prefer-coding-system 'utf-8-unix)
+(modify-coding-system-alist 'process "*" 'utf-8-unix)
+(setq-default buffer-file-coding-system 'utf-8-unix)
+(set-buffer-file-coding-system 'utf-8-unix)
+(set-file-name-coding-system 'utf-8-unix)
+(set-default-coding-systems 'utf-8-unix)
+(set-keyboard-coding-system 'utf-8-unix)
+(set-terminal-coding-system 'utf-8-unix)
+(set-language-environment "UTF-8")
+(setq locale-coding-system 'utf-8-unix)
+(setq default-process-coding-system '(utf-8-unix . utf-8-unix))
 
 ;; 向上/向下翻半页
 (autoload 'View-scroll-half-page-forward "view")
