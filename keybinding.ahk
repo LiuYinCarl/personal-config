@@ -40,6 +40,11 @@ return
 DisableKeyBoardAndMouse(0)  ; Enable all keyboard and mouse buttons
 Return
 
+; https://jmmv.dev/2021/07/macos-ahk.htmlhttps://jmmv.dev/2021/07/macos-ahk.htmlhttps://jmmv.dev/2021/07/macos-ahk.html
+$!a::Send ^a ; Select all.
+$^a::Send {Home}
+$^e::Send {End}
+
 ; don't use hotkey in Windows Remote Desktop Application
 ; exchange LCtrl and CapsLock
 #IfWinNotActive ahk_class TscShellContainerClass
