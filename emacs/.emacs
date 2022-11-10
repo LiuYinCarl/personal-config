@@ -86,7 +86,6 @@
 (add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
 
 (setq package-check-signature nil) ;;个别时候会出现签名校验失败
-(require 'package) ;; 初始化包管理器
 (unless (bound-and-true-p package--initialized)
   (package-initialize)) ;; 刷新软件源索引
 (unless package-archive-contents
@@ -107,7 +106,7 @@
 (set-face-attribute 'default nil :height 130)
 
 ;; 退出 Emacs 时保存工程状态
-(desktop-save-mode 1)
+(desktop-save-mode -1)
 
 ;; 设置光标颜色
 (set-cursor-color "white")
@@ -115,17 +114,17 @@
 ;; 默认开启折行
 (global-visual-line-mode 1)
 
-;; 不显示工具栏
-(tool-bar-mode -1)
-
-;; 不显示菜单栏
-(menu-bar-mode -1)
-
 ;; 选中即复制功能
 (setq x-select-enable-primary t)
 
 ;; 状态栏显示列数
 (column-number-mode 1)
+
+;; 不显示工具栏
+(tool-bar-mode -1)
+
+;; 不显示菜单栏
+(menu-bar-mode -1)
 
 ;; 将yes/no 作为确认改成 y/n
 (fset 'yes-or-no-p 'y-or-n-p)
@@ -140,6 +139,13 @@
 (setq linum-format "%4d\u2502")
 (global-linum-mode t)
 
+;; 某些模式不使用行号
+(setq linum-disabled-modes-list '(eshell-mode deadgrep-mode))
+(defun linum-on ()
+  (unless (or (minibufferp)
+	      (member major-mode linum-disabled-modes-list))
+    (linum-mode 1)))
+
 ;; 记录上次打开文件时 cursor 停留的位置
 (save-place-mode 1)
 
@@ -153,28 +159,26 @@
 (electric-pair-mode t)
 
 ;; 保存最近打开的文件
-(recentf-mode 1)
-(setq recentf-max-menu-items 100)
-(setq recentf-max-saved-items 100)
+(use-package recentf
+  :config
+  (setq recentf-max-menu-items 100)
+  (setq recentf-max-saved-items 100)
+  :hook (after-init . recentf-mode))
+
 ;; (global-set-key "\C-x\ \C-r" 'recentf-open-files)
 
 ;; 自动清除行尾空格
 ;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
 ;; (add-hook 'before-save-hook 'whitespace-cleanup)
 
-;; utf-8 everywhere
-(set-charset-priority 'unicode)
+;; 字符编码优先级设置，最下面的作为最优先选择的编码类型
+(prefer-coding-system 'cp950)
+(prefer-coding-system 'gb2312)
+(prefer-coding-system 'cp936)
+(prefer-coding-system 'gb18030)
+(prefer-coding-system 'utf-16)
+(prefer-coding-system 'utf-8-dos)
 (prefer-coding-system 'utf-8-unix)
-(modify-coding-system-alist 'process "*" 'utf-8-unix)
-(setq-default buffer-file-coding-system 'utf-8-unix)
-(set-buffer-file-coding-system 'utf-8-unix)
-(set-file-name-coding-system 'utf-8-unix)
-(set-default-coding-systems 'utf-8-unix)
-(set-keyboard-coding-system 'utf-8-unix)
-(set-terminal-coding-system 'utf-8-unix)
-(set-language-environment "UTF-8")
-(setq locale-coding-system 'utf-8-unix)
-(setq default-process-coding-system '(utf-8-unix . utf-8-unix))
 
 ;; 向上/向下翻半页
 (autoload 'View-scroll-half-page-forward "view")
@@ -236,6 +240,7 @@
 ;;   (add-hook 'haskell-mode-hook 'dante-mode))
 
 (use-package markdown-mode
+  :defer t
   :config
   (setq markdown-fontify-code-blocks-natively t)  ;; 语法高亮
   (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
@@ -254,33 +259,42 @@
 ;;     ;; Use opam switch to lookup ocamlmerlin binary
 ;;     (setq merlin-command 'opam)))
 
+;; Ocaml Mode
+(use-package tuareg
+  :defer t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 文本编辑插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; tree-sitter 进行语法高亮
 (use-package tree-sitter
+  :defer t
   :if (fboundp 'module-load) ; 需要 Emacs 支持 Dynamic module
   :config
   (global-tree-sitter-mode)
   (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
 
 (use-package tree-sitter-langs
+  :defer t
   :if (fboundp 'module-load) ; 需要Emacs 支持 Dynamic Module
   )
 
 ;; 快速选中区块 拓展顺序 字符 单词 句子 代码块 函数 全文件，按一次快捷键拓展一次
 (use-package expand-region
+  :defer t
   :bind ("M-o" . er/expand-region))
 
 ;; https://github.com/winterTTr/ace-jump-mode
 (use-package ace-jump-mode
+  :defer t
   :bind (("M-s j" . ace-jump-char-mode)
 	 ("M-s k" . ace-jump-word-mode)
 	 ("M-s l" . ace-jump-line-mode)))
 
 ;; 注释/反注释
 (use-package newcomment
+  :defer t
   :ensure nil
   :bind ([remap comment-dwim] . #'comment-or-uncomment)
   :config
@@ -299,12 +313,14 @@
 
 ;; 快捷移动文本段和复制文本段
 (use-package move-dup
+  :defer t
   :bind (("C-c <up>"     . move-dup-move-lines-up)
 	 ("C-c <down>"   . move-dup-move-lines-down)
 	 ("C-c c <up>"   . move-dup-duplicate-up)
 	 ("C-c c <down>" . move-dup-duplicate-down)))
 
 (use-package multiple-cursors
+  :defer t
   :bind(("C-c l" . mc/edit-lines)
 	("C-c j" . mc/mark-previous-like-this)
 	("C-c k" . mc/mark-next-like-this)))
@@ -319,6 +335,7 @@
   :defer t)
 
 (use-package windmove
+  :defer t
   :ensure nil
   :bind (("M-s <up>"    . windmove-up)
 	 ("M-s <down>"  . windmove-down)
@@ -327,6 +344,7 @@
   :config (setq windmove-wrap-around t))  ;; 在边缘的窗口进行循环跳转，最左窗口跳到最右窗口等
 
 (use-package indent-guide
+  :defer t
   :config
   (indent-guide-global-mode t)
   (setq indent-guide-delay 0.0  ;; 展示对齐线的延迟时间
@@ -343,6 +361,7 @@
 ;; C-c C-r 重命名文件或目录。
 ;; C-c C-c 改变根目录
 (use-package neotree
+  :defer t
   :bind (("C-c =" . neotree-show)
 	 ("C-c -" . neotree-hide)
 	 ("C-c d" . neotree-dir)
@@ -352,7 +371,7 @@
 ;; 将代码结构展示在右侧窗口
 ;; C-c C-j 可以在下方打开一个 imenu 窗口快速查找
 (use-package imenu-list
-  :bind ("C-c ." . imenu-list-smart-toggle)
+  :bind ("C-c m" . imenu-list-smart-toggle)
   :config (setq imenu-list-focus-after-activation t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -364,6 +383,7 @@
 ;; C-c C-j 切换到 term-line-mode
 ;; C-c C-k 切换到 term-char-mode
 (use-package shell-pop
+  :defer t
   :init
   (setq shell-pop-default-directory "./"
 	shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell))))
@@ -399,6 +419,7 @@
 ;; "q" -> symbol-overlay-query-replace      ; 查找替换当前symbol
 ;; "r" -> symbol-overlay-rename             ; 对symbol直接重命名
 (use-package symbol-overlay
+  :defer t
   :bind (("M-i"  . symbol-overlay-put)
 	 ("M-k"  . symbol-overlay-switch-forward)
 	 ("M-j"  . symbol-overlay-switch-backward)
@@ -453,6 +474,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package youdao-dictionary
+  :defer t
   :bind (("C-c f"   . youdao-dictionary-search-at-point+)
 	 ("C-c w"   . youdao-dictionary-search-at-point-tooltip)
 	 ("C-c SPC" . youdao-dictionary-search-from-input))
@@ -469,6 +491,7 @@
 ;; g 重新搜索
 ;; C-c C-k 停止搜索
 (use-package deadgrep
+  :defer t
   :bind (("C-c s" . deadgrep)))
 
 (if (version< emacs-version "27.1")
@@ -489,11 +512,13 @@
     ;; (setq vertico-cycle t)
     ))
 
+;; need by vertico
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
   :init
   (savehist-mode 1))
 
+;; need by vertico
 (use-package emacs
   :init
   (defun crm-indicator (args)
@@ -512,8 +537,8 @@
   (setq enable-recursive-minibuffers t))
 
 (use-package fzf
+  :defer t
   :load-path "~/.emacs.d/plugins/fzf.el/"
-  :demand t
   :bind (("M-s p" . fzf-find-file)
 	 ("M-s -" . fzf-git)
 	 ("M-s =" . fzf-recentf)
@@ -535,6 +560,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package atom-one-dark-theme
+  :demand t
   :config
   (load-theme 'atom-one-dark t))
 
@@ -596,7 +622,6 @@
 
 (use-package bm
   :ensure t
-  :demand t
   :init
   ;; restore on load (even before you require bm)
   (setq bm-restore-repository-on-load t)
@@ -743,7 +768,9 @@
  '(bm-face ((t (:background "DimGray"))))
  '(bm-fringe-face ((t (:background "DimGray"))))
  '(bm-fringe-persistent-face ((t (:background "DimGray"))))
- '(bm-persistent-face ((t (:background "DimGray")))))
+ '(bm-persistent-face ((t (:background "DimGray"))))
+ '(deadgrep-filename-face ((t (:foreground "Orange"))))
+ '(deadgrep-match-face ((t (:foreground "Green")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
