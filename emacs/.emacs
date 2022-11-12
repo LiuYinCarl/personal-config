@@ -383,7 +383,6 @@
 ;; C-c C-j 切换到 term-line-mode
 ;; C-c C-k 切换到 term-char-mode
 (use-package shell-pop
-  :defer t
   :init
   (setq shell-pop-default-directory "./"
 	shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell))))
