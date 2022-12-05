@@ -46,6 +46,13 @@
 ;; u 取消标记
 ;; x 执行所有的标记
 
+;; Occur-mode
+;; M-s o 或者 M-x occur 进入
+;; 在 Occur buffer 中按 C-c C-f 开启 next-error-follow-mirror-mode
+;; 在 Occur buffer 中使用 M-p/M-n 切换上一个/下一个匹配项目
+;; 配置在 Occur Buffer 中展示匹配项的前后 n 行
+;; (setq list-matching-lines-default-context-lines n)
+
 ;; Usage package 文档
 ;; https://phenix3443.github.io/notebook/emacs/modes/use-package-manual.html
 
