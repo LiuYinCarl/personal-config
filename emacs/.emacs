@@ -651,12 +651,6 @@
 	 ("M-<up>" . bm-show-all)
 	 ("M-<down>" . bm-show-quit-window)))
 
-(use-package column-marker
-  :load-path "~/.emacs.d/plugins/column-marker"
-  :config
-  (add-hook 'markdown-mode-hook (lambda () (interactive) (column-marker-2 80)))
-  )
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 版本管理插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
