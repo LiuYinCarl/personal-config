@@ -124,7 +124,7 @@
 (set-cursor-color "white")
 
 ;; 默认开启折行
-(global-visual-line-mode 1)
+;; (global-visual-line-mode t)
 
 ;; 选中即复制功能
 (setq x-select-enable-primary t)
@@ -197,9 +197,6 @@
 (autoload 'View-scroll-half-page-backward "view")
 (global-set-key (kbd "C-v") 'View-scroll-half-page-forward)
 (global-set-key (kbd "M-v") 'View-scroll-half-page-backward)
-
-;; 不显示换行时最右边的 '\' 符号
-(setq-default word-wrap t)
 
 ;; 解决粘贴中文出现乱码的问题
 (set-clipboard-coding-system 'utf-8)
@@ -653,6 +650,12 @@
 	 ("<f2>" . bm-toggle)
 	 ("M-<up>" . bm-show-all)
 	 ("M-<down>" . bm-show-quit-window)))
+
+(use-package column-marker
+  :load-path "~/.emacs.d/plugins/column-marker"
+  :config
+  (add-hook 'markdown-mode-hook (lambda () (interactive) (column-marker-2 80)))
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 版本管理插件
