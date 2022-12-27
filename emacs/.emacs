@@ -7,6 +7,9 @@
 ;; M-< 跳到文件开头
 ;; M-> 跳到文件结尾
 
+;; C-M f 跳到表达式/括号的结尾
+;; C-M b 跳到表达式/括号的开头
+
 ;; M-h 选中当前段
 ;; M-g g 跳转到指定行, 当选择的行大于最大行数，会跳转到最后一行
 
@@ -116,7 +119,7 @@
 
 ;; 设置默认字体大小 1 = 1/10 pt
 (if (display-graphic-p)
-    (set-face-attribute 'default nil :height 190) ;; GUI
+    (set-face-attribute 'default nil :height 140) ;; GUI
   (set-face-attribute 'default nil :height 130)   ;; 终端
   )
 
