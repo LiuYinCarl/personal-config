@@ -780,6 +780,17 @@
 ;; 删除光标下左右两侧的空侧
 (define-key global-map (kbd "M-s SPC") 'delete-horizontal-space)
 
+;; GUI 下标题栏显示文件名
+(setq frame-title-format
+      '(buffer-file-name "%f" (dired-directory dired-directory "%b")))
+
+(defun show-file-name ()
+  "Show the full path file name in the minibuffer."
+  (interactive)
+  (message (concat "file path: " (buffer-file-name)))
+  (kill-new (buffer-file-name))) ;; copy path to clipboard
+(global-set-key (kbd "M-s n") 'show-file-name)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 外观配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
