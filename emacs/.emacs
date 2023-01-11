@@ -575,6 +575,11 @@
         fzf/position-bottom t
         fzf/window-height 15))
 
+(use-package goto-line-preview
+  :load-path "~/.emacs.d/plugins/goto-line-preview"
+  :demand t
+  :bind (("M-g g" . goto-line-preview)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 主题配置插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
