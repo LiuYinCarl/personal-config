@@ -796,6 +796,12 @@
   (kill-new (buffer-file-name))) ;; copy path to clipboard
 (global-set-key (kbd "M-s n") 'show-file-name)
 
+(defun open-emacs-config ()
+  "Open .emacs file."
+  (interactive)
+  (find-file-read-only "~/.emacs"))
+(global-set-key (kbd "M-s c") 'open-emacs-config)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 外观配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
