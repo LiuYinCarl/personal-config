@@ -802,6 +802,10 @@
   (find-file-read-only "~/.emacs"))
 (global-set-key (kbd "M-s c") 'open-emacs-config)
 
+(defun save-region-to-tmp-file ()
+  (interactive)
+  (write-region (region-beginning) (region-end) "~/.emacs.d/.tmp_copy_region"))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 外观配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
