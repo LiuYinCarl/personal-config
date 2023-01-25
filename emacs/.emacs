@@ -144,6 +144,9 @@
 ;; 不显示菜单栏
 (menu-bar-mode -1)
 
+;; 不显示启动界面
+(setq inhibit-splash-screen t)
+
 ;; 将yes/no 作为确认改成 y/n
 (fset 'yes-or-no-p 'y-or-n-p)
 
