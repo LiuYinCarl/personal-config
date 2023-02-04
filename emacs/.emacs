@@ -59,6 +59,9 @@
 ;; Usage package 文档
 ;; https://phenix3443.github.io/notebook/emacs/modes/use-package-manual.html
 
+;; 打开最近的项目
+;; M-x project-switch-project (C-x p p)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 此配置的外部程序依赖
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -119,9 +122,8 @@
 
 ;; 设置默认字体大小 1 = 1/10 pt
 (if (display-graphic-p)
-    (set-face-attribute 'default nil :height 140) ;; GUI
-  (set-face-attribute 'default nil :height 130)   ;; 终端
-  )
+    (set-face-attribute 'default nil :height 190) ;; GUI
+  (set-face-attribute 'default nil :height 130))  ;; 终端
 
 ;; 退出 Emacs 时保存工程状态
 (desktop-save-mode -1)
@@ -679,6 +681,12 @@
 ;; 版本管理插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package diff-hl
+  :config
+  (global-diff-hl-mode)
+  (diff-hl-flydiff-mode)
+  ;; (diff-hl-margin-mode) ;; 终端下使用,不会自动刷新，需要手动调用
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 未分类插件
