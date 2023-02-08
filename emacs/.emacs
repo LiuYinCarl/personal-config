@@ -95,7 +95,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 包管理配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (require 'package)
 ;; 官方源 安装 Emacs 的机器在外网时使用
 ;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
@@ -125,20 +124,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 全局配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;; 设置默认字体大小 1 = 1/10 pt
 (if (display-graphic-p)
     (set-face-attribute 'default nil :height 190) ;; GUI
   (set-face-attribute 'default nil :height 130))  ;; 终端
 
-;; 退出 Emacs 时保存工程状态
-(desktop-save-mode -1)
-
 ;; 设置光标颜色
 (set-cursor-color "white")
-
-;; 默认开启折行
-;; (global-visual-line-mode t)
 
 ;; 选中即复制功能
 (setq x-select-enable-primary t)
@@ -194,12 +186,6 @@
   (setq recentf-max-saved-items 100)
   :hook (after-init . recentf-mode))
 
-;; (global-set-key "\C-x\ \C-r" 'recentf-open-files)
-
-;; 自动清除行尾空格
-;; (add-hook 'before-save-hook 'delete-trailing-whitespace)
-;; (add-hook 'before-save-hook 'whitespace-cleanup)
-
 ;; 字符编码优先级设置，最下面的作为最优先选择的编码类型
 (prefer-coding-system 'cp950)
 (prefer-coding-system 'gb2312)
@@ -228,7 +214,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs 优化插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;; 防止超长行卡死 emacs
 (use-package so-long
   :config (global-so-long-mode 1))
@@ -241,35 +226,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 编程语言插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (use-package cmake-mode
   :defer t)
 
 (use-package go-mode
   :defer t
   :config
-  (add-hook 'go-mode-hook (lambda() (setq tab-width 4)))
-  )
+  (add-hook 'go-mode-hook (lambda() (setq tab-width 4))))
 
 (use-package lua-mode
   :defer t)
 
 (use-package rust-mode
   :defer t)
-
-;; haskell 代码补全
-;; (use-package dante
-;;   :ensure t
-;;   :after haskell-mode
-;;   :commands 'dante-mode
-;;   :config
-;;   (flycheck-add-next-checker 'haskell-dante '(info . haskell-hlint))
-;;   :init
-;;   (add-hook 'haskell-mode-hook 'flycheck-mode)
-;;   ;; OR for flymake support:
-;;   (add-hook 'haskell-mode-hook 'flymake-mode)
-;;   (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
-;;   (add-hook 'haskell-mode-hook 'dante-mode))
 
 (use-package markdown-mode
   :defer t
@@ -294,7 +263,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 文本编辑插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;; tree-sitter 进行语法高亮
 (use-package tree-sitter
   :defer t
@@ -313,7 +281,6 @@
   :defer t
   :bind ("M-o" . er/expand-region))
 
-;; https://github.com/winterTTr/ace-jump-mode
 (use-package ace-jump-mode
   :defer t
   :bind (("M-s j" . ace-jump-char-mode)
@@ -356,7 +323,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 窗口布局，文件管理，buffer 管理插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;; M-x windresize 启动，然后使用方向键调整窗口大小
 ;; 用 i 调整步长，o键或者M-S-<up>/<left>跳到其它窗口，? 显示帮助，调整完了按RET退出即可
 (use-package windresize
@@ -433,14 +399,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 符号管理插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; 高亮光标下的符号并前后跳转
-;; (use-package highlight-symbol
-;;   :bind(("C-<f3>" . highlight-symbol)
-;; 	("<f3>" . highlight-symbol-next)
-;; ("<f4>" . highlight-symbol-prev)))
-
-;; https://zhuanlan.zhihu.com/p/26471685
 ;; 在 symbol-overlay-mode 中的时候，可使用如下快捷键操作
 ;; "i" -> symbol-overlay-put                ; 高亮或取消高亮当前symbol
 ;; "n" -> symbol-overlay-jump-next          ; 跳转到下一个位置
@@ -474,10 +432,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LSP
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; 给 clangd 生成项目配置文件的工具 compile_commands.json
-;; https://zhuanlan.zhihu.com/p/145430576
-;; https://github.com/rizsotto/Bear
 (when (not (version<= emacs-version "26.1"))
   (use-package eglot
     :ensure t
@@ -583,10 +537,7 @@
   (setq fzf/args "-x --print-query --margin=0,0"
         fzf/executable "fzf"
         fzf/git-grep-args "-i --line-number %s"
-        ;; command used for `fzf-grep-*` functions
-        ;; example usage for ripgrep:
         fzf/grep-command "rg --no-heading -nH"
-        ;; fzf/grep-command "grep -nrH"
         fzf/position-bottom t
         fzf/window-height 15))
 
@@ -701,8 +652,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 未分类插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; https://github.com/manateelazycat/awesome-tab
 (use-package awesome-tab
   :demand t
   :load-path "~/.emacs.d/plugins/awesome-tab"
@@ -745,28 +694,6 @@
 	     (c++-mode "{" "}" "/[*/]" nil nil)
 	     (rust-mode "{" "}" "/[*/]" nil nil)))))
 
-;; eshell 清屏
-(add-hook
- 'eshell-mode-hook
- (lambda ()
-   (local-set-key (kbd "C-l")
-		  (lambda ()
-		    (interactive)
-		    (let ((eshell-buffer-maximum-lines 0))
-		      (eshell-truncate-buffer))))))
-
-;; 退出 eshell
-(add-hook
- 'eshell-mode-hook
- (lambda ()
-   (local-set-key (kbd "C-d")
-		  (lambda (arg)
-		    "Delete a character or quit eshell if there's nothing to delete."
-		    (interactive "p")
-		    (if (and (eolp) (looking-back eshell-prompt-regexp nil))
-			(eshell-life-is-too-much)
-		      (delete-char arg))))))
-
 ;; 一键格式化
 (defun indent-whole ()
   (interactive)
@@ -774,41 +701,8 @@
   (message "format successfully"))
 (global-set-key [f10] 'indent-whole)
 
-;; WSL Emacs 与 Windows 共通剪切板
-(defun wsl-copy-region-to-clipboard (start end)
-  "Copy region to Windows clipboard."
-  (interactive "r")
-  (call-process-region start end "clip.exe" nil 0))
-
-(defun wsl-cut-region-to-clipboard (start end)
-  (interactive "r")
-  (call-process-region start end "clip.exe" nil 0)
-  (kill-region start end))
-
-(defun wsl-clipboard-to-string ()
-  "Return Windows clipboard as string."
-  (let ((coding-system-for-read 'dos))
-    (substring; remove added trailing \n
-     (shell-command-to-string
-      "powershell.exe -Command Get-Clipboard") 0 -1)))
-
-(defun wsl-paste-from-clipboard (arg)
-  "Insert Windows clipboard at point. With prefix ARG, also add to kill-ring"
-  (interactive "P")
-  (let ((clip (wsl-clipboard-to-string)))
-    (insert clip)
-    (if arg (kill-new clip))))
-
-;; (define-key global-map (kbd "C-x C-y") 'wsl-paste-from-clipboard)
-(define-key global-map (kbd "C-c M-c") 'wsl-copy-region-to-clipboard)
-;; (define-key global-map (kbd "C-x C-w") 'wsl-cut-region-to-clipboard)
-
 ;; 删除光标下左右两侧的空侧
 (define-key global-map (kbd "M-s SPC") 'delete-horizontal-space)
-
-;; GUI 下标题栏显示文件名
-(setq frame-title-format
-      '(buffer-file-name "%f" (dired-directory dired-directory "%b")))
 
 (defun show-file-name ()
   "Show the full path file name in the minibuffer."
