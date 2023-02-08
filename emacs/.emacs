@@ -69,6 +69,12 @@
 ;; apt install clang clangd fzf
 ;; npm install -g pyright  dont use pip3 install pyright, it's not a good choose
 ;; for update pyright: npm update -g pyright
+
+;; 安装 Golang LSP Server
+;; go env -w GOPROXY=https://goproxy.cn,direct # 可选
+;; go install golang.org/x/tools/gopls@latest
+;; PATH=$PATH:$(go env GOPATH)/bin # 添加到 .bashrc
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 启动优化配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -240,7 +246,10 @@
   :defer t)
 
 (use-package go-mode
-  :defer t)
+  :defer t
+  :config
+  (add-hook 'go-mode-hook (lambda() (setq tab-width 4)))
+  )
 
 (use-package lua-mode
   :defer t)
@@ -480,6 +489,7 @@
     (add-hook 'c-mode-hook 'eglot-ensure)
     (add-hook 'c++-mode-hook 'eglot-ensure)
     (add-hook 'python-mode-hook 'eglot-ensure)
+    (add-hook 'go-mode-hook 'eglot-ensure)
     ;; 修改 eldoc-mode 的展示延迟时间，避免光标移动一下 eldoc 就展示新的内容，影响阅读
     (setq eldoc-idle-delay 1000000)))
 
