@@ -32,6 +32,9 @@
 ;; 查看选中的区域内的行数、单词数、字符数
 ;; M-=
 
+;; 格式化 markdown 表格
+;; C-u M-x align-regexp \(\s-*\)|\(\s-*\) RET RET YES
+
 ;; 全量更新 melpa 包
 ;; M-x package-list-packages RET Ux
 
@@ -652,6 +655,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 未分类插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (use-package awesome-tab
   :demand t
   :load-path "~/.emacs.d/plugins/awesome-tab"
