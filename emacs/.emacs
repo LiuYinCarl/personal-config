@@ -699,29 +699,29 @@
 	     (rust-mode "{" "}" "/[*/]" nil nil)))))
 
 ;; 一键格式化
-(defun indent-whole ()
+(defun my-indent-whole ()
   (interactive)
   (indent-region (point-min) (point-max))
   (message "format successfully"))
-(global-set-key [f10] 'indent-whole)
+(global-set-key [f10] 'my-indent-whole)
 
 ;; 删除光标下左右两侧的空侧
 (define-key global-map (kbd "M-s SPC") 'delete-horizontal-space)
 
-(defun show-file-name ()
+(defun my-show-file-name ()
   "Show the full path file name in the minibuffer."
   (interactive)
   (message (concat "file path: " (buffer-file-name)))
   (kill-new (buffer-file-name))) ;; copy path to clipboard
-(global-set-key (kbd "M-s n") 'show-file-name)
+(global-set-key (kbd "M-s n") 'my-show-file-name)
 
-(defun open-emacs-config ()
+(defun my-open-emacs-config ()
   "Open .emacs file."
   (interactive)
   (find-file-read-only "~/.emacs"))
-(global-set-key (kbd "M-s c") 'open-emacs-config)
+(global-set-key (kbd "M-s c") 'my-open-emacs-config)
 
-(defun save-region-to-tmp-file ()
+(defun my-save-region-to-tmp-file ()
   (interactive)
   (write-region (region-beginning) (region-end) "~/.emacs.d/.tmp_copy_region"))
 
