@@ -279,8 +279,7 @@
 
 (use-package tree-sitter-langs
   :defer t
-  :if (fboundp 'module-load) ; 需要Emacs 支持 Dynamic Module
-  )
+  :if (fboundp 'module-load)) ; 需要Emacs 支持 Dynamic Module
 
 ;; 快速选中区块 拓展顺序 字符 单词 句子 代码块 函数 全文件，按一次快捷键拓展一次
 (use-package expand-region
@@ -289,9 +288,7 @@
 
 (use-package ace-jump-mode
   :defer t
-  :bind (("M-s j" . ace-jump-char-mode)
-	 ("M-s k" . ace-jump-word-mode)
-	 ("M-s l" . ace-jump-line-mode)))
+  :bind ("M-c" . ace-jump-word-mode))
 
 ;; 注释/反注释
 (use-package newcomment
