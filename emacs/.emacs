@@ -447,8 +447,9 @@
     (add-hook 'c++-mode-hook 'eglot-ensure)
     (add-hook 'python-mode-hook 'eglot-ensure)
     (add-hook 'go-mode-hook 'eglot-ensure)
-    ;; 修改 eldoc-mode 的展示延迟时间，避免光标移动一下 eldoc 就展示新的内容，影响阅读
-    (setq eldoc-idle-delay 1000000)))
+    (setq eldoc-idle-delay 1000000)  ;; 修改 eldoc-mode 的展示延迟时间
+    (setq completion-ignore-case t)  ;; company-capf匹配时不区分大小写
+    ))
 
 ;; 自动补全 https://www.emacswiki.org/emacs/CompanyMode
 (use-package company
