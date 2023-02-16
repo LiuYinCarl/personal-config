@@ -84,19 +84,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 启动优化配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;; 避免启动时 GC
 (setq gc-cons-threshold most-positive-fixnum ; 2^61 bytes
       gc-cons-percentage 0.6)
-
-;; 统计 Emacs 启动时间，放在文件开头
-(add-hook 'emacs-startup-hook
-	  (lambda ()
-	    (message "Emacs ready in %s with %d garbage collections."
-		     (format "%.2f seconds"
-			     (float-time
-			      (time-subtract after-init-time before-init-time)))
-		     gcs-done)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 包管理配置
@@ -112,7 +102,6 @@
 (setq package-archives '(("gnu" . "http://mirrors.ustc.edu.cn/elpa/gnu/")
                          ("melpa" . "http://mirrors.ustc.edu.cn/elpa/melpa/")
                          ("nongnu" . "http://mirrors.ustc.edu.cn/elpa/nongnu/")))
-
 
 (setq package-check-signature nil) ;;个别时候会出现签名校验失败
 (unless (bound-and-true-p package--initialized)
@@ -370,6 +359,17 @@
 (use-package imenu-list
   :bind ("C-c m" . imenu-list-smart-toggle)
   :config (setq imenu-list-focus-after-activation t))
+
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook)
+  (setq dashboard-startup-banner 2)
+  (setq dashboard-center-content t)
+  (setq dashboard-set-footer nil)
+  (setq dashboard-items '((recents  . 5)
+                          (projects . 5)))
+  (setq dashboard-projects-backend 'project-el))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 程序交互插件
