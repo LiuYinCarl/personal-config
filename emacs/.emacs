@@ -151,6 +151,11 @@
 ;; 关闭自动保存文件功能
 (setq auto-save-default nil)
 
+;; 显示行尾空格
+(setq-default show-trailing-whitespace t)
+(add-hook 'term-mode-hook
+	  (lambda () (setq show-trailing-whitespace nil)))
+
 ;; 行号的显示格式
 (setq linum-format "%4d\u2502")
 (global-linum-mode t)

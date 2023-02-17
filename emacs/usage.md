@@ -33,6 +33,17 @@ https://github.com/rizsotto/Bear
 ## 不常用功能
 
 ```lisp
+
+;; 统计 Emacs 启动时间，放在文件开头
+(add-hook 'emacs-startup-hook
+	  (lambda ()
+	    (message "Emacs ready in %s with %d garbage collections."
+		     (format "%.2f seconds"
+			     (float-time
+			      (time-subtract after-init-time before-init-time)))
+		     gcs-done)))
+
+
 ;; GUI 下标题栏显示文件名
 (setq frame-title-format
       '(buffer-file-name "%f" (dired-directory dired-directory "%b")))
