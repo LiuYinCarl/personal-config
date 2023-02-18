@@ -280,9 +280,9 @@
   :defer t
   :bind ("M-o" . er/expand-region))
 
-(use-package ace-jump-mode
+(use-package avy
   :defer t
-  :bind ("M-c" . ace-jump-word-mode))
+  :bind ("M-c" . avy-goto-word-1))
 
 ;; 注释/反注释
 (use-package newcomment
@@ -735,10 +735,6 @@
 ;; 外观配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
  '(bm-face ((t (:background "DimGray"))))
  '(bm-fringe-face ((t (:background "DimGray"))))
  '(bm-fringe-persistent-face ((t (:background "DimGray"))))
