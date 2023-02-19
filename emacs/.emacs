@@ -622,6 +622,7 @@
 
 (use-package bm
   :ensure t
+  :demand t
   :init
   ;; restore on load (even before you require bm)
   (setq bm-restore-repository-on-load t)
@@ -735,6 +736,10 @@
 ;; 外观配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(bm-face ((t (:background "DimGray"))))
  '(bm-fringe-face ((t (:background "DimGray"))))
  '(bm-fringe-persistent-face ((t (:background "DimGray"))))
