@@ -186,6 +186,12 @@
   (setq recentf-max-saved-items 100)
   :hook (after-init . recentf-mode))
 
+;; 80 列显示标记
+(if (not (version< emacs-version "27.1"))
+    (progn
+      (setq-default display-fill-column-indicator-column 81)
+      (global-display-fill-column-indicator-mode 0))) ;; 默认不开启
+
 ;; 字符编码优先级设置，最下面的作为最优先选择的编码类型
 (prefer-coding-system 'cp950)
 (prefer-coding-system 'gb2312)
