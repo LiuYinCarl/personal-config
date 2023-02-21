@@ -17,3 +17,5 @@ git clone --depth=1 git@github.com:gonewest818/dimmer.el.git
 git clone --depth=1 git@github.com:LiuYinCarl/fzf.el.git
 
 git clone --depth git@github.com:emacs-vs/goto-line-preview.git
+
+git clone --depth git@github.com:laishulu/hl-fill-column.git

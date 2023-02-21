@@ -23,7 +23,7 @@
 
 
 
-## 给 clangd 生成项目配置文件的工具 
+## 给 clangd 生成项目配置文件的工具
 
 compile_commands.json
 https://zhuanlan.zhihu.com/p/145430576
@@ -33,6 +33,23 @@ https://github.com/rizsotto/Bear
 ## 不常用功能
 
 ```lisp
+
+;; 80 列显示标记
+(if (not (version< emacs-version "27.1"))
+    (progn
+      (setq-default display-fill-column-indicator-column 81)
+      (global-display-fill-column-indicator-mode 0))) ;; 默认不开启
+
+;; 80 列显示标记
+(use-package hl-fill-column
+  :load-path "~/.emacs.d/plugins/hl-fill-column/"
+  :demand t
+  :config
+  (setq-default fill-column 40)
+  (global-hl-fill-column-mode 1)
+  )
+;; 设置face
+'(hl-fill-column-face ((t (:background "DimGray"))))
 
 ;; 统计 Emacs 启动时间，放在文件开头
 (add-hook 'emacs-startup-hook

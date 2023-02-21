@@ -108,11 +108,9 @@
   (package-initialize)) ;; 刷新软件源索引
 (unless package-archive-contents
   (package-refresh-contents))
-
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-
 ;; 自动安装系统没有的 package
 (setq use-package-always-ensure t)
 
@@ -126,28 +124,20 @@
 
 ;; 设置光标颜色
 (set-cursor-color "white")
-
 ;; 选中即复制功能
 (setq x-select-enable-primary t)
-
 ;; 状态栏显示列数
 (column-number-mode 1)
-
 ;; 不显示工具栏
 (tool-bar-mode -1)
-
 ;; 不显示菜单栏
 (menu-bar-mode -1)
-
 ;; 不显示启动界面
 (setq inhibit-splash-screen t)
-
 ;; 将yes/no 作为确认改成 y/n
 (fset 'yes-or-no-p 'y-or-n-p)
-
 ;; 关闭备份文件功能
 (setq make-backup-files nil)
-
 ;; 关闭自动保存文件功能
 (setq auto-save-default nil)
 
@@ -185,12 +175,6 @@
   (setq recentf-max-menu-items 100)
   (setq recentf-max-saved-items 100)
   :hook (after-init . recentf-mode))
-
-;; 80 列显示标记
-(if (not (version< emacs-version "27.1"))
-    (progn
-      (setq-default display-fill-column-indicator-column 81)
-      (global-display-fill-column-indicator-mode 0))) ;; 默认不开启
 
 ;; 字符编码优先级设置，最下面的作为最优先选择的编码类型
 (prefer-coding-system 'cp950)
@@ -250,9 +234,9 @@
   :defer t
   :config
   (setq markdown-fontify-code-blocks-natively t)  ;; 语法高亮
-  (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
+  (add-to-list 'auto-mode-alist '("\\.text\\'"     . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-  (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
+  (add-to-list 'auto-mode-alist '("\\.md\\'"       . markdown-mode)))
 
 ;; OCaml
 (let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
@@ -413,17 +397,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 符号管理插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 在 symbol-overlay-mode 中的时候，可使用如下快捷键操作
-;; "i" -> symbol-overlay-put                ; 高亮或取消高亮当前symbol
-;; "n" -> symbol-overlay-jump-next          ; 跳转到下一个位置
-;; "p" -> symbol-overlay-jump-prev          ; 跳转到上一个位置
-;; "w" -> symbol-overlay-save-symbol        ; 复制当前symbol
-;; "t" -> symbol-overlay-toggle-in-scope    ; 切换高亮范围到作用域
-;; "e" -> symbol-overlay-echo-mark          ; 撤销上一次跳转
-;; "d" -> symbol-overlay-jump-to-definition ; 跳转到定义
-;; "s" -> symbol-overlay-isearch-literally  ; 切换为isearch并搜索当前symbol
-;; "q" -> symbol-overlay-query-replace      ; 查找替换当前symbol
-;; "r" -> symbol-overlay-rename             ; 对symbol直接重命名
 (use-package symbol-overlay
   :defer t
   :bind (("M-i"  . symbol-overlay-put)
@@ -432,16 +405,17 @@
 	 ("<f7>" . symbol-overlay-mode)
 	 ("<f8>" . symbol-overlay-remove-all))
   :bind (:map symbol-overlay-map
-	      ("i" . symbol-overlay-put)
-	      ("n" . symbol-overlay-jump-next)
-	      ("p" . symbol-overlay-jump-prev)
-	      ("w" . symbol-overlay-save-symbol)
-	      ("t" . symbol-overlay-toggle-in-scope)
-	      ("e" . symbol-overlay-echo-mark)
-	      ("d" . symbol-overlay-jump-to-definition)
-	      ("s" . symbol-overlay-isearch-literally)
-	      ("q" . symbol-overlay-query-replace)
-	      ("r" . symbol-overlay-rename)))
+	      ("i" . symbol-overlay-put)		; 高亮或取消高亮当前symbol
+	      ("n" . symbol-overlay-jump-next)		; 跳转到下一个位置
+	      ("p" . symbol-overlay-jump-prev)		; 跳转到上一个位置
+	      ("w" . symbol-overlay-save-symbol)	; 复制当前symbol
+	      ("t" . symbol-overlay-toggle-in-scope)	; 切换高亮范围到作用域
+	      ("e" . symbol-overlay-echo-mark)		; 撤销上一次跳转
+	      ("d" . symbol-overlay-jump-to-definition) ; 跳转到定义
+	      ("s" . symbol-overlay-isearch-literally)	; 切换为isearch并搜索当前symbol
+	      ("q" . symbol-overlay-query-replace)	; 查找替换当前symbol
+	      ("r" . symbol-overlay-rename)		; 对symbol直接重命名
+	      ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LSP
@@ -454,10 +428,10 @@
     :config
     (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
     (add-to-list 'eglot-server-programs '((python-mode)  "pyright-langserver" "--stdio"))
-    (add-hook 'c-mode-hook 'eglot-ensure)
-    (add-hook 'c++-mode-hook 'eglot-ensure)
+    (add-hook 'c-mode-hook      'eglot-ensure)
+    (add-hook 'c++-mode-hook    'eglot-ensure)
     (add-hook 'python-mode-hook 'eglot-ensure)
-    (add-hook 'go-mode-hook 'eglot-ensure)
+    (add-hook 'go-mode-hook     'eglot-ensure)
     (setq eldoc-idle-delay 1000000)  ;; 修改 eldoc-mode 的展示延迟时间
     (setq completion-ignore-case t)  ;; company-capf匹配时不区分大小写
     ))
@@ -486,14 +460,14 @@
   (setq url-automatic-caching t
 	youdao-dictionary-search-history-file "~/.emacs.d/.youdao"))
 
-;; RET 在当前窗口打开文件
-;; o   在其他窗口打开文件
-;; n/p      上下移动，以行为单位
-;; M-n/M-p  上下移动，以文件为单位
-;; S 改变搜索关键字
-;; D 改变搜索目录
-;; g 重新搜索
-;; C-c C-k 停止搜索
+;; RET     ; 在当前窗口打开文件
+;; o       ; 在其他窗口打开文件
+;; n/p     ; 上下移动，以行为单位
+;; M-n/M-p ; 上下移动，以文件为单位
+;; S       ; 改变搜索关键字
+;; D       ; 改变搜索目录
+;; g       ; 重新搜索
+;; C-c C-k ; 停止搜索
 (use-package deadgrep
   :defer t
   :bind (("C-c s" . deadgrep)))
@@ -549,10 +523,10 @@
 	 ("M-s b" . fzf-find-in-buffer)
 	 ("M-s d" . fzf-find-file-current-dir))
   :config
-  (setq fzf/args "-x --print-query --margin=0,0"
-        fzf/executable "fzf"
+  (setq fzf/args          "-x --print-query --margin=0,0"
+        fzf/executable    "fzf"
         fzf/git-grep-args "-i --line-number %s"
-        fzf/grep-command "rg --no-heading -nH"
+        fzf/grep-command  "rg --no-heading -nH"
         fzf/position-bottom t
         fzf/window-height 15))
 
@@ -564,7 +538,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 主题配置插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 (use-package atom-one-dark-theme
   :demand t
   :config
@@ -630,29 +603,25 @@
   :ensure t
   :demand t
   :init
-  ;; restore on load (even before you require bm)
   (setq bm-restore-repository-on-load t)
   :config
-  ;; Allow cross-buffer 'next'
   (setq bm-cycle-all-buffers t)
-  ;; where to store persistant files
   (setq bm-repository-file "~/.emacs.d/bm-repository")
-
   (setq-default bm-buffer-persistence t)
-  (add-hook 'after-init-hook 'bm-repository-load)
-  (add-hook 'kill-buffer-hook #'bm-buffer-save)
-  (add-hook 'kill-emacs-hook #'(lambda nil
-				 (bm-buffer-save-all)
-				 (bm-repository-save)))
-  (add-hook 'after-save-hook #'bm-buffer-save)
-  (add-hook 'find-file-hooks   #'bm-buffer-restore)
-  (add-hook 'after-revert-hook #'bm-buffer-restore)
+  (add-hook 'after-init-hook        'bm-repository-load)
+  (add-hook 'kill-buffer-hook	    #'bm-buffer-save)
+  (add-hook 'after-save-hook	    #'bm-buffer-save)
+  (add-hook 'find-file-hooks	    #'bm-buffer-restore)
+  (add-hook 'after-revert-hook	    #'bm-buffer-restore)
   (add-hook 'vc-before-checkin-hook #'bm-buffer-save)
+  (add-hook 'kill-emacs-hook	    #'(lambda nil
+					(bm-buffer-save-all)
+					(bm-repository-save)))
   :bind (("M-<right>" . bm-next)
-	 ("M-<left>" . bm-previous)
-	 ("<f2>" . bm-toggle)
-	 ("M-<up>" . bm-show-all)
-	 ("M-<down>" . bm-show-quit-window)))
+	 ("M-<left>"  . bm-previous)
+	 ("<f2>"      . bm-toggle)
+	 ("M-<up>"    . bm-show-all)
+	 ("M-<down>"  . bm-show-quit-window)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 版本管理插件
@@ -707,8 +676,8 @@
   :custom
   (hs-special-modes-alist
    (mapcar 'purecopy
-	   '((c-mode "{" "}" "/[*/]" nil nil)
-	     (c++-mode "{" "}" "/[*/]" nil nil)
+	   '((c-mode    "{" "}" "/[*/]" nil nil)
+	     (c++-mode  "{" "}" "/[*/]" nil nil)
 	     (rust-mode "{" "}" "/[*/]" nil nil)))))
 
 ;; 一键格式化
@@ -746,13 +715,22 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(bm-face ((t (:background "DimGray"))))
- '(bm-fringe-face ((t (:background "DimGray"))))
- '(bm-fringe-persistent-face ((t (:background "DimGray"))))
- '(bm-persistent-face ((t (:background "DimGray"))))
- '(deadgrep-filename-face ((t (:foreground "Orange"))))
- '(deadgrep-match-face ((t (:foreground "Green")))))
+ '(bm-face                   ((t (:background "DimGray" ))))
+ '(bm-fringe-face            ((t (:background "DimGray" ))))
+ '(bm-fringe-persistent-face ((t (:background "DimGray" ))))
+ '(bm-persistent-face        ((t (:background "DimGray" ))))
+ '(deadgrep-filename-face    ((t (:foreground "Orange"  ))))
+ '(deadgrep-match-face       ((t (:foreground "Green"   ))))
+ '(hl-fill-column-face       ((t (:background "DimGray" ))))
+ )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(youdao-dictionary yasnippet windresize vertico use-package tuareg tree-sitter-langs symbol-overlay solarized-theme smart-mode-line-atom-one-dark-theme shell-pop rust-mode rainbow-mode neotree multiple-cursors move-dup lua-mode lsp-pyright ivy indent-guide imenu-list highlight-symbol highlight-blocks goto-line-preview go-mode fzf expand-region eglot diminish diff-hl deadgrep dashboard company color-theme-approximate cmake-mode bm avy atom-one-dark-theme ace-jump-mode)))
