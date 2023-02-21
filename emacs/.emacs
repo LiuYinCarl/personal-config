@@ -727,10 +727,3 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(youdao-dictionary yasnippet windresize vertico use-package tuareg tree-sitter-langs symbol-overlay solarized-theme smart-mode-line-atom-one-dark-theme shell-pop rust-mode rainbow-mode neotree multiple-cursors move-dup lua-mode lsp-pyright ivy indent-guide imenu-list highlight-symbol highlight-blocks goto-line-preview go-mode fzf expand-region eglot diminish diff-hl deadgrep dashboard company color-theme-approximate cmake-mode bm avy atom-one-dark-theme ace-jump-mode)))
