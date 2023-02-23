@@ -153,7 +153,8 @@
 (setq make-backup-files nil)
 ;; 关闭自动保存文件功能
 (setq auto-save-default nil)
-
+;; 设置每行最大长度
+(setq-default display-fill-column-indicator-column 80)
 ;; 显示行尾空格
 (setq-default show-trailing-whitespace t)
 (add-hook 'term-mode-hook
