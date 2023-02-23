@@ -727,6 +727,15 @@
   (interactive)
   (write-region (region-beginning) (region-end) "~/.emacs.d/.tmp_copy_region"))
 
+(defun my-copy-word-at-point ()
+  (interactive)
+  (let* ((sym (symbol-at-point))
+	 (sym-name (when sym
+		     (substring-no-properties (symbol-name sym)))))
+    (message (concat "copy symbol: " sym-name))
+    (kill-new sym-name)))
+(global-set-key (kbd "M-s s") 'my-copy-word-at-point)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 外观配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
