@@ -283,8 +283,15 @@
   :defer t
   :bind ("M-o" . er/expand-region))
 
-(use-package avy
+;; (use-package avy
+;;   :defer t
+;;   :bind ("M-c" . avy-goto-word-1))
+
+;; 替代 avy, 可以跳转中文
+(use-package ace-pinyin
   :defer t
+  :init
+  (ace-pinyin-global-mode 1)
   :bind ("M-c" . avy-goto-word-1))
 
 ;; 注释/反注释
@@ -728,14 +735,13 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(bm-face                   ((t (:background "DimGray" ))))
- '(bm-fringe-face            ((t (:background "DimGray" ))))
- '(bm-fringe-persistent-face ((t (:background "DimGray" ))))
- '(bm-persistent-face        ((t (:background "DimGray" ))))
- '(deadgrep-filename-face    ((t (:foreground "Orange"  ))))
- '(deadgrep-match-face       ((t (:foreground "Green"   ))))
- '(hl-fill-column-face       ((t (:background "DimGray" ))))
- )
+ '(bm-face ((t (:background "DimGray"))))
+ '(bm-fringe-face ((t (:background "DimGray"))))
+ '(bm-fringe-persistent-face ((t (:background "DimGray"))))
+ '(bm-persistent-face ((t (:background "DimGray"))))
+ '(deadgrep-filename-face ((t (:foreground "Orange"))))
+ '(deadgrep-match-face ((t (:foreground "Green"))))
+ '(hl-fill-column-face ((t (:background "DimGray")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
