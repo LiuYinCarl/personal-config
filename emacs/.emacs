@@ -724,6 +724,11 @@
   (find-file-read-only "~/.emacs"))
 (global-set-key (kbd "M-s c") 'my-open-emacs-config)
 
+(defun my-fast-note ()
+  (interactive)
+  (find-file-other-window "~/fast-note.md"))
+(global-set-key (kbd "M-n") 'my-fast-note)
+
 (defun my-save-region-to-tmp-file ()
   (interactive)
   (write-region (region-beginning) (region-end) "~/.emacs.d/.tmp_copy_region"))
@@ -736,6 +741,12 @@
     (message (concat "copy symbol: " sym-name))
     (kill-new sym-name)))
 (global-set-key (kbd "M-s s") 'my-copy-word-at-point)
+
+(defun my-kill-word-at-point ()
+  (interactive)
+  (backward-word)
+  (kill-word 1))
+(global-set-key (kbd "M-DEL") 'my-kill-word-at-point)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 外观配置
