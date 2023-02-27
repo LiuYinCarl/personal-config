@@ -556,6 +556,12 @@
   :demand t
   :bind (("M-g g" . goto-line-preview)))
 
+;; isearch
+(setq isearch-lazy-highlight t
+      isearch-lazy-count t
+      lazy-count-prefix-format "[ %s / %s ] "
+      lazy-count-suffix-format "")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 主题配置插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
