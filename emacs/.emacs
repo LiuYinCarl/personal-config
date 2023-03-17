@@ -754,6 +754,9 @@
   (kill-word 1))
 (global-set-key (kbd "M-DEL") 'my-kill-word-at-point)
 
+;; auto fullscreen on GUI mode
+(add-hook 'window-setup-hook #'toggle-frame-maximized t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 外观配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
