@@ -722,6 +722,11 @@
   (message "format successfully"))
 (global-set-key [f10] 'my-indent-whole)
 
+;; align-regexp 使用空格对其
+(defadvice align-regexp (around align-regexp-with-spaces activate)
+  (let ((indent-tabs-mode nil))
+    ad-do-it))
+
 ;; 删除光标下左右两侧的空侧
 (define-key global-map (kbd "M-s SPC") 'delete-horizontal-space)
 
