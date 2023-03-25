@@ -590,7 +590,7 @@
   (setq highlight-blocks-delay 0.05)
   ;; 设置背景颜色，第一个是显示的颜色
   (setq highlight-blocks--rainbow-colors
-	'("#464641" "#000000" "#464646" "#FFCACA" "#FFFFBA"))
+	'("#404045" "#464641" "#000000" "#464646" "#FFCACA" "#FFFFBA"))
   (setq highlight-blocks-max-face-count
 	(length highlight-blocks--rainbow-colors)))
 
@@ -627,6 +627,7 @@
 (add-hook 'emacs-lisp-mode-hook       'highlight-blocks-mode)
 (add-hook 'lisp-interaction-mode-hook 'highlight-blocks-mode)
 (add-hook 'lisp-mode-hook             'highlight-blocks-mode)
+(add-hook 'scheme-mode-hook           'highlight-blocks-mode)
 
 ;; 切换窗口时未获得焦点的窗口失去高光
 (use-package dimmer
