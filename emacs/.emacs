@@ -543,6 +543,10 @@
   ;; Enable recursive minibuffers
   (setq enable-recursive-minibuffers t))
 
+(use-package swiper
+  :defer t
+  :bind (("C-c b" . swiper-isearch)))
+
 (use-package fzf
   :defer t
   :load-path "~/.emacs.d/plugins/fzf.el/"
