@@ -34,6 +34,10 @@ https://github.com/rizsotto/Bear
 
 ```lisp
 
+(use-package nov
+  :config
+  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
+
 ;; 80 列显示标记
 (if (not (version< emacs-version "27.1"))
     (progn
