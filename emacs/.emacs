@@ -428,11 +428,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package symbol-overlay
   :defer t
-  :bind (("M-i"  . symbol-overlay-put)
-	 ("M-k"  . symbol-overlay-switch-forward)
-	 ("M-j"  . symbol-overlay-switch-backward)
-	 ("<f7>" . symbol-overlay-mode)
-	 ("<f8>" . symbol-overlay-remove-all))
+  :bind (("M-s i"  . symbol-overlay-put)
+	 ("M-s k"  . symbol-overlay-switch-forward)
+	 ("M-s j"  . symbol-overlay-switch-backward)
+	 ("M-s 9" . symbol-overlay-mode)
+	 ("M-s 0" . symbol-overlay-remove-all))
   :bind (:map symbol-overlay-map
 	      ("i" . symbol-overlay-put)		; 高亮或取消高亮当前symbol
 	      ("n" . symbol-overlay-jump-next)		; 跳转到下一个位置
