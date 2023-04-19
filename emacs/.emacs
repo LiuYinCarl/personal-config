@@ -173,13 +173,10 @@
 
 ;; 记录上次打开文件时 cursor 停留的位置
 (save-place-mode 1)
-
 ;; 高亮当前行
-(global-hl-line-mode 1)
-
+;; (global-hl-line-mode 1)
 ;; 展示匹配的括号
 (show-paren-mode 1)
-
 ;; 括号补全
 (electric-pair-mode t)
 
@@ -577,10 +574,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 主题配置插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package atom-one-dark-theme
-  :demand t
-  :config
-  (load-theme 'atom-one-dark t))
+;; (use-package atom-one-dark-theme
+;;   :demand t
+;;   :config
+;;   (load-theme 'atom-one-dark t))
 
 ;; 让括号变得不显眼
 (use-package parenface
@@ -594,7 +591,7 @@
   (setq highlight-blocks-delay 0.05)
   ;; 设置背景颜色，第一个是显示的颜色
   (setq highlight-blocks--rainbow-colors
-	'("#404045" "#464641" "#000000" "#464646" "#FFCACA" "#FFFFBA"))
+	'("#000000" "#464641" "#404045" "#464646" "#FFCACA" "#FFFFBA"))
   (setq highlight-blocks-max-face-count
 	(length highlight-blocks--rainbow-colors)))
 
