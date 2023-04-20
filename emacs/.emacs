@@ -579,11 +579,13 @@
 ;;   :config
 ;;   (load-theme 'atom-one-dark t))
 
+(load-theme 'misterioso)
+
 ;; 让括号变得不显眼
 (use-package parenface
   :load-path "~/.emacs.d/plugins/parenface"
   :config
-  (set-face-foreground 'paren-face "DimGray"))
+  (set-face-foreground 'paren-face "#909595"))
 
 ;; 修改光标所在括号内的块的背景颜色
 (use-package highlight-blocks
@@ -591,7 +593,7 @@
   (setq highlight-blocks-delay 0.05)
   ;; 设置背景颜色，第一个是显示的颜色
   (setq highlight-blocks--rainbow-colors
-	'("#000000" "#464641" "#404045" "#464646" "#FFCACA" "#FFFFBA"))
+	'("#606060" "#000000" "#464641" "#404045" "#464646" "#FFCACA" "#FFFFBA"))
   (setq highlight-blocks-max-face-count
 	(length highlight-blocks--rainbow-colors)))
 
@@ -695,7 +697,7 @@
 (defun hideshow-folded-overlay-fn (ov)
   (when (eq 'code (overlay-get ov 'hs))
     (let* ((nlines (count-lines (overlay-start ov) (overlay-end ov)))
-	   (info (format "[%d]" nlines)))
+	   (info (format " #[%d]..." nlines)))
       (overlay-put ov 'display (propertize info 'face hideshow-folded-face)))))
 
 ;; 显示被折叠的行数 这里额外启用了 :box t 属性使得提示更加明显
