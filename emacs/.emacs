@@ -2,8 +2,6 @@
 ;; 常用快捷键
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; C-x k 关闭 buffer
-
 ;; M-< 跳到文件开头
 ;; M-> 跳到文件结尾
 
@@ -15,9 +13,6 @@
 
 ;; 更换主题配色
 ;; M-x customize-themes
-
-;; 开启括号自动补全模式
-;; M-x electric-pair-mode
 
 ;; 在一个 buffer 中保存与回到光标位置
 ;; C-spc C-spc 设置一个 mark, 第二次是为了去掉高亮
@@ -31,9 +26,6 @@
 
 ;; 查看选中的区域内的行数、单词数、字符数
 ;; M-=
-
-;; 格式化 markdown 表格
-;; C-u M-x align-regexp \(\s-*\)|\(\s-*\) RET RET YES
 
 ;; 全量更新 melpa 包
 ;; M-x package-list-packages RET Ux
@@ -66,7 +58,7 @@
 ;; M-x project-switch-project (C-x p p)
 
 ;; 查看按键 -> 命令映射  C-h k HotKey
-;; 查看命令 -> 按键映射 C-h w  Command
+;; 查看命令 -> 按键映射  C-h w  Command
 
 ;; 以C-x r开头的命令来进行矩形操作。先用C-space或者C-@设一个mark，
 ;; 移动光标到另一点，用以下命令进行列操作
@@ -97,6 +89,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 启动优化配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; 避免启动时 GC
 (setq gc-cons-threshold most-positive-fixnum ; 2^61 bytes
       gc-cons-percentage 0.6)
@@ -104,6 +97,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 包管理配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (require 'package)
 ;; 官方源 安装 Emacs 的机器在外网时使用
 ;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
@@ -130,6 +124,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 全局配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; 设置默认字体大小 1 = 1/10 pt
 (if (display-graphic-p)
     (set-face-attribute 'default nil :height 190) ;; GUI
@@ -137,24 +132,34 @@
 
 ;; 设置光标颜色
 (set-cursor-color "white")
+
 ;; 选中即复制功能
 (setq x-select-enable-primary t)
+
 ;; 状态栏显示列数
 (column-number-mode 1)
+
 ;; 不显示工具栏
 (tool-bar-mode -1)
+
 ;; 不显示菜单栏
 (menu-bar-mode -1)
+
 ;; 不显示启动界面
 (setq inhibit-splash-screen t)
+
 ;; 将yes/no 作为确认改成 y/n
 (fset 'yes-or-no-p 'y-or-n-p)
+
 ;; 关闭备份文件功能
 (setq make-backup-files nil)
+
 ;; 关闭自动保存文件功能
 (setq auto-save-default nil)
+
 ;; 设置每行最大长度
 (setq-default display-fill-column-indicator-column 80)
+
 ;; 显示行尾空格
 (setq-default show-trailing-whitespace t)
 (add-hook 'term-mode-hook
@@ -163,7 +168,6 @@
 ;; 行号的显示格式
 (setq linum-format "%4d\u2502")
 (global-linum-mode t)
-
 ;; 某些模式不使用行号
 (setq linum-disabled-modes-list '(eshell-mode deadgrep-mode))
 (defun linum-on ()
@@ -171,29 +175,38 @@
 	      (member major-mode linum-disabled-modes-list))
     (linum-mode 1)))
 
-;; 记录上次打开文件时 cursor 停留的位置
-(save-place-mode 1)
 ;; 高亮当前行
 ;; (global-hl-line-mode 1)
-;; 展示匹配的括号
-(show-paren-mode 1)
+
 ;; 括号补全
 (electric-pair-mode t)
+
+;; 展示匹配的括号
+(use-package paren
+  :ensure nil
+  :hook (after-init . show-paren-mode)
+  :config
+  (setq show-paren-when-point-inside-paren t
+        show-paren-when-point-in-periphery t))
+
+;; 记录上次打开文件时 cursor 停留的位置
+(use-package saveplace
+  :ensure nil
+  :hook (after-init . save-place-mode))
 
 ;; 保存最近打开的文件
 (use-package recentf
   :config
-  (setq recentf-max-menu-items 100)
-  (setq recentf-max-saved-items 100)
+  (setq recentf-max-menu-items 100
+	recentf-max-saved-items 100)
   :hook (after-init . recentf-mode))
 
-;; 字符编码优先级设置，最下面的作为最优先选择的编码类型
-(prefer-coding-system 'cp950)
-(prefer-coding-system 'gb2312)
-(prefer-coding-system 'cp936)
-(prefer-coding-system 'gb18030)
-(prefer-coding-system 'utf-16)
-(prefer-coding-system 'utf-8-dos)
+;; 选中文本后直接输入，省去删除被选中文本的操作
+(use-package delsel
+  :ensure nil
+  :hook (after-init . delete-selection-mode))
+
+;; 字符编码优先级设置，优先选择的编码类型
 (prefer-coding-system 'utf-8-unix)
 
 ;; 向上/向下翻半页
@@ -204,6 +217,7 @@
 
 ;; 解决粘贴中文出现乱码的问题
 (set-clipboard-coding-system 'utf-8)
+
 ;; 终端中文乱码
 (set-terminal-coding-system 'utf-8)
 (modify-coding-system-alist 'process "*" 'utf-8)
@@ -215,6 +229,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs 优化插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; 防止超长行卡死 emacs
 (use-package so-long
   :config (global-so-long-mode 1))
@@ -235,6 +250,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 编程语言插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (use-package cmake-mode
   :defer t)
 
@@ -272,9 +288,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 文本编辑插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; tree-sitter 进行语法高亮
 (use-package tree-sitter
-  :defer t
+  :ensure t
+  :demand t
   :if (fboundp 'module-load) ; 需要 Emacs 支持 Dynamic module
   :config
   (global-tree-sitter-mode)
@@ -296,8 +314,7 @@
 ;; 替代 avy, 可以跳转中文
 (use-package ace-pinyin
   :defer t
-  :init
-  (ace-pinyin-global-mode 1)
+  :init (ace-pinyin-global-mode 1)
   :bind ("M-c" . avy-goto-word-1))
 
 ;; 注释/反注释
@@ -336,6 +353,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 窗口布局，文件管理，buffer 管理插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; M-x windresize 启动，然后使用方向键调整窗口大小
 ;; 用 i 调整步长，o键或者M-S-<up>/<left>跳到其它窗口，? 显示帮助，调整完了按RET退出即可
 (use-package windresize
@@ -348,14 +366,15 @@
 	 ("M-s <down>"  . windmove-down)
 	 ("M-s <left>"  . windmove-left)
 	 ("M-s <right>" . windmove-right))
-  :config (setq windmove-wrap-around t))  ;; 在边缘的窗口进行循环跳转，最左窗口跳到最右窗口等
+  ;; 在边缘的窗口进行循环跳转，最左窗口跳到最右窗口等
+  :config (setq windmove-wrap-around t))
 
-(use-package indent-guide
-  :defer t
-  :config
-  (indent-guide-global-mode t)
-  (setq indent-guide-delay 0.0  ;; 展示对齐线的延迟时间
-	indent-guide-recursive t))
+;; (use-package indent-guide
+;;   :defer t
+;;   :config
+;;   (setq indent-guide-global-mode t
+;; 	indent-guide-delay 0.0  ;; 展示对齐线的延迟时间
+;; 	indent-guide-recursive t))
 
 ;; 资源管理器 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
 ;; neotree 窗口有效
@@ -423,25 +442,27 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 符号管理插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (use-package symbol-overlay
   :defer t
-  :bind (("M-s i"  . symbol-overlay-put)
-	 ("M-s k"  . symbol-overlay-switch-forward)
-	 ("M-s j"  . symbol-overlay-switch-backward)
+  :bind (("M-s i" . symbol-overlay-put)
+	 ("M-s k" . symbol-overlay-switch-forward)
+	 ("M-s j" . symbol-overlay-switch-backward)
 	 ("M-s 9" . symbol-overlay-mode)
 	 ("M-s 0" . symbol-overlay-remove-all))
-  :bind (:map symbol-overlay-map
-	      ("i" . symbol-overlay-put)		; 高亮或取消高亮当前symbol
-	      ("n" . symbol-overlay-jump-next)		; 跳转到下一个位置
-	      ("p" . symbol-overlay-jump-prev)		; 跳转到上一个位置
-	      ("w" . symbol-overlay-save-symbol)	; 复制当前symbol
-	      ("t" . symbol-overlay-toggle-in-scope)	; 切换高亮范围到作用域
-	      ("e" . symbol-overlay-echo-mark)		; 撤销上一次跳转
-	      ("d" . symbol-overlay-jump-to-definition) ; 跳转到定义
-	      ("s" . symbol-overlay-isearch-literally)	; 切换为isearch并搜索当前symbol
-	      ("q" . symbol-overlay-query-replace)	; 查找替换当前symbol
-	      ("r" . symbol-overlay-rename)		; 对symbol直接重命名
-	      ))
+  :bind
+  (:map symbol-overlay-map
+	("i" . symbol-overlay-put)                ; 高亮或取消高亮当前symbol
+	("n" . symbol-overlay-jump-next)          ; 跳转到下一个位置
+	("p" . symbol-overlay-jump-prev)	  ; 跳转到上一个位置
+	("w" . symbol-overlay-save-symbol)        ; 复制当前symbol
+	("t" . symbol-overlay-toggle-in-scope)    ; 切换高亮范围到作用域
+	("e" . symbol-overlay-echo-mark)	  ; 撤销上一次跳转
+	("d" . symbol-overlay-jump-to-definition) ; 跳转到定义
+	("s" . symbol-overlay-isearch-literally)  ; 切换为isearch并搜索当前symbol
+	("q" . symbol-overlay-query-replace)      ; 查找替换当前symbol
+	("r" . symbol-overlay-rename)             ; 对symbol直接重命名
+	))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LSP
@@ -467,10 +488,9 @@
   :ensure t
   :demand t
   :bind (("C-c TAB" . company-complete-common))
-  :config
-  (setq company-idle-delay       0     ;; 延迟补全时间
-	company-mode             t
-	company-dabbrev-downcase nil)  ;; 补全区分大小写
+  :config (setq company-idle-delay       0     ;; 延迟补全时间
+		company-mode             t
+		company-dabbrev-downcase nil)  ;; 补全区分大小写
   (add-hook 'after-init-hook 'global-company-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -482,9 +502,8 @@
   :bind (("C-c f"   . youdao-dictionary-search-at-point+)
 	 ("C-c w"   . youdao-dictionary-search-at-point-tooltip)
 	 ("C-c SPC" . youdao-dictionary-search-from-input))
-  :config
-  (setq url-automatic-caching t
-	youdao-dictionary-search-history-file "~/.emacs.d/.youdao"))
+  :config (setq url-automatic-caching t
+		youdao-dictionary-search-history-file "~/.emacs.d/.youdao"))
 
 ;; RET     ; 在当前窗口打开文件
 ;; o       ; 在其他窗口打开文件
@@ -504,23 +523,19 @@
       (ivy-mode 1)
       ;; Add recent files and bookmarks to the ivy-switch-buffer
       ;; (setq ivy-use-virtual-buffers t)
-      (setq ivy-count-format "%d/%d ")
-      )
+      (setq ivy-count-format "%d/%d "))
   (use-package vertico
-    :init
-    (vertico-mode 1)
-    :config
-    (setq vertico-scroll-margin 0)
-    (setq vertico-count 10)
-    ;; (setq vertico-resize t)
-    ;; (setq vertico-cycle t)
-    ))
+    :init (vertico-mode 1)
+    :config (setq vertico-scroll-margin 0
+		  vertico-count 10
+		  ;; setq vertico-resize t
+		  ;; setq vertico-cycle t
+		  )))
 
 ;; need by vertico
 ;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
-  :init
-  (savehist-mode 1))
+  :init (savehist-mode 1))
 
 ;; need by vertico
 (use-package emacs
@@ -552,50 +567,47 @@
 	 ("M-s =" . fzf-recentf)
 	 ("M-s b" . fzf-find-in-buffer)
 	 ("M-s d" . fzf-find-file-current-dir))
-  :config
-  (setq fzf/args          "-x --print-query --margin=0,0"
-        fzf/executable    "fzf"
-        fzf/git-grep-args "-i --line-number %s"
-        fzf/grep-command  "rg --no-heading -nH"
-        fzf/position-bottom t
-        fzf/window-height 15))
+  :config (setq fzf/args          "-x --print-query --margin=0,0"
+		fzf/executable    "fzf"
+		fzf/git-grep-args "-i --line-number %s"
+		fzf/grep-command  "rg --no-heading -nH"
+		fzf/position-bottom t
+		fzf/window-height 15))
 
 (use-package goto-line-preview
   :load-path "~/.emacs.d/plugins/goto-line-preview"
   :demand t
   :bind (("M-g g" . goto-line-preview)))
 
-;; isearch
-(setq isearch-lazy-highlight t
-      isearch-lazy-count t
-      lazy-count-prefix-format "[ %s / %s ] "
-      lazy-count-suffix-format "")
+(use-package isearch
+  :ensure nil
+  :config (setq isearch-lazy-highlight t
+		isearch-lazy-count t
+		lazy-count-prefix-format "[%s/%s] "
+		lazy-count-suffix-format ""))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 主题配置插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (use-package atom-one-dark-theme
-;;   :demand t
-;;   :config
-;;   (load-theme 'atom-one-dark t))
 
-(load-theme 'misterioso)
+(use-package ef-themes
+  :demand t
+  :config (load-theme 'ef-dark t))
+
+;; (load-theme 'misterioso)
 
 ;; 让括号变得不显眼
 (use-package parenface
   :load-path "~/.emacs.d/plugins/parenface"
-  :config
-  (set-face-foreground 'paren-face "#909595"))
+  :config (set-face-foreground 'paren-face "#909595"))
 
 ;; 修改光标所在括号内的块的背景颜色
 (use-package highlight-blocks
   :config
-  (setq highlight-blocks-delay 0.05)
-  ;; 设置背景颜色，第一个是显示的颜色
-  (setq highlight-blocks--rainbow-colors
-	'("#606060" "#000000" "#464641" "#404045" "#464646" "#FFCACA" "#FFFFBA"))
-  (setq highlight-blocks-max-face-count
-	(length highlight-blocks--rainbow-colors)))
+  (setq highlight-blocks-delay 0.05
+	;; 设置背景颜色，第一个是显示的颜色
+	highlight-blocks--rainbow-colors '("#606060" "#000000" "#464641")
+	highlight-blocks-max-face-count (length highlight-blocks--rainbow-colors)))
 
 (defun highlight-blocks--get-bounds ()
   (let ((result '())
@@ -666,12 +678,12 @@
 ;; 版本管理插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package diff-hl
-  :config
-  (global-diff-hl-mode)
-  (diff-hl-flydiff-mode)
-  ;; (diff-hl-margin-mode) ;; 终端下使用,不会自动刷新，需要手动调用
-  )
+;; (use-package diff-hl
+;;   :config
+;;   (global-diff-hl-mode)
+;;   (diff-hl-flydiff-mode)
+;;   ;; (diff-hl-margin-mode) ;; 终端下使用,不会自动刷新，需要手动调用
+;;   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 未分类插件
@@ -777,18 +789,20 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 外观配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(bm-face ((t (:background "DimGray"))))
- '(bm-fringe-face ((t (:background "DimGray"))))
+ '(bm-face                   ((t (:background "DimGray"))))
+ '(bm-fringe-face            ((t (:background "DimGray"))))
  '(bm-fringe-persistent-face ((t (:background "DimGray"))))
- '(bm-persistent-face ((t (:background "DimGray"))))
- '(deadgrep-filename-face ((t (:foreground "Orange"))))
- '(deadgrep-match-face ((t (:foreground "Green"))))
- '(hl-fill-column-face ((t (:background "DimGray")))))
+ '(bm-persistent-face        ((t (:background "DimGray"))))
+ '(deadgrep-filename-face    ((t (:foreground "Orange"))))
+ '(deadgrep-match-face       ((t (:foreground "Green"))))
+ '(hl-fill-column-face       ((t (:background "DimGray"))))
+ )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
