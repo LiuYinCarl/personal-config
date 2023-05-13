@@ -315,7 +315,7 @@
 (use-package ace-pinyin
   :defer t
   :init (ace-pinyin-global-mode 1)
-  :bind ("M-c" . avy-goto-word-1))
+  :bind ("M-c" . ace-pinyin-jump-char))
 
 ;; 注释/反注释
 (use-package newcomment
