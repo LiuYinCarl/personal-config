@@ -632,10 +632,10 @@
 
 ;; (highlight-blocks--define-rainbow-colors highlight-blocks--rainbow-colors)
 
-(add-hook 'emacs-lisp-mode-hook       'highlight-blocks-mode)
-(add-hook 'lisp-interaction-mode-hook 'highlight-blocks-mode)
-(add-hook 'lisp-mode-hook             'highlight-blocks-mode)
-(add-hook 'scheme-mode-hook           'highlight-blocks-mode)
+;; (add-hook 'emacs-lisp-mode-hook       'highlight-blocks-mode)
+;; (add-hook 'lisp-interaction-mode-hook 'highlight-blocks-mode)
+;; (add-hook 'lisp-mode-hook             'highlight-blocks-mode)
+;; (add-hook 'scheme-mode-hook           'highlight-blocks-mode)
 
 ;; 切换窗口时未获得焦点的窗口失去高光
 (use-package dimmer
