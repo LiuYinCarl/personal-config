@@ -369,13 +369,6 @@
   ;; 在边缘的窗口进行循环跳转，最左窗口跳到最右窗口等
   :config (setq windmove-wrap-around t))
 
-;; (use-package indent-guide
-;;   :defer t
-;;   :config
-;;   (setq indent-guide-global-mode t
-;; 	indent-guide-delay 0.0  ;; 展示对齐线的延迟时间
-;; 	indent-guide-recursive t))
-
 ;; 资源管理器 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
 ;; neotree 窗口有效
 ;; U       进入上层目录
@@ -602,42 +595,42 @@
   :config (set-face-foreground 'paren-face "#909595"))
 
 ;; 修改光标所在括号内的块的背景颜色
-(use-package highlight-blocks
-  :config
-  (setq highlight-blocks-delay 0.05
-	;; 设置背景颜色，第一个是显示的颜色
-	highlight-blocks--rainbow-colors '("#606060" "#000000" "#464641")
-	highlight-blocks-max-face-count (length highlight-blocks--rainbow-colors)))
+;; (use-package highlight-blocks
+;;   :config
+;;   (setq highlight-blocks-delay 0.05
+;; 	;; 设置背景颜色，第一个是显示的颜色
+;; 	highlight-blocks--rainbow-colors '("#606060" "#000000" "#464641")
+;; 	highlight-blocks-max-face-count (length highlight-blocks--rainbow-colors)))
 
-(defun highlight-blocks--get-bounds ()
-  (let ((result '())
-	(parse-sexp-ignore-comments t))
-    (condition-case nil
-	(let* ((parse-state (syntax-ppss))
-	       (starting-pos (if (or (nth 3 parse-state)
-				     (nth 4 parse-state))
-				 (nth 8 parse-state)
-			       (point)))
-	       (begins (nreverse (nth 9 parse-state)))
-	       (end starting-pos)
-	       (i 0))
-	  (while (or (eq highlight-blocks-max-innermost-block-count t)
-		     (< i highlight-blocks-max-innermost-block-count))
-	    (setq end (scan-lists end 1 1))
-	    (push (cons (pop begins) end) result)
-	    (setq i (1+ i))))
-      (scan-error))
-    (last result)))
+;; (defun highlight-blocks--get-bounds ()
+;;   (let ((result '())
+;; 	(parse-sexp-ignore-comments t))
+;;     (condition-case nil
+;; 	(let* ((parse-state (syntax-ppss))
+;; 	       (starting-pos (if (or (nth 3 parse-state)
+;; 				     (nth 4 parse-state))
+;; 				 (nth 8 parse-state)
+;; 			       (point)))
+;; 	       (begins (nreverse (nth 9 parse-state)))
+;; 	       (end starting-pos)
+;; 	       (i 0))
+;; 	  (while (or (eq highlight-blocks-max-innermost-block-count t)
+;; 		     (< i highlight-blocks-max-innermost-block-count))
+;; 	    (setq end (scan-lists end 1 1))
+;; 	    (push (cons (pop begins) end) result)
+;; 	    (setq i (1+ i))))
+;;       (scan-error))
+;;     (last result)))
 
-(defun highlight-blocks--define-rainbow-colors (colors)
-  (dotimes (i (length colors))
-    (face-spec-set
-     (intern (format "highlight-blocks-depth-%d-face" (1+ i)))
-     `((((class color) (background dark))  :background ,(nth i colors))
-       (((class color) (background light)) :background ,(nth i colors)))
-     'face-defface-spec)))
+;; (defun highlight-blocks--define-rainbow-colors (colors)
+;;   (dotimes (i (length colors))
+;;     (face-spec-set
+;;      (intern (format "highlight-blocks-depth-%d-face" (1+ i)))
+;;      `((((class color) (background dark))  :background ,(nth i colors))
+;;        (((class color) (background light)) :background ,(nth i colors)))
+;;      'face-defface-spec)))
 
-(highlight-blocks--define-rainbow-colors highlight-blocks--rainbow-colors)
+;; (highlight-blocks--define-rainbow-colors highlight-blocks--rainbow-colors)
 
 (add-hook 'emacs-lisp-mode-hook       'highlight-blocks-mode)
 (add-hook 'lisp-interaction-mode-hook 'highlight-blocks-mode)
@@ -795,14 +788,13 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(bm-face                   ((t (:background "DimGray"))))
- '(bm-fringe-face            ((t (:background "DimGray"))))
+ '(bm-face ((t (:background "DimGray"))))
+ '(bm-fringe-face ((t (:background "DimGray"))))
  '(bm-fringe-persistent-face ((t (:background "DimGray"))))
- '(bm-persistent-face        ((t (:background "DimGray"))))
- '(deadgrep-filename-face    ((t (:foreground "Orange"))))
- '(deadgrep-match-face       ((t (:foreground "Green"))))
- '(hl-fill-column-face       ((t (:background "DimGray"))))
- )
+ '(bm-persistent-face ((t (:background "DimGray"))))
+ '(deadgrep-filename-face ((t (:foreground "Orange"))))
+ '(deadgrep-match-face ((t (:foreground "Green"))))
+ '(hl-fill-column-face ((t (:background "DimGray")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
