@@ -86,6 +86,11 @@
 ;; go install golang.org/x/tools/gopls@latest
 ;; PATH=$PATH:$(go env GOPATH)/bin # 添加到 .bashrc
 
+;; OCaml
+;; opam install merlin
+;; opam user-setup install
+;; 查看 ocamlmerlin Path: whereis ocamlmerlin
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 启动优化配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -274,16 +279,12 @@
   (add-to-list 'auto-mode-alist '("\\.md\\'"       . markdown-mode)))
 
 ;; OCaml
-(let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
-  (when (and opam-share (file-directory-p opam-share))
-    ;; Register Merlin
-    (add-to-list 'load-path (expand-file-name "emacs/site-lisp" opam-share))
-    (autoload 'merlin-mode "merlin" nil t nil)
-    ;; Automatically start it in OCaml buffers
-    (add-hook 'tuareg-mode-hook 'merlin-mode t)
-    (add-hook 'caml-mode-hook 'merlin-mode t)
-    ;; Use opam switch to lookup ocamlmerlin binary
-    (setq merlin-command 'opam)))
+(use-package tuareg)
+
+;; needed only if ocamlmerlin not already in your PATH
+(setq merlin-command "~/.opam/5.0.0/bin/ocamlmerlin")
+(add-hook 'tuareg-mode-hook #'merlin-mode)
+(add-hook 'caml-mode-hook #'merlin-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 文本编辑插件
@@ -516,11 +517,12 @@
       (ivy-mode 1)
       ;; Add recent files and bookmarks to the ivy-switch-buffer
       ;; (setq ivy-use-virtual-buffers t)
+      (setq ivy-height 20)
       (setq ivy-count-format "%d/%d "))
   (use-package vertico
     :init (vertico-mode 1)
     :config (setq vertico-scroll-margin 0
-		  vertico-count 10
+		  vertico-count 20
 		  ;; setq vertico-resize t
 		  ;; setq vertico-cycle t
 		  )))
