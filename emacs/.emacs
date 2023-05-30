@@ -308,6 +308,19 @@
   :defer t
   :bind ("M-o" . er/expand-region))
 
+(use-package smartparens
+  :defer t
+  :config
+  (require 'smartparens-config)
+  (add-hook 'js-mode-hook     #'smartparens-mode)
+  (add-hook 'c-mode-hook      #'smartparens-mode)
+  (add-hook 'c++-mode-hook    #'smartparens-mode)
+  (add-hook 'go-mode-hook     #'smartparens-mode)
+  (add-hook 'python-mode-hook #'smartparens-mode)
+  :bind (("M-s [" . beginning-of-defun)
+	 ("M-s ]" . end-of-defun))
+  )
+
 ;; (use-package avy
 ;;   :defer t
 ;;   :bind ("M-c" . avy-goto-word-1))
