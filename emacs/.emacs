@@ -293,7 +293,7 @@
 ;; tree-sitter 进行语法高亮
 (use-package tree-sitter
   :ensure t
-  :demand t
+  :defer t
   :if (fboundp 'module-load) ; 需要 Emacs 支持 Dynamic module
   :config
   (global-tree-sitter-mode)
@@ -329,7 +329,7 @@
 (use-package ace-pinyin
   :defer t
   :init (ace-pinyin-global-mode 1)
-  :bind ("M-c" . ace-pinyin-jump-char))
+  :bind ("M-c" . avy-goto-word-1))
 
 ;; 注释/反注释
 (use-package newcomment
@@ -814,3 +814,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
+(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
+;; ## end of OPAM user-setup addition for emacs / base ## keep this line
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   '(youdao-dictionary windresize vertico use-package tuareg tree-sitter-langs symbol-overlay swiper speedbar-git-respect solarized-theme smartparens shell-pop rust-mode rg pkg-info neotree multiple-cursors move-dup markdown-mode magit-section lua-mode imenu-list highlight-blocks goto-line-preview go-mode git-commit expand-region exec-path-from-shell eglot ef-themes diff-hl deadgrep dashboard color-theme-approximate cmake-mode bm ace-pinyin)))
