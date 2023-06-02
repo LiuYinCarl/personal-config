@@ -812,15 +812,14 @@
  '(hl-fill-column-face ((t (:background "DimGray")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 自动生成的东西
+;; 工具生成的配置，不同机器差异不大
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; use opam user-setup install to generate
 ;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
 (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
 ;; ## end of OPAM user-setup addition for emacs / base ## keep this line
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   '(youdao-dictionary windresize vertico use-package tuareg tree-sitter-langs symbol-overlay swiper speedbar-git-respect solarized-theme smartparens shell-pop rust-mode rg pkg-info neotree multiple-cursors move-dup markdown-mode magit-section lua-mode imenu-list highlight-blocks goto-line-preview go-mode git-commit expand-region exec-path-from-shell eglot ef-themes diff-hl deadgrep dashboard color-theme-approximate cmake-mode bm ace-pinyin)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 自动生成的东西
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
