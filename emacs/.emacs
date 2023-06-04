@@ -697,6 +697,12 @@
 ;; 未分类插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package breadcrumb
+  :demand t
+  :load-path "~/.emacs.d/plugins/breadcrumb"
+  :config
+  (breadcrumb-mode t))
+
 (use-package awesome-tab
   :demand t
   :load-path "~/.emacs.d/plugins/awesome-tab"
@@ -823,3 +829,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes '(ef-night))
+ '(custom-safe-themes
+   '("745be6ee3b4cc03357112e3e9543db51d6144aef7f8a91fe206883322a6d6081" default)))
