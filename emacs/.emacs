@@ -286,6 +286,23 @@
 (add-hook 'tuareg-mode-hook #'merlin-mode)
 (add-hook 'caml-mode-hook #'merlin-mode)
 
+;; (use-package haskell-mode
+;;   :ensure t)
+
+;; ;; haskell 代码补全
+;; (use-package dante
+;;   :ensure t
+;;   :after haskell-mode
+;;   :commands 'dante-mode
+;;   :config
+;;   (flycheck-add-next-checker 'haskell-dante '(info . haskell-hlint))
+;;   :init
+;;   ;; (add-hook 'haskell-mode-hook 'flycheck-mode)
+;;   ;; OR for flymake support:
+;;   (add-hook 'haskell-mode-hook 'flymake-mode)
+;;   (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
+;;   (add-hook 'haskell-mode-hook 'dante-mode))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 文本编辑插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -432,7 +449,7 @@
 	shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell))))
 	shell-pop-term-shell "/bin/bash"
 	shell-pop-universal-key "C-t"
-	shell-pop-window-size 30
+	shell-pop-window-size 50
 	shell-pop-full-span t
 	shell-pop-window-position "bottom"
 	shell-pop-autocd-to-working-dir t
@@ -486,8 +503,15 @@
     (add-hook 'c++-mode-hook    'eglot-ensure)
     (add-hook 'python-mode-hook 'eglot-ensure)
     (add-hook 'go-mode-hook     'eglot-ensure)
+    (add-hook 'haskell-mode-hook 'eglot-ensure)
     (setq eldoc-idle-delay 1000000)  ;; 修改 eldoc-mode 的展示延迟时间
     (setq completion-ignore-case t)  ;; company-capf匹配时不区分大小写
+    (setq-default eglot-workspace-configuration
+                  '((haskell
+                     (plugin
+                      (stan
+                       (globalOn . :json-false))))))  ;; disable stan
+
     ))
 
 ;; 自动补全 https://www.emacswiki.org/emacs/CompanyMode
@@ -523,6 +547,9 @@
 (use-package deadgrep
   :defer t
   :bind (("C-c s" . deadgrep)))
+
+(use-package counsel
+  :bind (("M-s m" . counsel-imenu)))
 
 (if (version< emacs-version "27.1")
     (use-package ivy
@@ -829,11 +856,3 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes '(ef-night))
- '(custom-safe-themes
-   '("745be6ee3b4cc03357112e3e9543db51d6144aef7f8a91fe206883322a6d6081" default)))
