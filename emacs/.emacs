@@ -504,6 +504,7 @@
     (add-hook 'python-mode-hook 'eglot-ensure)
     (add-hook 'go-mode-hook     'eglot-ensure)
     (add-hook 'haskell-mode-hook 'eglot-ensure)
+    (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1))) ;; 关闭行内函数参数展示
     (setq eldoc-idle-delay 1000000)  ;; 修改 eldoc-mode 的展示延迟时间
     (setq completion-ignore-case t)  ;; company-capf匹配时不区分大小写
     (setq-default eglot-workspace-configuration
@@ -511,7 +512,6 @@
                      (plugin
                       (stan
                        (globalOn . :json-false))))))  ;; disable stan
-
     ))
 
 ;; 自动补全 https://www.emacswiki.org/emacs/CompanyMode
