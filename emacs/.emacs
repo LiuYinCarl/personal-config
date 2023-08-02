@@ -419,7 +419,6 @@
 	 ("C-c _" . neotree-ffip-project-dir)))
 
 ;; 将代码结构展示在右侧窗口
-;; C-c C-j 可以在下方打开一个 imenu 窗口快速查找
 (use-package imenu-list
   :bind ("C-c m" . imenu-list-smart-toggle)
   :config (setq imenu-list-focus-after-activation t))
@@ -491,6 +490,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LSP
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (when (not (version<= emacs-version "26.1"))
   (use-package eglot
     :ensure t
@@ -528,14 +528,6 @@
 ;; 搜索功能插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package youdao-dictionary
-  :defer t
-  :bind (("C-c f"   . youdao-dictionary-search-at-point+)
-	 ("C-c w"   . youdao-dictionary-search-at-point-tooltip)
-	 ("C-c SPC" . youdao-dictionary-search-from-input))
-  :config (setq url-automatic-caching t
-		youdao-dictionary-search-history-file "~/.emacs.d/.youdao"))
-
 ;; RET     ; 在当前窗口打开文件
 ;; o       ; 在其他窗口打开文件
 ;; n/p     ; 上下移动，以行为单位
@@ -549,7 +541,11 @@
   :bind (("C-c s" . deadgrep)))
 
 (use-package counsel
-  :bind (("M-s m" . counsel-imenu)))
+  :bind (("C-c SPC" . counsel-imenu)))
+
+(use-package swiper
+  :defer t
+  :bind (("C-c b" . swiper-isearch)))
 
 (if (version< emacs-version "27.1")
     (use-package ivy
@@ -589,10 +585,6 @@
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
   ;; Enable recursive minibuffers
   (setq enable-recursive-minibuffers t))
-
-(use-package swiper
-  :defer t
-  :bind (("C-c b" . swiper-isearch)))
 
 (use-package fzf
   :defer t
@@ -761,8 +753,8 @@
   :ensure nil
   :diminish hs-minor-mode
   :bind (:map prog-mode-map
-	      ("ESC -" . hs-toggle-hiding)
-	      ("ESC =" . hs-show-all))
+	      ("C-c (" . hs-toggle-hiding)
+	      ("C-c )" . hs-show-all))
   :hook (prog-mode . hs-minor-mode)
   :config (setq hs-set-up-overlay 'hideshow-folded-overlay-fn)
   :custom
@@ -807,7 +799,11 @@
 
 (defun my-save-region-to-tmp-file ()
   (interactive)
-  (write-region (region-beginning) (region-end) "~/.emacs.d/.tmp_copy_region"))
+  (let ((content (buffer-substring (region-beginning) (region-end))))
+    (with-temp-buffer
+      (insert content)
+      (insert "\n")
+      (write-file "~/.emacs.d/.tmp_copy_region"))))
 
 (defun my-copy-word-at-point ()
   (interactive)
