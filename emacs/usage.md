@@ -207,5 +207,17 @@ https://github.com/rizsotto/Bear
 (add-hook 'scheme-mode-hook           'highlight-blocks-mode)
 
 
+;; ivy 单独使用时候的配置
+(use-package ivy
+  :init (ivy-mode 1)
+  :config
+  ;; Add recent files and bookmarks to the ivy-switch-buffer
+  ;; (setq ivy-use-virtual-buffers t)
+  (setq ivy-height 20)
+  (setq ivy-count-format "%d/%d "))
+
+(custom-set-faces
+ '(ivy-current-match ((t (:background "Dimgray"))))
+ '(ivy-minibuffer-match-face-2 ((t (:foreground "Blue")))))
 
 ```

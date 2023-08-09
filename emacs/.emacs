@@ -553,40 +553,23 @@
     (use-package ivy
       :config
       (ivy-mode 1)
-      ;; Add recent files and bookmarks to the ivy-switch-buffer
-      ;; (setq ivy-use-virtual-buffers t)
       (setq ivy-height 20)
       (setq ivy-count-format "%d/%d "))
   (use-package vertico
     :init (vertico-mode 1)
     :config (setq vertico-scroll-margin 0
-		  vertico-count 20
-		  ;; setq vertico-resize t
-		  ;; setq vertico-cycle t
-		  )))
+		  vertico-count 20)))
 
 ;; need by vertico
-;; Persist history over Emacs restarts. Vertico sorts by history position.
 (use-package savehist
   :init (savehist-mode 1))
 
-;; need by vertico
-(use-package emacs
+;; need by vertico. Optionally use the `orderless' completion style.
+(use-package orderless
   :init
-  (defun crm-indicator (args)
-    (cons (format "[CRM%s] %s"
-                  (replace-regexp-in-string
-                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
-                   crm-separator)
-                  (car args))
-          (cdr args)))
-  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
-  ;; Do not allow the cursor in the minibuffer prompt
-  (setq minibuffer-prompt-properties
-        '(read-only t cursor-intangible t face minibuffer-prompt))
-  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
-  ;; Enable recursive minibuffers
-  (setq enable-recursive-minibuffers t))
+  (setq completion-styles '(orderless basic)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package fzf
   :defer t
@@ -663,13 +646,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 版本管理插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; (use-package diff-hl
-;;   :config
-;;   (global-diff-hl-mode)
-;;   (diff-hl-flydiff-mode)
-;;   ;; (diff-hl-margin-mode) ;; 终端下使用,不会自动刷新，需要手动调用
-;;   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 未分类插件
