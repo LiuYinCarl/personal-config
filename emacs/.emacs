@@ -134,7 +134,7 @@
 
 ;; 设置默认字体大小 1 = 1/10 pt
 (if (display-graphic-p)
-    (set-face-attribute 'default nil :height 190) ;; GUI
+    (set-face-attribute 'default nil :height 160) ;; GUI
   (set-face-attribute 'default nil :height 130))  ;; 终端
 
 ;; 设置光标颜色
@@ -174,13 +174,16 @@
 
 ;; 行号的显示格式
 (setq linum-format "%4d\u2502")
-(global-linum-mode t)
+;; (global-linum-mode t)
+(when (version<= "26.0.50" emacs-version )
+  (global-display-line-numbers-mode))
+
 ;; 某些模式不使用行号
-(setq linum-disabled-modes-list '(eshell-mode deadgrep-mode))
-(defun linum-on ()
-  (unless (or (minibufferp)
-	      (member major-mode linum-disabled-modes-list))
-    (linum-mode 1)))
+;; (setq linum-disabled-modes-list '(eshell-mode deadgrep-mode))
+;; (defun linum-on ()
+;;   (unless (or (minibufferp)
+;; 	      (member major-mode linum-disabled-modes-list))
+;;     (linum-mode 1)))
 
 ;; 高亮当前行
 ;; (global-hl-line-mode 1)
@@ -571,9 +574,13 @@
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
 
+;; (use-package find-file-in-project
+;;   :demand t
+;;   :bind (("M-s -" . find-file-in-project)))
+
 (use-package fzf
   :defer t
-  :load-path "~/.emacs.d/plugins/fzf.el/"
+  ;; :load-path "~/.emacs.d/plugins/fzf.el/"
   :bind (("M-s p" . fzf-find-file)
 	 ("M-s -" . fzf-git)
 	 ("M-s =" . fzf-recentf)
