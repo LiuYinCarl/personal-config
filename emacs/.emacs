@@ -439,6 +439,16 @@
                           (projects . 5)))
   (setq dashboard-projects-backend 'project-el))
 
+(use-package winner-mode
+  :ensure nil
+  :bind (("C-c <left>"  . winner-undo)
+	 ("C-c <right>" . winner-redo))
+  :hook (after-init . winner-mode))
+
+(use-package ediff
+  :ensure nil
+  :hook (ediff-quit . winner-undo))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 程序交互插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
