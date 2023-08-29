@@ -556,18 +556,21 @@
   :bind (("C-c s" . deadgrep)))
 
 (use-package counsel
-  :bind (("C-c SPC" . counsel-imenu)))
+  :bind (("C-c SPC" . counsel-imenu)
+	 ("C-c c SPC" . counsel-rg)))
 
 (use-package swiper
   :defer t
   :bind (("C-c b" . swiper-isearch)))
 
+(use-package ivy
+  :config
+  (ivy-mode 0) ;; just load config, not use
+  (setq ivy-height 20)
+  (setq ivy-count-format "%d/%d "))
+
 (if (version< emacs-version "27.1")
-    (use-package ivy
-      :config
-      (ivy-mode 1)
-      (setq ivy-height 20)
-      (setq ivy-count-format "%d/%d "))
+    (ivy-mode 1)
   (use-package vertico
     :init (vertico-mode 1)
     :config (setq vertico-scroll-margin 0
@@ -583,6 +586,33 @@
   (setq completion-styles '(orderless basic)
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
+
+;; need by vertico
+(use-package emacs
+  :init
+  ;; Add prompt indicator to `completing-read-multiple'.
+  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
+  (defun crm-indicator (args)
+    (cons (format "[CRM%s] %s"
+                  (replace-regexp-in-string
+                   "\\`\\[.*?]\\*\\|\\[.*?]\\*\\'" ""
+                   crm-separator)
+                  (car args))
+          (cdr args)))
+  (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
+
+  ;; Do not allow the cursor in the minibuffer prompt
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+
+  ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
+  ;; Vertico commands are hidden in normal buffers.
+  ;; (setq read-extended-command-predicate
+  ;;       #'command-completion-default-include-p)
+
+  ;; Enable recursive minibuffers
+  (setq enable-recursive-minibuffers t))
 
 ;; (use-package find-file-in-project
 ;;   :demand t
@@ -614,6 +644,14 @@
 		isearch-lazy-count t
 		lazy-count-prefix-format "[%s/%s] "
 		lazy-count-suffix-format ""))
+
+;; 字典查找
+;; apt install dictd dict dict-{wn,vera,jargon,devil,gcide,foldoc}
+;; systemctl enable dictd
+(use-package dictionary
+  :demand t
+  ;; :config (setq dictionary-server "dict.org") ;; set dict.org as dict server
+  :bind (("C-c f" . dictionary-lookup-definition)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 主题配置插件
