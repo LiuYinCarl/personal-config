@@ -810,6 +810,16 @@
   (kill-word 1))
 (global-set-key (kbd "M-DEL") 'my-kill-word-at-point)
 
+(defun my-kill-all-file-buffers ()
+  "Kills all buffers that are open to files. Does not kill
+modified buffers or special buffers."
+  (interactive)
+  (mapc 'kill-buffer (cl-loop for buffer being the buffers
+                              when (and (buffer-file-name buffer)
+                                        (not (buffer-modified-p buffer)))
+                              unless (eq buffer (current-buffer))
+                              collect buffer)))
+
 ;; auto fullscreen on GUI mode
 (add-hook 'window-setup-hook #'toggle-frame-maximized t)
 
