@@ -272,9 +272,6 @@
 (use-package lua-mode
   :defer t)
 
-(use-package rust-mode
-  :defer t)
-
 (use-package markdown-mode
   :defer t
   :config
@@ -751,8 +748,7 @@
   (hs-special-modes-alist
    (mapcar 'purecopy
 	   '((c-mode    "{" "}" "/[*/]" nil nil)
-	     (c++-mode  "{" "}" "/[*/]" nil nil)
-	     (rust-mode "{" "}" "/[*/]" nil nil)))))
+	     (c++-mode  "{" "}" "/[*/]" nil nil)))))
 
 ;; 一键格式化
 (defun my-indent-whole ()
@@ -761,7 +757,7 @@
   (message "format successfully"))
 (global-set-key [f10] 'my-indent-whole)
 
-;; align-regexp 使用空格对其
+;; align-regexp 使用空格而不是 tab 对齐
 (defadvice align-regexp (around align-regexp-with-spaces activate)
   (let ((indent-tabs-mode nil))
     ad-do-it))
@@ -783,11 +779,13 @@
 (global-set-key (kbd "M-s c") 'my-open-emacs-config)
 
 (defun my-fast-note ()
+  "open ~/fast-note.md in other window"
   (interactive)
   (find-file-other-window "~/fast-note.md"))
 (global-set-key (kbd "M-n") 'my-fast-note)
 
 (defun my-save-region-to-tmp-file ()
+  "save region to ~/.emacs.d/.tmp_copy_region"
   (interactive)
   (let ((content (buffer-substring (region-beginning) (region-end))))
     (with-temp-buffer
@@ -796,6 +794,7 @@
       (write-file "~/.emacs.d/.tmp_copy_region"))))
 
 (defun my-copy-word-at-point ()
+  "copy word at point"
   (interactive)
   (let* ((sym (symbol-at-point))
 	 (sym-name (when sym
@@ -805,6 +804,7 @@
 (global-set-key (kbd "M-s s") 'my-copy-word-at-point)
 
 (defun my-kill-word-at-point ()
+  "kill word at point"
   (interactive)
   (backward-word)
   (kill-word 1))
