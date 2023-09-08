@@ -240,6 +240,9 @@
 ;; Emacs 优化插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; 统计各个插件的启动消耗时间
+(use-package benchmark-init)
+
 ;; 防止超长行卡死 emacs
 (use-package so-long
   :config (global-so-long-mode 1))
@@ -281,7 +284,8 @@
   (add-to-list 'auto-mode-alist '("\\.md\\'"       . markdown-mode)))
 
 ;; OCaml
-(use-package tuareg)
+(use-package tuareg
+  :defer t)
 
 ;; needed only if ocamlmerlin not already in your PATH
 (setq merlin-command "~/.opam/5.0.0/bin/ocamlmerlin")
@@ -311,7 +315,6 @@
 
 ;; tree-sitter 进行语法高亮
 (use-package tree-sitter
-  :ensure t
   :defer t
   :if (fboundp 'module-load) ; 需要 Emacs 支持 Dynamic module
   :config
@@ -352,8 +355,8 @@
 
 ;; 注释/反注释
 (use-package newcomment
-  :defer t
   :ensure nil
+  :defer t
   :bind ([remap comment-dwim] . #'comment-or-uncomment)
   :config
   (defun comment-or-uncomment ()
@@ -394,7 +397,6 @@
 
 (use-package windmove
   :defer t
-  :ensure nil
   :bind (("M-s <up>"    . windmove-up)
 	 ("M-s <down>"  . windmove-down)
 	 ("M-s <left>"  . windmove-left)
@@ -617,7 +619,6 @@
 
 (use-package fzf
   :defer t
-  ;; :load-path "~/.emacs.d/plugins/fzf.el/"
   :bind (("M-s p" . fzf-find-file)
 	 ("M-s -" . fzf-git)
 	 ("M-s =" . fzf-recentf)
@@ -846,7 +847,7 @@ modified buffers or special buffers."
 
 ;; use opam user-setup install to generate
 ;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
-(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
+;; (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
 ;; ## end of OPAM user-setup addition for emacs / base ## keep this line
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
