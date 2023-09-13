@@ -553,9 +553,18 @@
 ;; D       ; 改变搜索目录
 ;; g       ; 重新搜索
 ;; C-c C-k ; 停止搜索
+
+(defun pp/deadgrep-view-file ()
+  "View result under cursor in other window."
+  (interactive)
+  (deadgrep-visit-result-other-window)
+  (other-window 1))
+
 (use-package deadgrep
   :defer t
-  :bind (("C-c s" . deadgrep)))
+  :bind (("C-c s" . deadgrep)
+	 :map deadgrep-mode-map
+         ("v" . pp/deadgrep-view-file)))
 
 (use-package counsel
   :bind (("C-c SPC" . counsel-imenu)
