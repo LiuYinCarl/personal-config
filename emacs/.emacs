@@ -460,6 +460,7 @@
 ;; C-c C-j 切换到 term-line-mode
 ;; C-c C-k 切换到 term-char-mode
 (use-package shell-pop
+  :demand t
   :init
   (setq shell-pop-default-directory "./"
 	shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell))))
@@ -503,6 +504,11 @@
 	("q" . symbol-overlay-query-replace)      ; 查找替换当前symbol
 	("r" . symbol-overlay-rename)             ; 对symbol直接重命名
 	))
+
+(use-package hl-todo
+  :load-path "~/.emacs.d/plugins/hl-todo"
+  :config
+  (global-hl-todo-mode t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LSP
@@ -725,8 +731,9 @@
 (use-package awesome-tab
   :demand t
   :load-path "~/.emacs.d/plugins/awesome-tab"
-  :bind (("M-k" . awesome-tab-forward-tab)
-	 ("M-j" . awesome-tab-backward-tab))
+  :bind (("M-h" . awesome-tab-ace-jump)
+	 ("M-j" . awesome-tab-backward-tab)
+	 ("M-k" . awesome-tab-forward-tab))
   :config
   (awesome-tab-mode t)
   ;; 颜色配置
