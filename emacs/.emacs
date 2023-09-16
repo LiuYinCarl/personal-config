@@ -167,6 +167,18 @@
 ;; 关闭自动保存文件功能
 (setq auto-save-default nil)
 
+;; 设置 tab 宽度
+(setq default-tab-width 4)
+
+;; 设置不使用 Tab 对齐
+(setq-default indent-tabs-mode nil)
+
+;; 设置 c 语言缩进
+(setq c-basic-offset 4)
+
+;; 设置 C 语言注释格式为 // 而不是 /* */
+(add-hook 'c-mode-hook #'(lambda () (c-toggle-comment-style -1)))
+
 ;; 设置每行最大长度
 (setq-default display-fill-column-indicator-column 80)
 
