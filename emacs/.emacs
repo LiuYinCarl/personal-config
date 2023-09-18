@@ -2,37 +2,33 @@
 ;; 常用快捷键
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; M-< 跳到文件开头
-;; M-> 跳到文件结尾
-
-;; M-s 方向键 跳到其他窗口
-
-;; C-M f 跳到表达式/括号的结尾
-;; C-M b 跳到表达式/括号的开头
-
-;; M-h 选中当前段
-;; M-g g 跳转到指定行, 当选择的行大于最大行数，会跳转到最后一行
-
-;; 更换主题配色
-;; M-x customize-themes
-
-;; 在一个 buffer 中保存与回到光标位置
-;; C-spc C-spc 设置一个 mark, 第二次是为了去掉高亮
-;; C-u C-spc 回到上一个 makr 的位置
-
-;; 多行缩进
-;; C-spc 选中多行，然后 C-x TAB , 然后 left 或 right 进行移动
-
-;; 文件编码转换
-;; C-x RET r 编码类型(gbk,utf-8 ...)
-
-;; 查看选中的区域内的行数、单词数、字符数
-;; M-=
-
-;; 全量更新 melpa 包
-;; M-x package-list-packages RET Ux
-
-;; 书签使用 bm 插件
+;; | 快捷键/函数                        | 功能说明                                     |
+;; | ---------------                    | --------------------                         |
+;; | C-M f                              | 跳到表达式/括号的结尾                        |
+;; | C-M b                              | 跳到表达式/括号的开头                        |
+;; | C-h k HotKey                       | 查看按键 -> 命令映射                         |
+;; | C-h w  Command                     | 查看命令 -> 按键映射                         |
+;; | C-x RET r [gbk/utf-8/...]          | 文件编码转换                                 |
+;; | M-<                                | 跳到文件开头                                 |
+;; | M->                                | 跳到文件末尾                                 |
+;; | M-s 方向键                         | 跳到其他窗口                                 |
+;; | M-g g                              | 跳转到指定行                                 |
+;; | M-=                                | 查看选中的区域内的行数,单词数,字符数         |
+;; | M-x customize-themes               | 更换主题配色                                 |
+;; | M-x package-list-packages RET Ux   | 全量更新 melpa 包                            |
+;; | set-frame-font                     | 设置字体                                     |
+;; | M-x project-switch-project/C-x p p | 打开最近的项目                               |
+;; | C-u 10 C-x TAB                     | 整体右移 10 个字符,要先选中文本区域          |
+;; | C-u -2 C-x TAB                     | 整体左移 2 个字符,要先选中文本区域           |
+;; | C-x TAB [left/right]               | 向左/右移动一个字符位置,要先选中文本区域     |
+;; | C-x r r                            | 复制一个矩形区域到寄存器,要先选中文本区域    |
+;; | C-x r k                            | 剪切一个矩形块,要先选中文本区域              |
+;; | C-x r y                            |粘贴一个矩形块,要先选中文本区域               |
+;; | C-x r o                            | 插入一个矩形块,要先选中文本区域              |
+;; | C-x r c                            |清除一个矩形块(使其变成空白),要先选中文本区域 |
+;; | C-x r t                            |在选定区域的所有列前插入字符,要先选中文本区域 |
+;; | C-spc C-spc                        | 设置一个 mark, 第二次是为了去掉高亮          |
+;; |C-u C-spc                           | 回到上一个 makr 的位置                       |
 
 ;; Dired Mode
 ;; C-x d 进入Dired Mode
@@ -56,25 +52,6 @@
 ;; Usage package 文档
 ;; https://phenix3443.github.io/notebook/emacs/modes/use-package-manual.html
 
-;; 打开最近的项目
-;; M-x project-switch-project (C-x p p)
-
-;; 查看按键 -> 命令映射  C-h k HotKey
-;; 查看命令 -> 按键映射  C-h w  Command
-
-;; 以C-x r开头的命令来进行矩形操作。先用C-space或者C-@设一个mark，
-;; 移动光标到另一点，用以下命令进行列操作
-;; C-x r r 复制一个矩形区域到寄存器
-;; C-x r k 剪切一个矩形块
-;; C-x r y 粘贴一个矩形块
-;; C-x r o 插入一个矩形块
-;; C-x r c 清除一个矩形块(使其变成空白)
-;; C-x r t 在选定区域的所有列前插入样的字符
-
-;; 先选中文本区域，然后执行如下命令使选中区域进行左右移动
-;; C-u 10 C-x TAB  ;; 整体右移 10 个字符
-;; C-u -2 C-x TAB  ;; 整体左移 2 个字符
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 此配置的外部程序依赖
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -92,9 +69,6 @@
 ;; opam install merlin
 ;; opam user-setup install
 ;; 查看 ocamlmerlin Path: whereis ocamlmerlin
-
-;; 设置字体
-;; set-frame-font
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 启动优化配置
@@ -142,46 +116,32 @@
 
 ;; 设置光标颜色
 (set-cursor-color "white")
-
 ;; 选中即复制功能
 (setq x-select-enable-primary t)
-
 ;; 状态栏显示列数
 (column-number-mode 1)
-
 ;; 不显示工具栏
 (tool-bar-mode -1)
-
 ;; 不显示菜单栏
 (menu-bar-mode -1)
-
 ;; 不显示启动界面
 (setq inhibit-splash-screen t)
-
 ;; 将yes/no 作为确认改成 y/n
 (fset 'yes-or-no-p 'y-or-n-p)
-
 ;; 关闭备份文件功能
 (setq make-backup-files nil)
-
 ;; 关闭自动保存文件功能
 (setq auto-save-default nil)
-
 ;; 设置 tab 宽度
 (setq default-tab-width 4)
-
 ;; 设置不使用 Tab 对齐
 (setq-default indent-tabs-mode nil)
-
 ;; 设置 c 语言缩进
 (setq c-basic-offset 4)
-
 ;; 设置 C 语言注释格式为 // 而不是 /* */
 (add-hook 'c-mode-hook #'(lambda () (c-toggle-comment-style -1)))
-
 ;; 设置每行最大长度
 (setq-default display-fill-column-indicator-column 80)
-
 ;; 显示行尾空格
 (setq-default show-trailing-whitespace t)
 (add-hook 'term-mode-hook
@@ -202,7 +162,6 @@
 
 ;; 高亮当前行
 ;; (global-hl-line-mode 1)
-
 ;; 括号补全
 (electric-pair-mode t)
 
@@ -782,6 +741,11 @@
 	   '((c-mode    "{" "}" "/[*/]" nil nil)
 	     (c++-mode  "{" "}" "/[*/]" nil nil)))))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 自定义函数
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;; 一键格式化
 (defun my-indent-whole ()
   (interactive)
@@ -854,6 +818,18 @@ modified buffers or special buffers."
 
 ;; auto fullscreen on GUI mode
 (add-hook 'window-setup-hook #'toggle-frame-maximized t)
+
+;; 使用 gdb-mode 进行调试
+;; step1: gdb
+;; step2: gdb-many-windows
+(defun my-gdb-env ()
+  "Prepare the GDB environment"
+  (interactive)
+  (awesome-tab-mode 0)
+  (dimmer-mode 0))
+
+;; Windows Terminal 下 Ctrl+Space 无效，但是这个很常用，所以映射一下
+(global-set-key [f4] 'set-mark-command)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 外观配置
