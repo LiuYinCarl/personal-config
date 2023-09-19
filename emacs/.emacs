@@ -2,33 +2,36 @@
 ;; 常用快捷键
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; | 快捷键/函数                        | 功能说明                                     |
-;; | ---------------                    | --------------------                         |
-;; | C-M f                              | 跳到表达式/括号的结尾                        |
-;; | C-M b                              | 跳到表达式/括号的开头                        |
-;; | C-h k HotKey                       | 查看按键 -> 命令映射                         |
-;; | C-h w  Command                     | 查看命令 -> 按键映射                         |
-;; | C-x RET r [gbk/utf-8/...]          | 文件编码转换                                 |
-;; | M-<                                | 跳到文件开头                                 |
-;; | M->                                | 跳到文件末尾                                 |
-;; | M-s 方向键                         | 跳到其他窗口                                 |
-;; | M-g g                              | 跳转到指定行                                 |
-;; | M-=                                | 查看选中的区域内的行数,单词数,字符数         |
-;; | M-x customize-themes               | 更换主题配色                                 |
-;; | M-x package-list-packages RET Ux   | 全量更新 melpa 包                            |
-;; | set-frame-font                     | 设置字体                                     |
-;; | M-x project-switch-project/C-x p p | 打开最近的项目                               |
-;; | C-u 10 C-x TAB                     | 整体右移 10 个字符,要先选中文本区域          |
-;; | C-u -2 C-x TAB                     | 整体左移 2 个字符,要先选中文本区域           |
-;; | C-x TAB [left/right]               | 向左/右移动一个字符位置,要先选中文本区域     |
-;; | C-x r r                            | 复制一个矩形区域到寄存器,要先选中文本区域    |
-;; | C-x r k                            | 剪切一个矩形块,要先选中文本区域              |
-;; | C-x r y                            |粘贴一个矩形块,要先选中文本区域               |
-;; | C-x r o                            | 插入一个矩形块,要先选中文本区域              |
-;; | C-x r c                            |清除一个矩形块(使其变成空白),要先选中文本区域 |
-;; | C-x r t                            |在选定区域的所有列前插入字符,要先选中文本区域 |
-;; | C-spc C-spc                        | 设置一个 mark, 第二次是为了去掉高亮          |
-;; |C-u C-spc                           | 回到上一个 makr 的位置                       |
+;; | 快捷键/函数                        | 功能说明                                    |
+;; | ---------------                    | --------------------                        |
+;; | C-M f                              | 跳到表达式/括号的结尾                       |
+;; | C-M b                              | 跳到表达式/括号的开头                       |
+;; | C-h k HotKey                       | 查看按键 -> 命令映射                        |
+;; | C-h w  Command                     | 查看命令 -> 按键映射                        |
+;; | C-x RET r [gbk/utf-8/...]          | 文件编码转换                                |
+;; | M-<                                | 跳到文件开头                                |
+;; | M->                                | 跳到文件末尾                                |
+;; | M-s 方向键                         | 跳到其他窗口                                |
+;; | M-g g                              | 跳转到指定行                                |
+;; | M-=                                | 查看选中的区域内的行数,单词数,字符数        |
+;; | M-x customize-themes               | 更换主题配色                                |
+;; | M-x package-list-packages RET Ux   | 全量更新 melpa 包                           |
+;; | set-frame-font                     | 设置字体                                    |
+;; | M-x project-switch-project/C-x p p | 打开最近的项目                              |
+;; | C-u 10 C-x TAB                     | 整体右移 10 个字符,要先选中文本区域         |
+;; | C-u -2 C-x TAB                     | 整体左移 2 个字符,要先选中文本区域          |
+;; | C-x TAB [left/right]               | 向左/右移动一个字符位置,要先选中文本区域    |
+;; | C-x r r                            | 复制矩形区域到寄存器,要先选中文本区域       |
+;; | C-x r k                            | 剪切矩形块,要先选中文本区域                 |
+;; | C-x r y                            | 粘贴矩形块,要先选中文本区域                 |
+;; | C-x r o                            | 插入矩形块,要先选中文本区域                 |
+;; | C-x r c                            | 清除矩形块(使其变成空白),要先选中文本区域   |
+;; | C-x r t                            | 在选定区域所有列前插入字符,要先选中文本区域 |
+;; | C-spc C-spc                        | 设置一个 mark, 第二次是为了去掉高亮         |
+;; |C-u C-spc                           | 回到上一个 makr 的位置                      |
+;; | M-s .                              | isearch-forward-symbol 开始搜索当前符号     |
+;; | C-s/C-r                            | isearch-forward/backward 向后查找/向前查找  |
+;;
 
 ;; Dired Mode
 ;; C-x d 进入Dired Mode
@@ -147,18 +150,11 @@
 (add-hook 'term-mode-hook
 	  (lambda () (setq show-trailing-whitespace nil)))
 
-;; 行号的显示格式
-(setq linum-format "%4d\u2502")
-;; (global-linum-mode t)
-(when (version<= "26.0.50" emacs-version )
-  (global-display-line-numbers-mode))
-
-;; 某些模式不使用行号
-;; (setq linum-disabled-modes-list '(eshell-mode deadgrep-mode))
-;; (defun linum-on ()
-;;   (unless (or (minibufferp)
-;; 	      (member major-mode linum-disabled-modes-list))
-;;     (linum-mode 1)))
+;; 行号展示
+(if (version<= "26.0.50" emacs-version )
+    (global-display-line-numbers-mode)
+  (setq linum-format "%4d\u2502")
+  (global-linum-mode t))
 
 ;; 高亮当前行
 ;; (global-hl-line-mode 1)
@@ -192,7 +188,6 @@
 
 ;; 字符编码优先级设置，优先选择的编码类型
 (prefer-coding-system 'utf-8-unix)
-
 ;; 向上/向下翻半页
 (autoload 'View-scroll-half-page-forward "view")
 (autoload 'View-scroll-half-page-backward "view")
@@ -201,12 +196,10 @@
 
 ;; 解决粘贴中文出现乱码的问题
 (set-clipboard-coding-system 'utf-8)
-
 ;; 终端中文乱码
 (set-terminal-coding-system 'utf-8)
 (modify-coding-system-alist 'process "*" 'utf-8)
 (setq default-process-coding-system '(utf-8 . utf-8))
-
 ;; kill current buffer without verify
 (global-set-key (kbd "C-x k") 'kill-current-buffer)
 
@@ -287,7 +280,21 @@
 ;; 文本编辑插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; tree-sitter 进行语法高亮
+;; 撤销修改
+;; f   to go forward
+;; b   to go backward
+;; n   to go to the node below when you at a branching point
+;; p   to go to the node above
+;; a   to go back to the last branching point
+;; e   to go forward to the end/tip of the branch
+;; q   to quit, you can also type C-g
+;; C-c C-s (or whatever binding you used for save-buffer)
+;;     to save the buffer at the current undo state
+(when (not (version<= emacs-version "28.0"))
+  (use-package vundo
+    :bind ("M-s u" . vundo)))
+
+;; 语法高亮
 (use-package tree-sitter
   :defer t
   :if (fboundp 'module-load) ; 需要 Emacs 支持 Dynamic module
@@ -481,6 +488,13 @@
   :config
   (global-hl-todo-mode t))
 
+;; 面包屑导航
+(use-package breadcrumb
+  :demand t
+  :load-path "~/.emacs.d/plugins/breadcrumb"
+  :config
+  (breadcrumb-mode t))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LSP
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -522,6 +536,13 @@
 ;; 搜索功能插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package isearch
+  :ensure nil
+  :config (setq isearch-lazy-highlight t
+		isearch-lazy-count t
+		lazy-count-prefix-format "[%s/%s] "
+		lazy-count-suffix-format ""))
+
 ;; RET     ; 在当前窗口打开文件
 ;; o       ; 在其他窗口打开文件
 ;; n/p     ; 上下移动，以行为单位
@@ -544,18 +565,19 @@
          ("v" . pp/deadgrep-view-file)))
 
 (use-package counsel
-  :bind (("C-c SPC" . counsel-imenu)
-	 ("C-c c SPC" . counsel-rg)))
+  :bind (("C-c SPC" . counsel-imenu) ;; 搜索 imenu list
+	 ("C-c c SPC" . counsel-rg))) ;; 搜索项目内关键字
 
 (use-package swiper
   :defer t
-  :bind (("C-c b" . swiper-isearch)))
+  :bind (("C-c b" . swiper-isearch))) ;; 搜索 buffer 内关键字
 
 (use-package ivy
   :config
   (ivy-mode 0) ;; just load config, not use
   (setq ivy-height 20)
   (setq ivy-count-format "%d/%d "))
+
 
 (if (version< emacs-version "27.1")
     (ivy-mode 1)
@@ -593,18 +615,12 @@
   (setq minibuffer-prompt-properties
         '(read-only t cursor-intangible t face minibuffer-prompt))
   (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
-
   ;; Emacs 28: Hide commands in M-x which do not work in the current mode.
   ;; Vertico commands are hidden in normal buffers.
-  ;; (setq read-extended-command-predicate
-  ;;       #'command-completion-default-include-p)
-
+  (setq read-extended-command-predicate
+        #'command-completion-default-include-p)
   ;; Enable recursive minibuffers
   (setq enable-recursive-minibuffers t))
-
-;; (use-package find-file-in-project
-;;   :demand t
-;;   :bind (("M-s -" . find-file-in-project)))
 
 (use-package fzf
   :defer t
@@ -620,18 +636,6 @@
 		fzf/position-bottom t
 		fzf/window-height 15))
 
-(use-package goto-line-preview
-  :load-path "~/.emacs.d/plugins/goto-line-preview"
-  :demand t
-  :bind (("M-g g" . goto-line-preview)))
-
-(use-package isearch
-  :ensure nil
-  :config (setq isearch-lazy-highlight t
-		isearch-lazy-count t
-		lazy-count-prefix-format "[%s/%s] "
-		lazy-count-suffix-format ""))
-
 ;; 字典查找
 ;; apt install dictd dict dict-{wn,vera,jargon,devil,gcide,foldoc}
 ;; systemctl enable dictd
@@ -644,11 +648,11 @@
 ;; 主题配置插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; (load-theme 'misterioso)
+
 (use-package ef-themes
   :demand t
   :config (load-theme 'ef-dark t))
-
-;; (load-theme 'misterioso)
 
 ;; 让括号变得不显眼
 (use-package parenface
@@ -660,6 +664,21 @@
   :load-path "~/.emacs.d/plugins/dimmer.el"
   :config
   (dimmer-mode t))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 跳转插件
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package goto-line-preview
+  :load-path "~/.emacs.d/plugins/goto-line-preview"
+  :demand t
+  :bind (("M-g g" . goto-line-preview)))
+
+(use-package better-jumper
+  :bind (("C-c p" . better-jumper-set-jump)
+         ("C-c [" . better-jumper-jump-backward)
+         ("C-c ]" . better-jumper-jump-forward)
+         ("C-c \\" . better-jumper-clear-jumps)))
 
 (use-package bm
   :ensure t
@@ -686,18 +705,12 @@
 	 ("M-<down>"  . bm-show-quit-window)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 版本管理插件
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 未分类插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package breadcrumb
+(use-package which-key
   :demand t
-  :load-path "~/.emacs.d/plugins/breadcrumb"
-  :config
-  (breadcrumb-mode t))
+  :config (which-key-mode))
 
 (use-package awesome-tab
   :demand t
@@ -720,7 +733,7 @@
 (defun hideshow-folded-overlay-fn (ov)
   (when (eq 'code (overlay-get ov 'hs))
     (let* ((nlines (count-lines (overlay-start ov) (overlay-end ov)))
-	   (info (format " #[%d]..." nlines)))
+	   (info (format " #[%d]... " nlines)))
       (overlay-put ov 'display (propertize info 'face hideshow-folded-face)))))
 
 ;; 显示被折叠的行数 这里额外启用了 :box t 属性使得提示更加明显
@@ -740,7 +753,6 @@
    (mapcar 'purecopy
 	   '((c-mode    "{" "}" "/[*/]" nil nil)
 	     (c++-mode  "{" "}" "/[*/]" nil nil)))))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自定义函数

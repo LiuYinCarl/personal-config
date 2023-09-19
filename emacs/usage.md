@@ -220,4 +220,54 @@ https://github.com/rizsotto/Bear
  '(ivy-current-match ((t (:background "Dimgray"))))
  '(ivy-minibuffer-match-face-2 ((t (:foreground "Blue")))))
 
+
+;; 不移动当前光标的情况下把屏幕上卷/下卷几行
+(defun my-scroll-up-lines()
+  "Scroll up 4 lines."
+  (interactive)
+  (read-only-mode 1)
+  (scroll-up 4)
+  (read-only-mode 0))
+
+(defun my-scroll-down-lines()
+  "Scroll down 4 lines."
+  (interactive)
+  (read-only-mode 1)
+  (scroll-down 4)
+  (read-only-mode 0))
+
+;; (global-set-key (kbd "C-c 9") 'my-scroll-down-lines)
+;; (global-set-key (kbd "C-c 0") 'my-scroll-up-lines)
+
+
+;; 位置跳转和记录
+(defvar point-stack nil
+  "The stack position.")
+
+(defun my-point-stack-clear ()
+  "Clear point stack."
+  (interactive)
+  (setq point-stack nil)
+  (message "Clear point stack, now stack size: %d" (length point-stack)))
+
+(defun my-point-stack-push ()
+  "Push current point in stack."
+  (interactive)
+  (setq point-stack (cons (list (current-buffer) (point)) point-stack))
+  (message "Location marked, now stack size: %d" (length point-stack)))
+
+(defun my-point-stack-pop ()
+  "Pop point from stack."
+  (interactive)
+  (if (null point-stack)
+      (message "Stack is empty.")
+    (switch-to-buffer (caar point-stack))
+    (goto-char (cadar point-stack))
+    (setq point-stack (cdr point-stack))
+    (message "Location poped, now stack size: %d" (length point-stack))))
+
+(global-set-key (kbd "C-c p") 'my-point-stack-push)
+(global-set-key (kbd "C-c [") 'my-point-stack-pop)
+(global-set-key (kbd "C-c ]") 'my-point-stack-clear)
+
 ```
