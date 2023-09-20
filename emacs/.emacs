@@ -137,7 +137,7 @@
 (setq auto-save-default nil)
 ;; 设置 tab 宽度
 (setq default-tab-width 4)
-;; 设置不使用 Tab 对齐
+;; 设置将 tab 替换为空格
 (setq-default indent-tabs-mode nil)
 ;; 设置 c 语言缩进
 (setq c-basic-offset 4)
@@ -507,11 +507,12 @@
     :config
     (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
     (add-to-list 'eglot-server-programs '((python-mode)  "pyright-langserver" "--stdio"))
-    (add-hook 'c-mode-hook      'eglot-ensure)
-    (add-hook 'c++-mode-hook    'eglot-ensure)
-    (add-hook 'python-mode-hook 'eglot-ensure)
-    (add-hook 'go-mode-hook     'eglot-ensure)
+    (add-hook 'c-mode-hook       'eglot-ensure)
+    (add-hook 'c++-mode-hook     'eglot-ensure)
+    (add-hook 'python-mode-hook  'eglot-ensure)
+    (add-hook 'go-mode-hook      'eglot-ensure)
     (add-hook 'haskell-mode-hook 'eglot-ensure)
+    (add-hook 'rust-mode-hook    'eglot-ensure)
     (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1))) ;; 关闭行内函数参数展示
     (setq eldoc-idle-delay 1000000)  ;; 修改 eldoc-mode 的展示延迟时间
     (setq completion-ignore-case t)  ;; company-capf匹配时不区分大小写
@@ -654,16 +655,35 @@
   :demand t
   :config (load-theme 'ef-dark t))
 
+;; (use-package atom-one-dark-theme
+;;   :demand t
+;;   :config (load-theme 'atom-one-dark))
+
+(use-package indent-bars
+  :load-path "~/.emacs.d/plugins/indent-bars"
+  :custom
+  (indent-bars-treesit-support t)
+  (indent-bars-no-descend-string t)
+  (indent-bars-treesit-ignore-blank-lines-types '("module"))
+  (indent-bars-treesit-wrap '((python argument_list parameters ; for python, as an example
+                                      list list_comprehension
+                                      dictionary dictionary_comprehension
+                                      parenthesized_expression subscript)))
+  :hook ((python-mode yaml-mode c-mode c++-mode) . indent-bars-mode)
+  :config
+  (setq indent-bars-color  '("DimGray" :face-bg t :blend 0.6)) ;; 设置颜色
+  (setq indent-bars-color-by-depth nil)) ;; 不按照嵌套深度改变颜色
+
 ;; 让括号变得不显眼
 (use-package parenface
   :load-path "~/.emacs.d/plugins/parenface"
   :config (set-face-foreground 'paren-face "#909595"))
 
 ;; 切换窗口时未获得焦点的窗口失去高光
-(use-package dimmer
-  :load-path "~/.emacs.d/plugins/dimmer.el"
-  :config
-  (dimmer-mode t))
+;; (use-package dimmer
+;;   :load-path "~/.emacs.d/plugins/dimmer.el"
+;;   :config
+;;   (dimmer-mode t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 跳转插件
@@ -872,3 +892,13 @@ modified buffers or special buffers."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-enabled-themes '(ef-dark))
+ '(custom-safe-themes
+   '("0c860c4fe9df8cff6484c54d2ae263f19d935e4ff57019999edbda9c7eda50b8" "2949f71b19f52bcee693534b6b6ad8796e495eb0c676e9c94f3e33f10511eb47" "5014b68d3880d21a5539af6ef40c1e257e9045d224efb3b65bf0ae7ff2a5e17a" "779aa194815bd4f88b672856961077bc3c735cb82d05b440e981bd218749cf18" "3ca84532551daa1b492545bbfa47fd1b726ca951d8be29c60a3214ced30b86f5" "f25f174e4e3dbccfcb468b8123454b3c61ba94a7ae0a870905141b050ad94b8f" default))
+ '(package-selected-packages
+   '(vundo windresize vertico use-package tuareg tree-sitter-langs timu-spacegrey-theme timu-rouge-theme timu-macos-theme symbol-overlay smartparens shrink-path shell-pop rust-mode pos-tip popup orderless neotree names multiple-cursors move-dup merlin markdown-mode lua-mode imenu-list haskell-mode go-mode fzf expand-region exec-path-from-shell eglot ef-themes deadgrep dashboard dante counsel cmake-mode citre chinese-word-at-point bm benchmark-init ace-pinyin)))
