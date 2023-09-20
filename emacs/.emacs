@@ -419,6 +419,7 @@
                           (projects . 5)))
   (setq dashboard-projects-backend 'project-el))
 
+;; 恢复之前的窗口布局
 (use-package winner-mode
   :ensure nil
   :bind (("C-c <left>"  . winner-undo)
@@ -680,10 +681,10 @@
   :config (set-face-foreground 'paren-face "#909595"))
 
 ;; 切换窗口时未获得焦点的窗口失去高光
-;; (use-package dimmer
-;;   :load-path "~/.emacs.d/plugins/dimmer.el"
-;;   :config
-;;   (dimmer-mode t))
+(use-package dimmer
+  :load-path "~/.emacs.d/plugins/dimmer.el"
+  :config
+  (dimmer-mode t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 跳转插件
@@ -892,13 +893,3 @@ modified buffers or special buffers."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes '(ef-dark))
- '(custom-safe-themes
-   '("0c860c4fe9df8cff6484c54d2ae263f19d935e4ff57019999edbda9c7eda50b8" "2949f71b19f52bcee693534b6b6ad8796e495eb0c676e9c94f3e33f10511eb47" "5014b68d3880d21a5539af6ef40c1e257e9045d224efb3b65bf0ae7ff2a5e17a" "779aa194815bd4f88b672856961077bc3c735cb82d05b440e981bd218749cf18" "3ca84532551daa1b492545bbfa47fd1b726ca951d8be29c60a3214ced30b86f5" "f25f174e4e3dbccfcb468b8123454b3c61ba94a7ae0a870905141b050ad94b8f" default))
- '(package-selected-packages
-   '(vundo windresize vertico use-package tuareg tree-sitter-langs timu-spacegrey-theme timu-rouge-theme timu-macos-theme symbol-overlay smartparens shrink-path shell-pop rust-mode pos-tip popup orderless neotree names multiple-cursors move-dup merlin markdown-mode lua-mode imenu-list haskell-mode go-mode fzf expand-region exec-path-from-shell eglot ef-themes deadgrep dashboard dante counsel cmake-mode citre chinese-word-at-point bm benchmark-init ace-pinyin)))
