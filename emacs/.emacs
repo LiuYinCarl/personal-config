@@ -560,6 +560,11 @@
   (deadgrep-visit-result-other-window)
   (other-window 1))
 
+(defadvice deadgrep (around align-regexp-with-spaces activate)
+  "Save current position before call deadgrep"
+  (better-jumper-set-jump)
+  ad-do-it)
+
 (use-package deadgrep
   :defer t
   :bind (("C-c s" . deadgrep)
@@ -695,6 +700,7 @@
   :demand t
   :bind (("M-g g" . goto-line-preview)))
 
+;; ivy-push-view/ivy-pop-view/ivy-switch-view 功能类似
 (use-package better-jumper
   :bind (("C-c p" . better-jumper-set-jump)
          ("C-c [" . better-jumper-jump-backward)
