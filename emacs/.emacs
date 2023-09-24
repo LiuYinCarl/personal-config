@@ -553,7 +553,6 @@
 ;; D       ; 改变搜索目录
 ;; g       ; 重新搜索
 ;; C-c C-k ; 停止搜索
-
 (defun pp/deadgrep-view-file ()
   "View result under cursor in other window."
   (interactive)
@@ -617,7 +616,6 @@
                   (car args))
           (cdr args)))
   (advice-add #'completing-read-multiple :filter-args #'crm-indicator)
-
   ;; Do not allow the cursor in the minibuffer prompt
   (setq minibuffer-prompt-properties
         '(read-only t cursor-intangible t face minibuffer-prompt))
