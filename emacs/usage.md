@@ -270,4 +270,27 @@ https://github.com/rizsotto/Bear
 (global-set-key (kbd "C-c [") 'my-point-stack-pop)
 (global-set-key (kbd "C-c ]") 'my-point-stack-clear)
 
+
+(defun my-query-and-replace ()
+  "查找项目内所有关键字并进行替换"
+  (interactive)
+  ;; 查找关键字
+  (call-interactively 'deadgrep)
+  ;; 循环直到 deadgrep 查询完毕
+  (while buffer-read-only
+    (condition-case err
+        (progn
+          (message "deadgrep is still searching, waiting...")
+          (sit-for 0.2)
+          ;; 使 deadgrep buffer 可以编辑
+          (call-interactively 'deadgrep-edit-mode))
+      ;; 当 deadgrep 还没有查找完成时调用 deadgrep-edit-mode
+      ;; 会触发 user-error, 这里进行忽略
+      (user-error
+       (message "deadgrep user-error occur, ignore...")
+       (ignore))))
+  ;; 对 deadgrep buffer 进行替换
+  (call-interactively 'query-replace))
+
+
 ```

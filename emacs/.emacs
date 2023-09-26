@@ -33,6 +33,11 @@
 ;; | C-s/C-r                            | isearch-forward/backward 向后查找/向前查找  |
 ;;
 
+;; 项目内进行全局搜索替换
+;; 1. 执行 deadgrep 进行搜索，搜索结果都展示在 deadgrep buffer
+;; 2. 执行 deadgrep-edit-mode, 使得可以编辑 deadgrep buffer
+;; 3. 执行 query-replace 对 deadgrep 内文本进行替换，? 查看快捷键
+
 ;; Dired Mode
 ;; C-x d 进入Dired Mode
 ;; q 退出Dired Mode
@@ -600,8 +605,15 @@
 (use-package orderless
   :init
   (setq completion-styles '(orderless basic)
+        orderless-matching-styles '(orderless-flex orderless-literal)
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
+
+;; for company mode
+(defun just-one-face (fn &rest args)
+  (let ((orderless-match-faces [completions-common-part]))
+    (apply fn args)))
+(advice-add 'company-capf--candidates :around #'just-one-face)
 
 ;; need by vertico
 (use-package emacs
@@ -659,10 +671,6 @@
   :demand t
   :config (load-theme 'ef-dark t))
 
-;; (use-package atom-one-dark-theme
-;;   :demand t
-;;   :config (load-theme 'atom-one-dark))
-
 (use-package indent-bars
   :load-path "~/.emacs.d/plugins/indent-bars"
   :custom
@@ -673,7 +681,8 @@
                                       list list_comprehension
                                       dictionary dictionary_comprehension
                                       parenthesized_expression subscript)))
-  :hook ((python-mode yaml-mode c-mode c++-mode) . indent-bars-mode)
+  :hook ((python-mode yaml-mode c-mode c++-mode rust-mode go-mode lua-mode ocaml-mode)
+         . indent-bars-mode)
   :config
   (setq indent-bars-color  '("DimGray" :face-bg t :blend 0.6)) ;; 设置颜色
   (setq indent-bars-color-by-depth nil)) ;; 不按照嵌套深度改变颜色
@@ -868,6 +877,24 @@ modified buffers or special buffers."
 ;; Windows Terminal 下 Ctrl+Space 无效，但是这个很常用，所以映射一下
 (global-set-key [f4] 'set-mark-command)
 
+(defun my-query-and-replace ()
+  "find string im project, then repalce by select."
+  (interactive)
+  (let* ((w1 (read-string "query replace: "))
+         (w2 (read-string (format "query replace '%s' with: " w1))))
+    (deadgrep w1)
+    (while buffer-read-only
+      (condition-case err
+          (progn
+            (message "deadgrep is still searching, waiting...")
+            (sit-for 0.2)
+            (deadgrep-edit-mode))
+        (user-error
+         (message "deadgrep user-error occur, ignore...")
+         (ignore))))
+    (query-replace w1 w2)))
+(global-set-key (kbd "C-c C-f") 'my-query-and-replace)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 外观配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -883,6 +910,8 @@ modified buffers or special buffers."
  '(bm-persistent-face ((t (:background "DimGray"))))
  '(deadgrep-filename-face ((t (:foreground "Orange"))))
  '(deadgrep-match-face ((t (:foreground "Green"))))
+ '(font-lock-comment-face ((t (:foreground "Green" :inherit nil))))
+ '(font-lock-doc-face ((t (:foreground "Blue" :inherit nil))))
  '(hl-fill-column-face ((t (:background "DimGray")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
