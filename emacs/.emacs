@@ -138,6 +138,8 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 ;; 关闭备份文件功能
 (setq make-backup-files nil)
+;; 设置备份文件目录
+(setq backup-directory-alist (quote (("." . "~/.emacs.d/backup_files"))))
 ;; 关闭自动保存文件功能
 (setq auto-save-default nil)
 ;; 设置 tab 宽度
@@ -147,49 +149,22 @@
 ;; 设置 c 语言缩进
 (setq c-basic-offset 4)
 ;; 设置 C 语言注释格式为 // 而不是 /* */
-(add-hook 'c-mode-hook #'(lambda () (c-toggle-comment-style -1)))
+(add-hook 'c-mode-hook (lambda () (c-toggle-comment-style -1)))
 ;; 设置每行最大长度
 (setq-default display-fill-column-indicator-column 80)
 ;; 显示行尾空格
 (setq-default show-trailing-whitespace t)
-(add-hook 'term-mode-hook
-	  (lambda () (setq show-trailing-whitespace nil)))
+(add-hook 'term-mode-hook (lambda () (setq show-trailing-whitespace nil)))
 
 ;; 行号展示
 (if (version<= "26.0.50" emacs-version )
     (global-display-line-numbers-mode)
   (setq linum-format "%4d\u2502")
   (global-linum-mode t))
-
 ;; 高亮当前行
 ;; (global-hl-line-mode 1)
 ;; 括号补全
 (electric-pair-mode t)
-
-;; 展示匹配的括号
-(use-package paren
-  :ensure nil
-  :hook (after-init . show-paren-mode)
-  :config
-  (setq show-paren-when-point-inside-paren t
-        show-paren-when-point-in-periphery t))
-
-;; 记录上次打开文件时 cursor 停留的位置
-(use-package saveplace
-  :ensure nil
-  :hook (after-init . save-place-mode))
-
-;; 保存最近打开的文件
-(use-package recentf
-  :config
-  (setq recentf-max-menu-items 100
-	recentf-max-saved-items 100)
-  :hook (after-init . recentf-mode))
-
-;; 选中文本后直接输入，省去删除被选中文本的操作
-(use-package delsel
-  :ensure nil
-  :hook (after-init . delete-selection-mode))
 
 ;; 字符编码优先级设置，优先选择的编码类型
 (prefer-coding-system 'utf-8-unix)
@@ -232,6 +207,31 @@
   (when (daemonp)
     (exec-path-from-shell-initialize)))
 
+;; 展示匹配的括号
+(use-package paren
+  :ensure nil
+  :hook (after-init . show-paren-mode)
+  :config
+  (setq show-paren-when-point-inside-paren t
+        show-paren-when-point-in-periphery t))
+
+;; 保存最近打开的文件
+(use-package recentf
+  :config
+  (setq recentf-max-menu-items 100
+	recentf-max-saved-items 100)
+  :hook (after-init . recentf-mode))
+
+;; 选中文本后直接输入可删除选中文本并输入，省去删除被选中文本的操作
+(use-package delsel
+  :ensure nil
+  :hook (after-init . delete-selection-mode))
+
+;; 记录上次打开文件时 cursor 停留的位置
+(use-package saveplace
+  :ensure nil
+  :hook (after-init . save-place-mode))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 编程语言插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -244,6 +244,9 @@
   :config
   (add-hook 'go-mode-hook (lambda() (setq tab-width 4))))
 
+(use-package rust-mode
+  :defer t)
+
 (use-package lua-mode
   :defer t)
 
@@ -251,7 +254,6 @@
   :defer t
   :config
   (setq markdown-fontify-code-blocks-natively t)  ;; 语法高亮
-  (add-to-list 'auto-mode-alist '("\\.text\\'"     . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.md\\'"       . markdown-mode)))
 
@@ -348,15 +350,15 @@
   (defun comment-or-uncomment ()
     (interactive)
     (if (region-active-p)
-	(comment-or-uncomment-region (region-beginning) (region-end))
+        (comment-or-uncomment-region (region-beginning) (region-end))
       (if (save-excursion
-	    (beginning-of-line)
-	    (looking-at "\\s-*$"))
-	  (call-interactively 'comment-dwim)
-	(comment-or-uncomment-region (line-beginning-position) (line-end-position)))))
+            (beginning-of-line)
+            (looking-at "\\s-*$"))
+          (call-interactively 'comment-dwim)
+        (comment-or-uncomment-region (line-beginning-position) (line-end-position)))))
   :custom
-  (comment-auto-fill-only-comments t))
-(global-set-key (kbd "C-c /") 'comment-or-uncomment)
+  (comment-auto-fill-only-comments t)
+  :bind (("C-c /" . comment-or-uncomment)))
 
 ;; 快捷移动文本段和复制文本段
 (use-package move-dup
@@ -589,7 +591,6 @@
   (setq ivy-height 20)
   (setq ivy-count-format "%d/%d "))
 
-
 (if (version< emacs-version "27.1")
     (ivy-mode 1)
   (use-package vertico
@@ -653,14 +654,6 @@
 		fzf/position-bottom t
 		fzf/window-height 15))
 
-;; 字典查找
-;; apt install dictd dict dict-{wn,vera,jargon,devil,gcide,foldoc}
-;; systemctl enable dictd
-(use-package dictionary
-  :demand t
-  ;; :config (setq dictionary-server "dict.org") ;; set dict.org as dict server
-  :bind (("C-c f" . dictionary-lookup-definition)))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 主题配置插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -670,6 +663,8 @@
 (use-package ef-themes
   :demand t
   :config (load-theme 'ef-dark t))
+
+(use-package all-the-icons)
 
 (use-package indent-bars
   :load-path "~/.emacs.d/plugins/indent-bars"
@@ -754,15 +749,10 @@
 	 ("M-k" . awesome-tab-forward-tab))
   :config
   (awesome-tab-mode t)
-  ;; 颜色配置
-  (setq awesome-tab-terminal-dark-select-background-color    "#708090")
   (setq awesome-tab-terminal-dark-select-foreground-color    "#FFFAFA")
+  (setq awesome-tab-terminal-dark-select-background-color    "#708090")
   (setq awesome-tab-terminal-dark-unselect-background-color  "#1C1C1C")
-  (setq awesome-tab-terminal-dark-unselect-foreground-color  "#FFFAFA")
-  (setq awesome-tab-terminal-light-select-background-color   "#708090")
-  (setq awesome-tab-terminal-light-select-foreground-color   "#FFFAFA")
-  (setq awesome-tab-terminal-light-unselect-background-color "#1C1C1C")
-  (setq awesome-tab-terminal-light-unselect-foreground-color "#FFFAFA"))
+  (setq awesome-tab-terminal-dark-unselect-foreground-color  "#FFFAFA"))
 
 (defun hideshow-folded-overlay-fn (ov)
   (when (eq 'code (overlay-get ov 'hs))
@@ -781,12 +771,7 @@
 	      ("C-c (" . hs-toggle-hiding)
 	      ("C-c )" . hs-show-all))
   :hook (prog-mode . hs-minor-mode)
-  :config (setq hs-set-up-overlay 'hideshow-folded-overlay-fn)
-  :custom
-  (hs-special-modes-alist
-   (mapcar 'purecopy
-	   '((c-mode    "{" "}" "/[*/]" nil nil)
-	     (c++-mode  "{" "}" "/[*/]" nil nil)))))
+  :config (setq hs-set-up-overlay 'hideshow-folded-overlay-fn))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自定义函数
@@ -796,7 +781,7 @@
 (defun my-indent-whole ()
   (interactive)
   (indent-region (point-min) (point-max))
-  (message "format successfully"))
+  (message "format success"))
 (global-set-key [f10] 'my-indent-whole)
 
 ;; align-regexp 使用空格而不是 tab 对齐
