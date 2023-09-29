@@ -664,8 +664,6 @@
   :demand t
   :config (load-theme 'ef-dark t))
 
-(use-package all-the-icons)
-
 (use-package indent-bars
   :load-path "~/.emacs.d/plugins/indent-bars"
   :custom
