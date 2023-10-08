@@ -38,6 +38,13 @@
 ;; 2. 执行 deadgrep-edit-mode, 使得可以编辑 deadgrep buffer
 ;; 3. 执行 query-replace 对 deadgrep 内文本进行替换，? 查看快捷键
 
+;; C-x (        开启宏记录
+;; C-x )        关闭宏记录
+;; C-x e        执行刚刚录制的宏
+;; C-u n C-x e  循环执行n次刚刚录制的宏
+;; C-u n C-x e  循环执行n次刚刚录制的宏
+;; C-u n C-x e  循环执行n次刚刚录制的宏
+
 ;; Dired Mode
 ;; C-x d 进入Dired Mode
 ;; q 退出Dired Mode
@@ -566,7 +573,7 @@
   (deadgrep-visit-result-other-window)
   (other-window 1))
 
-(defadvice deadgrep (around align-regexp-with-spaces activate)
+(defadvice deadgrep (around deadgrep-with-spaces activate)
   "Save current position before call deadgrep"
   (better-jumper-set-jump)
   ad-do-it)
@@ -664,8 +671,6 @@
   :demand t
   :config (load-theme 'ef-dark t))
 
-(use-package all-the-icons)
-
 (use-package indent-bars
   :load-path "~/.emacs.d/plugins/indent-bars"
   :custom
@@ -753,6 +758,14 @@
   (setq awesome-tab-terminal-dark-select-background-color    "#708090")
   (setq awesome-tab-terminal-dark-unselect-background-color  "#1C1C1C")
   (setq awesome-tab-terminal-dark-unselect-foreground-color  "#FFFAFA"))
+
+;; (use-package sort-tab
+;;   :demand t
+;;   :load-path "~/.emacs.d/plugins/sort-tab"
+;;   :config
+;;   (sort-tab-mode 1)
+;;   :bind (("M-j" . sort-tab-select-prev-tab)
+;;          ("M-k" . sort-tab-select-next-tab)))
 
 (defun hideshow-folded-overlay-fn (ov)
   (when (eq 'code (overlay-get ov 'hs))
