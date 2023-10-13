@@ -293,4 +293,14 @@ https://github.com/rizsotto/Bear
   (call-interactively 'query-replace))
 
 
+;; 窗口跳转
+(use-package windmove
+  :defer t
+  :bind (("M-s <up>"    . windmove-up)
+	 ("M-s <down>"  . windmove-down)
+	 ("M-s <left>"  . windmove-left)
+	 ("M-s <right>" . windmove-right))
+  ;; 在边缘的窗口进行循环跳转，最左窗口跳到最右窗口等
+  :config (setq windmove-wrap-around t))
+
 ```

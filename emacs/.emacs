@@ -304,9 +304,9 @@
 ;; q   to quit, you can also type C-g
 ;; C-c C-s (or whatever binding you used for save-buffer)
 ;;     to save the buffer at the current undo state
-(when (not (version<= emacs-version "28.0"))
-  (use-package vundo
-    :bind ("M-s u" . vundo)))
+(use-package vundo
+  :if (not (version<= emacs-version "28.0"))
+  :bind ("M-s u" . vundo))
 
 ;; 语法高亮
 (use-package tree-sitter
@@ -341,6 +341,11 @@
 ;; (use-package avy
 ;;   :defer t
 ;;   :bind ("M-c" . avy-goto-word-1))
+
+;; 代替 switch-to-buffer
+(use-package ace-jump-buffer
+  :defer t
+  :bind ("C-x b" . ace-jump-buffer))
 
 ;; 替代 avy, 可以跳转中文
 (use-package ace-pinyin
@@ -381,6 +386,12 @@
 	("C-c j" . mc/mark-previous-like-this)
 	("C-c k" . mc/mark-next-like-this)))
 
+;; 自动找到当前光标下的关键字并进行编辑
+(use-package iedit
+  :demand t
+  :bind (("C-c ;" . iedit-mode) ;; 进入和退出编辑
+         ("C-c '" . iedit-show/hide-context-lines))) ;; 只展示匹配行
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 窗口布局，文件管理，buffer 管理插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -390,14 +401,10 @@
 (use-package windresize
   :defer t)
 
-(use-package windmove
+;; 在窗口间移动
+(use-package ace-window
   :defer t
-  :bind (("M-s <up>"    . windmove-up)
-	 ("M-s <down>"  . windmove-down)
-	 ("M-s <left>"  . windmove-left)
-	 ("M-s <right>" . windmove-right))
-  ;; 在边缘的窗口进行循环跳转，最左窗口跳到最右窗口等
-  :config (setq windmove-wrap-around t))
+  :bind ("M-p" . ace-window))
 
 ;; 资源管理器 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
 ;; neotree 窗口有效
@@ -414,8 +421,7 @@
   :bind (("C-c =" . neotree-show)
 	 ("C-c -" . neotree-hide)
 	 ("C-c d" . neotree-dir)
-	 ("C-c +" . neotree-find)
-	 ("C-c _" . neotree-ffip-project-dir)))
+	 ("C-c +" . neotree-find)))
 
 ;; 将代码结构展示在右侧窗口
 (use-package imenu-list
@@ -514,29 +520,28 @@
 ;; LSP
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(when (not (version<= emacs-version "26.1"))
-  (use-package eglot
-    :ensure t
-    :demand t
-    :bind (("C-c h" . eldoc))
-    :config
-    (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
-    (add-to-list 'eglot-server-programs '((python-mode)  "pyright-langserver" "--stdio"))
-    (add-hook 'c-mode-hook       'eglot-ensure)
-    (add-hook 'c++-mode-hook     'eglot-ensure)
-    (add-hook 'python-mode-hook  'eglot-ensure)
-    (add-hook 'go-mode-hook      'eglot-ensure)
-    (add-hook 'haskell-mode-hook 'eglot-ensure)
-    (add-hook 'rust-mode-hook    'eglot-ensure)
-    (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1))) ;; 关闭行内函数参数展示
-    (setq eldoc-idle-delay 1000000)  ;; 修改 eldoc-mode 的展示延迟时间
-    (setq completion-ignore-case t)  ;; company-capf匹配时不区分大小写
-    (setq-default eglot-workspace-configuration
-                  '((haskell
-                     (plugin
-                      (stan
-                       (globalOn . :json-false))))))  ;; disable stan
-    ))
+(use-package eglot
+  :if (not (version<= emacs-version "26.1"))
+  :ensure t
+  :demand t
+  :bind (("C-c h" . eldoc))
+  :config
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+  (add-to-list 'eglot-server-programs '((python-mode)  "pyright-langserver" "--stdio"))
+  (add-hook 'c-mode-hook       'eglot-ensure)
+  (add-hook 'c++-mode-hook     'eglot-ensure)
+  (add-hook 'python-mode-hook  'eglot-ensure)
+  (add-hook 'go-mode-hook      'eglot-ensure)
+  (add-hook 'haskell-mode-hook 'eglot-ensure)
+  (add-hook 'rust-mode-hook    'eglot-ensure)
+  (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1))) ;; 关闭行内函数参数展示
+  (setq eldoc-idle-delay 1000000)  ;; 修改 eldoc-mode 的展示延迟时间
+  (setq completion-ignore-case t)  ;; company-capf匹配时不区分大小写
+  (setq-default eglot-workspace-configuration
+                '((haskell
+                   (plugin
+                    (stan
+                     (globalOn . :json-false)))))))  ;; disable stan
 
 ;; 自动补全 https://www.emacswiki.org/emacs/CompanyMode
 (use-package company
