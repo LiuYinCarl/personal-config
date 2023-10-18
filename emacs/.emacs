@@ -913,6 +913,7 @@ modified buffers or special buffers."
  '(bm-persistent-face ((t (:background "DimGray"))))
  '(deadgrep-filename-face ((t (:foreground "Orange"))))
  '(deadgrep-match-face ((t (:foreground "Green"))))
+ '(aw-leading-char-face ((t (:background "Black" :foreground "Orange" :height 180.0))))
  '(font-lock-comment-face ((t (:foreground "Green" :inherit nil))))
  '(font-lock-doc-face ((t (:foreground "Blue" :inherit nil))))
  '(hl-fill-column-face ((t (:background "DimGray")))))
