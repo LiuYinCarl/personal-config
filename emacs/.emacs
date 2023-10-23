@@ -516,6 +516,11 @@
   :config
   (breadcrumb-mode t))
 
+(use-package yasnippet
+  :demand t
+  :config (yas-global-mode t)
+  :bind (("M-s m" . yas-expand)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LSP
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -907,13 +912,13 @@ modified buffers or special buffers."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(aw-leading-char-face ((t (:background "Black" :foreground "Orange" :height 180.0))))
  '(bm-face ((t (:background "DimGray"))))
  '(bm-fringe-face ((t (:background "DimGray"))))
  '(bm-fringe-persistent-face ((t (:background "DimGray"))))
  '(bm-persistent-face ((t (:background "DimGray"))))
  '(deadgrep-filename-face ((t (:foreground "Orange"))))
  '(deadgrep-match-face ((t (:foreground "Green"))))
- '(aw-leading-char-face ((t (:background "Black" :foreground "Orange" :height 180.0))))
  '(font-lock-comment-face ((t (:foreground "Green" :inherit nil))))
  '(font-lock-doc-face ((t (:foreground "Blue" :inherit nil))))
  '(hl-fill-column-face ((t (:background "DimGray")))))
