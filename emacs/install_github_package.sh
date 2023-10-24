@@ -23,3 +23,7 @@ git clone --depth=1 git@github.com:emacs-vs/goto-line-preview.git
 git clone --depth=1 git@github.com:joaotavora/breadcrumb.git
 
 git clone --depth=1 git@github.com:jdtsmith/indent-bars.git
+
+git clone --depth=1 git@github.com:manateelazycat/auto-save.git
+
+git clone --depth=1 git@github.com:manateelazycat/delete-block.git

@@ -418,6 +418,8 @@
 ;; C-c C-c 改变根目录
 (use-package neotree
   :defer t
+  :config
+  (setq neo-hidden-regexp-list '("\\.pyc" "~$" "^#.*#$" "\\.elc$" "__pycache__" "\\.o$" "\\.git" "\\.clangd" "\\.gdb.*$"))
   :bind (("C-c =" . neotree-show)
 	 ("C-c -" . neotree-hide)
 	 ("C-c d" . neotree-dir)
@@ -756,6 +758,23 @@
   :demand t
   :config (which-key-mode))
 
+(use-package auto-save
+  :demand t
+  :load-path "~/.emacs.d/plugins/auto-save"
+  :config
+  (auto-save-enable)
+  (setq auto-save-silent t))
+
+(use-package delete-block
+  :demand t
+  :load-path "~/.emacs.d/plugins/delete-block"
+  :config
+  (defun delete-block-at-point ()
+    (interactive)
+    (delete-block-backward)
+    (delete-block-forward))
+  :bind (("M-DEL" . delete-block-at-point)))
+
 (use-package awesome-tab
   :demand t
   :load-path "~/.emacs.d/plugins/awesome-tab"
@@ -852,13 +871,6 @@
     (message (concat "copy symbol: " sym-name))
     (kill-new sym-name)))
 (global-set-key (kbd "M-s s") 'my-copy-word-at-point)
-
-(defun my-kill-word-at-point ()
-  "kill word at point"
-  (interactive)
-  (backward-word)
-  (kill-word 1))
-(global-set-key (kbd "M-DEL") 'my-kill-word-at-point)
 
 (defun my-kill-all-file-buffers ()
   "Kills all buffers that are open to files. Does not kill

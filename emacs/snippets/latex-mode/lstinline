@@ -1,6 +1,6 @@
 # -*- mode: snippet -*-
-# name: lstin
-# key: lstin
+# name: lstinline
+# key: li
 # --
 
 \lstinline|$0|
