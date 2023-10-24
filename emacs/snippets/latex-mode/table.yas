@@ -1,0 +1,19 @@
+# -*- mode: snippet -*-
+# name: table
+# key: table
+# need usepackage float
+# --
+
+\begin{table}[H]
+  \centering
+  \caption{$1 table name}
+  \begin{tabular}{p{0.10\textwidth}p{0.60\textwidth}}
+    \hline
+   title1  & title2 \\\\
+    \hline
+    content1 & content2  \\\\
+    content1 & content2  \\\\
+    content1 & content2  \\\\
+    \hline
+  \end{tabular}
+\end{table}

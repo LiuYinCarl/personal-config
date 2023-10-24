@@ -520,7 +520,13 @@
 
 (use-package yasnippet
   :demand t
-  :config (yas-global-mode t)
+  :config
+  (yas-global-mode t)
+  (setq auto-save-disable-predicates
+        '((lambda ()
+            (string-suffix-p
+             "yas"
+             (file-name-extension (buffer-name)) t))))
   :bind (("M-s m" . yas-expand)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
