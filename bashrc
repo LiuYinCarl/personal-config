@@ -5,11 +5,23 @@ alias c='clear'
 # export TERM=xterm-256color
 export TERM=screen-256color # for tmux
 
-# tmux
-alias tmls='tmux ls'
+
+# tmux alias
+function tmux_color_ls() {
+    if [ -n "$TMUX" ]; then
+        cur_session=$(tmux display-message -p "#S")
+        tmux ls | sed "s/^\($cur_session:\)/$(printf '\e[32m')\1/" | sed "s/$/$(printf '\e[0m')/"
+    else
+        tmux ls
+    fi
+}
+
+alias tmls='tmux_color_ls'
 alias tmnew='tmux new -s'
 alias tmkill='tmux kill-session -t'
 alias tmat='tmux attach-session -t'
+alias tmde='tmux detach'
+alias tmex='exit'
 
 # Emacs
 alias em='emacs -nw'
