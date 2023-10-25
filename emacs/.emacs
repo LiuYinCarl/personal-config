@@ -165,7 +165,7 @@
 
 ;; 行号展示
 (if (version<= "26.0.50" emacs-version )
-    (global-display-line-numbers-mode)
+    (global-display-line-numbers-mode) ;; 较快的行号功能
   (setq linum-format "%4d\u2502")
   (global-linum-mode t))
 ;; 高亮当前行
@@ -187,6 +187,14 @@
 (set-terminal-coding-system 'utf-8)
 (modify-coding-system-alist 'process "*" 'utf-8)
 (setq default-process-coding-system '(utf-8 . utf-8))
+
+;; 解决大文件打开慢的问题
+(setq-default bidi-display-reordering nil)
+(setq bidi-inhibit-bpa t
+      long-line-threshold 1000
+      large-hscroll-threshold 1000
+      syntax-wholeline-max 1000)
+
 ;; kill current buffer without verify
 (global-set-key (kbd "C-x k") 'kill-current-buffer)
 
@@ -225,8 +233,8 @@
 ;; 保存最近打开的文件
 (use-package recentf
   :config
-  (setq recentf-max-menu-items 100
-	recentf-max-saved-items 100)
+  (setq recentf-max-menu-items 150
+	recentf-max-saved-items 150)
   :hook (after-init . recentf-mode))
 
 ;; 选中文本后直接输入可删除选中文本并输入，省去删除被选中文本的操作
@@ -335,8 +343,7 @@
   (add-hook 'go-mode-hook     #'smartparens-mode)
   (add-hook 'python-mode-hook #'smartparens-mode)
   :bind (("M-s [" . beginning-of-defun)
-	 ("M-s ]" . end-of-defun))
-  )
+         ("M-s ]" . end-of-defun)))
 
 ;; (use-package avy
 ;;   :defer t
@@ -604,7 +611,8 @@
 
 (use-package counsel
   :bind (("C-c SPC" . counsel-imenu) ;; 搜索 imenu list
-	 ("C-c c SPC" . counsel-rg))) ;; 搜索项目内关键字
+	 ("C-c c SPC" . counsel-rg) ;; 搜索项目内关键字
+         ("C-c r" . counsel-recentf))) ;; 打开最近的文件
 
 (use-package swiper
   :defer t
@@ -714,6 +722,10 @@
 (use-package dimmer
   :load-path "~/.emacs.d/plugins/dimmer.el"
   :config
+  (dimmer-configure-which-key)
+  (dimmer-configure-company-box)
+  (dimmer-configure-gnus)
+  (dimmer-configure-posframe)
   (dimmer-mode t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -794,14 +806,6 @@
   (setq awesome-tab-terminal-dark-unselect-background-color  "#1C1C1C")
   (setq awesome-tab-terminal-dark-unselect-foreground-color  "#FFFAFA"))
 
-;; (use-package sort-tab
-;;   :demand t
-;;   :load-path "~/.emacs.d/plugins/sort-tab"
-;;   :config
-;;   (sort-tab-mode 1)
-;;   :bind (("M-j" . sort-tab-select-prev-tab)
-;;          ("M-k" . sort-tab-select-next-tab)))
-
 (defun hideshow-folded-overlay-fn (ov)
   (when (eq 'code (overlay-get ov 'hs))
     (let* ((nlines (count-lines (overlay-start ov) (overlay-end ov)))
@@ -876,7 +880,7 @@
 		     (substring-no-properties (symbol-name sym)))))
     (message (concat "copy symbol: " sym-name))
     (kill-new sym-name)))
-(global-set-key (kbd "M-s s") 'my-copy-word-at-point)
+(global-set-key (kbd "M-;") 'my-copy-word-at-point)
 
 (defun my-kill-all-file-buffers ()
   "Kills all buffers that are open to files. Does not kill
