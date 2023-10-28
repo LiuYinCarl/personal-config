@@ -64,6 +64,9 @@
 ;; 配置在 Occur Buffer 中展示匹配项的前后 n 行
 ;; (setq list-matching-lines-default-context-lines n)
 
+;; interactive 函数绑定了快捷键如何传递参数
+;; 先按 C-u，然后输入参数，最后再按快捷键
+
 ;; Usage package 文档
 ;; https://phenix3443.github.io/notebook/emacs/modes/use-package-manual.html
 
@@ -163,11 +166,8 @@
 (setq-default show-trailing-whitespace t)
 (add-hook 'term-mode-hook (lambda () (setq show-trailing-whitespace nil)))
 
-;; 行号展示
-(if (version<= "26.0.50" emacs-version )
-    (global-display-line-numbers-mode) ;; 较快的行号功能
-  (setq linum-format "%4d\u2502")
-  (global-linum-mode t))
+;; 行号展示，26以下可以使用 linum
+(global-display-line-numbers-mode)
 ;; 高亮当前行
 ;; (global-hl-line-mode 1)
 ;; 括号补全
@@ -246,6 +246,9 @@
 (use-package saveplace
   :ensure nil
   :hook (after-init . save-place-mode))
+
+;; 查看和管理 minor-mode
+(use-package manage-minor-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 编程语言插件
@@ -388,7 +391,7 @@
 	 ("C-c c <down>" . move-dup-duplicate-down)))
 
 (use-package multiple-cursors
-  :defer t
+  ;; :defer t
   :bind(("C-c l" . mc/edit-lines)
 	("C-c j" . mc/mark-previous-like-this)
 	("C-c k" . mc/mark-next-like-this)))
@@ -727,6 +730,20 @@
   (dimmer-configure-gnus)
   (dimmer-configure-posframe)
   (dimmer-mode t))
+
+;; 显示被编辑过的行和 git 操作
+(use-package git-gutter
+  :init
+  (global-git-gutter-mode t)
+  :config
+  (custom-set-variables
+   '(git-gutter:update-interval 1.0))
+  :bind (("M-s <up>" . git-gutter:previous-hunk)
+         ("M-s <down>" . git-gutter:next-hunk)
+         ("M-s <left>" . git-gutter:popup-hunk)
+         ("M-s <right>" . git-gutter:mark-hunk)
+         ("M-s g <up>" . git-gutter:stage-hunk)
+         ("M-s g <down>" . git-gutter:revert-hunk)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 跳转插件
