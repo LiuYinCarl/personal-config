@@ -447,8 +447,8 @@
   (setq dashboard-startup-banner 2)
   (setq dashboard-center-content t)
   (setq dashboard-set-footer nil)
-  (setq dashboard-items '((recents  . 5)
-                          (projects . 5)))
+  (setq dashboard-items '((recents  . 15)
+                          (projects . 2)))
   (setq dashboard-projects-backend 'project-el))
 
 ;; 恢复之前的窗口布局
@@ -700,6 +700,7 @@
   :demand t
   :config (load-theme 'ef-dark t))
 
+;; 某些系统的GUI和终端(如 Manjaro) 下会导致分割的窗口排版混乱
 (use-package indent-bars
   :load-path "~/.emacs.d/plugins/indent-bars"
   :custom
@@ -966,10 +967,14 @@ modified buffers or special buffers."
 ;; 工具生成的配置，不同机器差异不大
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; use opam user-setup install to generate
-;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
-;; (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
-;; ## end of OPAM user-setup addition for emacs / base ## keep this line
+(add-hook
+ 'tuareg-mode-hook
+ (lambda ()
+   ;; use opam user-setup install to generate
+   ;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
+   (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
+   ;; ## end of OPAM user-setup addition for emacs / base ## keep this line
+   ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 自动生成的东西

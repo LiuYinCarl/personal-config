@@ -6,4 +6,3 @@
 \begin{lstlisting}[language=$1,numbers=left,numbersep=1em,numberstyle=\footnotesize,breaklines=true]
 $0
 \end{lstlisting}
-
