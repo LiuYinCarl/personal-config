@@ -76,6 +76,9 @@ alias gcp='git commit -m "update" && git push'
 alias gu="guile --no-auto-compile"
 alias cz="chezscheme"
 alias cs="chezscheme --script"
+alias rgf="rg -F" # 不使用正则
+alias g++v="g++ -dM -E -x c++  /dev/null | grep -F __cplusplus"
+alias clang++v="clang++ -dM -E -x c++  /dev/null | grep -F __cplusplus"
 
 ############################################################
 ## local machine alias

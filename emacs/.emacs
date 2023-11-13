@@ -487,7 +487,6 @@
 ;; 使用 shell-pop 的时候避免退出 Emacs 时再确认一次
 (require 'cl-lib)
 (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
-  "Prevent annoying \"Active processes exist\" query when you quit Emacs."
   (cl-letf (((symbol-function #'process-list) (lambda ())))
     ad-do-it))
 
