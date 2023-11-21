@@ -556,7 +556,7 @@
   (add-hook 'go-mode-hook      'eglot-ensure)
   (add-hook 'haskell-mode-hook 'eglot-ensure)
   (add-hook 'rust-mode-hook    'eglot-ensure)
-  (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1))) ;; 关闭行内函数参数展示
+  ;; (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1))) ;; 关闭行内函数参数展示
   (setq eldoc-idle-delay 1000000)  ;; 修改 eldoc-mode 的展示延迟时间
   (setq completion-ignore-case t)  ;; company-capf匹配时不区分大小写
   (setq-default eglot-workspace-configuration
@@ -695,6 +695,10 @@
 
 ;; (load-theme 'misterioso)
 
+;; (use-package solarized-theme
+;;   :demand t
+;;   :config (load-theme 'solarized-wombat-dark t))
+
 (use-package ef-themes
   :demand t
   :config (load-theme 'ef-dark t))
@@ -810,18 +814,32 @@
     (delete-block-forward))
   :bind (("M-DEL" . delete-block-at-point)))
 
-(use-package awesome-tab
-  :demand t
-  :load-path "~/.emacs.d/plugins/awesome-tab"
-  :bind (("M-h" . awesome-tab-ace-jump)
-	 ("M-j" . awesome-tab-backward-tab)
-	 ("M-k" . awesome-tab-forward-tab))
+;; (use-package awesome-tab
+;;   :demand t
+;;   :load-path "~/.emacs.d/plugins/awesome-tab"
+;;   :bind (("M-h" . awesome-tab-ace-jump)
+;; 	 ("M-j" . awesome-tab-backward-tab)
+;; 	 ("M-k" . awesome-tab-forward-tab))
+;;   :config
+;;   (awesome-tab-mode t)
+;;   (setq awesome-tab-terminal-dark-select-foreground-color    "#FFFAFA")
+;;   (setq awesome-tab-terminal-dark-select-background-color    "#708090")
+;;   (setq awesome-tab-terminal-dark-unselect-background-color  "#1C1C1C")
+;;   (setq awesome-tab-terminal-dark-unselect-foreground-color  "#FFFAFA"))
+
+(use-package centaur-tabs
+  :demand
   :config
-  (awesome-tab-mode t)
-  (setq awesome-tab-terminal-dark-select-foreground-color    "#FFFAFA")
-  (setq awesome-tab-terminal-dark-select-background-color    "#708090")
-  (setq awesome-tab-terminal-dark-unselect-background-color  "#1C1C1C")
-  (setq awesome-tab-terminal-dark-unselect-foreground-color  "#FFFAFA"))
+  (centaur-tabs-mode t)
+  (setq centaur-tabs-gray-out-icons 'buffer) ;; 未被选中 tab 置灰
+  (setq centaur-tabs-set-bar 'left)          ;; 被选中 tab 左侧展示特殊标志
+  (setq centaur-tabs-set-close-button nil)   ;; 展示关闭 tab 按钮
+  (setq centaur-tabs-set-modified-marker t)  ;; 文件修改后显示修改符号
+  ;; (setq centaur-tabs-label-fixed-length 14)  ;; 固定 tab 长度
+  :bind
+  ("M-h" . centaur-tabs-ace-jump)
+  ("M-j" . centaur-tabs-backward)
+  ("M-k" . centaur-tabs-forward))
 
 (defun hideshow-folded-overlay-fn (ov)
   (when (eq 'code (overlay-get ov 'hs))
