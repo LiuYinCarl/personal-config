@@ -814,6 +814,19 @@
     (delete-block-forward))
   :bind (("M-DEL" . delete-block-at-point)))
 
+(use-package quickrun
+  :config
+  (quickrun-add-command "c++/c17"
+    '((:command . "g++")
+      (:exec    . ("%c -std=c++17 %o -o %e %s" "%e %a"))
+      (:remove  . ("%e")))
+    :default "c++")
+  (quickrun-add-command "python"
+    '((:command . "python3")
+      (:exec    . ("%c %s")))
+    :mode 'python-mode)
+  :bind (("<f5>" . quickrun)))
+
 ;; (use-package awesome-tab
 ;;   :demand t
 ;;   :load-path "~/.emacs.d/plugins/awesome-tab"
