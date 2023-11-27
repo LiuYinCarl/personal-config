@@ -303,4 +303,37 @@ https://github.com/rizsotto/Bear
   ;; 在边缘的窗口进行循环跳转，最左窗口跳到最右窗口等
   :config (setq windmove-wrap-around t))
 
+
+(use-package awesome-tab
+  :demand t
+  :load-path "~/.emacs.d/plugins/awesome-tab"
+  :bind (("M-h" . awesome-tab-ace-jump)
+	 ("M-j" . awesome-tab-backward-tab)
+	 ("M-k" . awesome-tab-forward-tab))
+  :config
+  (awesome-tab-mode t)
+  (setq awesome-tab-terminal-dark-select-foreground-color    "#FFFAFA")
+  (setq awesome-tab-terminal-dark-select-background-color    "#708090")
+  (setq awesome-tab-terminal-dark-unselect-background-color  "#1C1C1C")
+  (setq awesome-tab-terminal-dark-unselect-foreground-color  "#FFFAFA"))
+
+
+;; 对齐线 某些系统的GUI和终端(如 Manjaro) 下会导致分割的窗口排版混乱
+(use-package indent-bars
+  :load-path "~/.emacs.d/plugins/indent-bars"
+  :custom
+  (indent-bars-treesit-support t)
+  (indent-bars-no-descend-string t)
+  (indent-bars-treesit-ignore-blank-lines-types '("module"))
+  (indent-bars-treesit-wrap '((python argument_list parameters ; for python, as an example
+                                      list list_comprehension
+                                      dictionary dictionary_comprehension
+                                      parenthesized_expression subscript)))
+  :hook ((python-mode yaml-mode c-mode c++-mode rust-mode go-mode lua-mode ocaml-mode)
+         . indent-bars-mode)
+  :config
+  (setq indent-bars-color  '("DimGray" :face-bg t :blend 0.6)) ;; 设置颜色
+  (setq indent-bars-color-by-depth nil)) ;; 不按照嵌套深度改变颜色
+
+
 ```

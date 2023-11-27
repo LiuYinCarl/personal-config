@@ -1,19 +1,24 @@
 # personal-config
 
-这个仓库用来存储平时使用的工具和配置，在修改这个仓库的时候务必要遵守这些规则
+## 说明
 
+这个仓库用来存储平时使用的工具和配置，在修改这个仓库的时候务必要遵守下列规则.
 
-## 规则
+1. 配置适应的环境需要做出说明
+2. 配置需要尽量通用，兼容多平台多版本操作系统
+3. 避免提交未验证过的软件配置和陌生软件配置
+4. 配置项尽量添加注释
 
-1. 配置以能适应最多环境最佳，一些锦上添花的配置可以加在配置文件里面，但是要注释掉
-2. 为了保证仓库的可维护性，每一份配置在提交修改前都必须加上准确的注释说明，如果说明太多，单独在配置目录下维护一份说明，避免在配置文件中写过多的说明
-3. 提交的每一项配置都必须是在自己已经完全了解的情况下提交的，不要将自己不熟悉的工具提交到仓库中
-4. 使用的工具如果有官方网站，务必添加官方网站的链接，便于及时更新配置
+## 常用软件
 
+| Softawre | Version | Platform    | Informatio                |
+|------    |------   |------       | ------                    |
+| Emacs    | > 28    | All         | text editor               |
+| glances  | nil     | Linux       | system monitor            |
+| z.lua    | nil     | All         | path jump                 |
+| tmux     | nil     | Linux       | server session keep alive |
+| rlwrap   | nil     | Linux,MacOS | terminal wrapper          |
+| batcat   | nil     | All         | better cat                |
+| rigprep  | nil     | All         | better grep               |
+| fzf      | nil     | Linux,MacOS | command-line fuzzy finder |
 
-## Emacs
-
-现在的配置已经满足日常工作需求。
-
-
-## Vim
