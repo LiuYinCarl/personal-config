@@ -64,6 +64,10 @@
 ;; 配置在 Occur Buffer 中展示匹配项的前后 n 行
 ;; (setq list-matching-lines-default-context-lines n)
 
+;; 使用 gdb-mode 进行调试
+;; step1: gdb
+;; step2: gdb-many-windows
+
 ;; interactive 函数绑定了快捷键如何传递参数
 ;; 先按 C-u，然后输入参数，最后再按快捷键
 
@@ -430,10 +434,9 @@
   :defer t
   :config
   (setq neo-hidden-regexp-list '("\\.pyc" "~$" "^#.*#$" "\\.elc$" "__pycache__" "\\.o$" "\\.git" "\\.clangd" "\\.gdb.*$"))
-  :bind (("C-c =" . neotree-show)
-	 ("C-c -" . neotree-hide)
-	 ("C-c d" . neotree-dir)
-	 ("C-c +" . neotree-find)))
+  :bind (("C-c =" . neotree-toggle)
+         ("C-c -" . neotree-find)
+	 ("C-c d" . neotree-dir)))
 
 ;; 将代码结构展示在右侧窗口
 (use-package imenu-list
@@ -695,10 +698,6 @@
 
 ;; (load-theme 'misterioso)
 
-;; (use-package solarized-theme
-;;   :demand t
-;;   :config (load-theme 'solarized-wombat-dark t))
-
 (use-package ef-themes
   :demand t
   :config (load-theme 'ef-dark t))
@@ -825,6 +824,8 @@
   :demand
   :config
   (centaur-tabs-mode t)
+  (setq centaur-tabs-cycle-scope 'tabs)
+  (setq centaur-tabs-show-new-tab-button nil)
   (setq centaur-tabs-gray-out-icons 'buffer) ;; 未被选中 tab 置灰
   (setq centaur-tabs-set-bar 'left)          ;; 被选中 tab 左侧展示特殊标志
   (setq centaur-tabs-set-close-button nil)   ;; 展示关闭 tab 按钮
@@ -832,8 +833,8 @@
   ;; (setq centaur-tabs-label-fixed-length 14)  ;; 固定 tab 长度
   :bind
   ("M-h" . centaur-tabs-ace-jump)
-  ("M-k" . centaur-tabs-backward)
-  ("M-j" . centaur-tabs-forward))
+  ("M-j" . centaur-tabs-backward)
+  ("M-k" . centaur-tabs-forward))
 
 (defun hideshow-folded-overlay-fn (ov)
   (when (eq 'code (overlay-get ov 'hs))
@@ -920,18 +921,10 @@ modified buffers or special buffers."
                                         (not (buffer-modified-p buffer)))
                               unless (eq buffer (current-buffer))
                               collect buffer)))
+(global-set-key (kbd "C-c t") 'my-kill-all-file-buffers)
 
 ;; auto fullscreen on GUI mode
 (add-hook 'window-setup-hook #'toggle-frame-maximized t)
-
-;; 使用 gdb-mode 进行调试
-;; step1: gdb
-;; step2: gdb-many-windows
-(defun my-gdb-env ()
-  "Prepare the GDB environment"
-  (interactive)
-  (awesome-tab-mode 0)
-  (dimmer-mode 0))
 
 ;; Windows Terminal 下 Ctrl+Space 无效，但是这个很常用，所以映射一下
 (global-set-key [f4] 'set-mark-command)
