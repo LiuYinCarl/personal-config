@@ -48,6 +48,18 @@ function update_current_dir_repos() {
     done
 }
 
+function list_current_dir_repos() {
+   for dir in *; do
+       if [ -d "${dir}" ]; then
+           cd "${dir}" || exit
+           if [ -d ".git" ]; then
+               git remote -v | head -n 1 | cut -f 2 | cut -d " " -f 1
+           fi
+       fi
+       cd ..
+   done
+}
+
 function run() {
     if [ "${1}" = "ls" ]; then
         dir_path=$(pwd)
@@ -70,6 +82,8 @@ function run() {
         done
     elif [ "${1}" = "pull" ]; then
         update_current_dir_repos
+    elif [ "${1}" = "list" ]; then
+        list_current_dir_repos
     else
         echo "Script Args:"
         echo "    ls      list repo directory"
@@ -77,6 +91,7 @@ function run() {
         echo "    clear   remove all backup"
         echo "    clone   clone all uninstalled repo"
         echo "    pull    update all installed repo"
+        echo "    list    list all repo's remove path"
     fi
 }
 
