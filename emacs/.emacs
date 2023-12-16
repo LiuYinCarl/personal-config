@@ -38,13 +38,6 @@
 ;; 2. 执行 deadgrep-edit-mode, 使得可以编辑 deadgrep buffer
 ;; 3. 执行 query-replace 对 deadgrep 内文本进行替换，? 查看快捷键
 
-;; C-x (        开启宏记录
-;; C-x )        关闭宏记录
-;; C-x e        执行刚刚录制的宏
-;; C-u n C-x e  循环执行n次刚刚录制的宏
-;; C-u n C-x e  循环执行n次刚刚录制的宏
-;; C-u n C-x e  循环执行n次刚刚录制的宏
-
 ;; Dired Mode
 ;; C-x d 进入Dired Mode
 ;; q 退出Dired Mode
@@ -57,22 +50,12 @@
 ;; u 取消标记
 ;; x 执行所有的标记
 
-;; Occur-mode
-;; M-s o 或者 M-x occur 进入
-;; 在 Occur buffer 中按 C-c C-f 开启 next-error-follow-mirror-mode
-;; 在 Occur buffer 中使用 M-p/M-n 切换上一个/下一个匹配项目
-;; 配置在 Occur Buffer 中展示匹配项的前后 n 行
-;; (setq list-matching-lines-default-context-lines n)
-
 ;; 使用 gdb-mode 进行调试
 ;; step1: gdb
 ;; step2: gdb-many-windows
 
 ;; interactive 函数绑定了快捷键如何传递参数
 ;; 先按 C-u，然后输入参数，最后再按快捷键
-
-;; Usage package 文档
-;; https://phenix3443.github.io/notebook/emacs/modes/use-package-manual.html
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 此配置的外部程序依赖
@@ -87,10 +70,9 @@
 ;; go install golang.org/x/tools/gopls@latest
 ;; PATH=$PATH:$(go env GOPATH)/bin # 添加到 .bashrc
 
-;; OCaml
 ;; opam install merlin
 ;; opam user-setup install
-;; 查看 ocamlmerlin Path: whereis ocamlmerlin
+;; 查看 ocamlmerlin path: whereis ocamlmerlin
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 启动优化配置
@@ -111,7 +93,7 @@
 ;; 腾讯源 安装 Emacs 的机器在国内时使用
 ;; (add-to-list 'package-archives '("gnu" . "http://mirrors.cloud.tencent.com/elpa/gnu/"))
 ;; (add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
-;; USTC
+;; USTC 源
 (setq package-archives '(("gnu" . "http://mirrors.ustc.edu.cn/elpa/gnu/")
                          ("melpa" . "http://mirrors.ustc.edu.cn/elpa/melpa/")
                          ("nongnu" . "http://mirrors.ustc.edu.cn/elpa/nongnu/")))
@@ -142,9 +124,9 @@
 (setq x-select-enable-primary t)
 ;; 状态栏显示列数
 (column-number-mode 1)
-;; 不显示工具栏
+;; GUI 不显示工具栏
 (tool-bar-mode -1)
-;; 不显示菜单栏
+;; GUI 不显示菜单栏
 (menu-bar-mode -1)
 ;; 不显示启动界面
 (setq inhibit-splash-screen t)
@@ -169,14 +151,12 @@
 ;; 显示行尾空格
 (setq-default show-trailing-whitespace t)
 (add-hook 'term-mode-hook (lambda () (setq show-trailing-whitespace nil)))
-
 ;; 行号展示，26以下可以使用 linum
 (global-display-line-numbers-mode)
 ;; 高亮当前行
 ;; (global-hl-line-mode 1)
 ;; 括号补全
 (electric-pair-mode t)
-
 ;; 字符编码优先级设置，优先选择的编码类型
 (prefer-coding-system 'utf-8-unix)
 ;; 向上/向下翻半页
@@ -184,21 +164,18 @@
 (autoload 'View-scroll-half-page-backward "view")
 (global-set-key (kbd "C-v") 'View-scroll-half-page-forward)
 (global-set-key (kbd "M-v") 'View-scroll-half-page-backward)
-
 ;; 解决粘贴中文出现乱码的问题
 (set-clipboard-coding-system 'utf-8)
 ;; 终端中文乱码
 (set-terminal-coding-system 'utf-8)
 (modify-coding-system-alist 'process "*" 'utf-8)
 (setq default-process-coding-system '(utf-8 . utf-8))
-
 ;; 解决大文件打开慢的问题
 (setq-default bidi-display-reordering nil)
 (setq bidi-inhibit-bpa t
       long-line-threshold 1000
       large-hscroll-threshold 1000
       syntax-wholeline-max 1000)
-
 ;; kill current buffer without verify
 (global-set-key (kbd "C-x k") 'kill-current-buffer)
 
@@ -215,11 +192,9 @@
 
 ;; Emacs 内部打开的文件如果被外部修改，可以自动更新对应的 buffer
 (use-package autorevert
-  :ensure nil
   :hook (after-init . global-auto-revert-mode))
 
 (use-package exec-path-from-shell
-  :ensure t
   :config
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize))
@@ -228,7 +203,6 @@
 
 ;; 展示匹配的括号
 (use-package paren
-  :ensure nil
   :hook (after-init . show-paren-mode)
   :config
   (setq show-paren-when-point-inside-paren t
@@ -243,12 +217,10 @@
 
 ;; 选中文本后直接输入可删除选中文本并输入，省去删除被选中文本的操作
 (use-package delsel
-  :ensure nil
   :hook (after-init . delete-selection-mode))
 
 ;; 记录上次打开文件时 cursor 停留的位置
 (use-package saveplace
-  :ensure nil
   :hook (after-init . save-place-mode))
 
 ;; 查看和管理 minor-mode
@@ -369,7 +341,6 @@
 
 ;; 注释/反注释
 (use-package newcomment
-  :ensure nil
   :defer t
   :bind ([remap comment-dwim] . #'comment-or-uncomment)
   :config
@@ -395,7 +366,6 @@
 	 ("C-c c <down>" . move-dup-duplicate-down)))
 
 (use-package multiple-cursors
-  ;; :defer t
   :bind(("C-c l" . mc/edit-lines)
 	("C-c j" . mc/mark-previous-like-this)
 	("C-c k" . mc/mark-next-like-this)))
@@ -440,7 +410,7 @@
 
 ;; 将代码结构展示在右侧窗口
 (use-package imenu-list
-  :bind ("C-c m" . imenu-list-smart-toggle)
+  :bind ("C-c i" . imenu-list-smart-toggle)
   :config (setq imenu-list-focus-after-activation t))
 
 (use-package dashboard
@@ -462,7 +432,6 @@
   :hook (after-init . winner-mode))
 
 (use-package ediff
-  :ensure nil
   :hook (ediff-quit . winner-undo))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -539,7 +508,7 @@
             (string-suffix-p
              "yas"
              (file-name-extension (buffer-name)) t))))
-  :bind (("M-s m" . yas-expand)))
+  :bind (("C-c y" . yas-expand)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LSP
@@ -579,7 +548,7 @@
   (add-hook 'after-init-hook 'global-company-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 搜索功能插件
+;; 搜索功能插件 搜索功能的快捷键前缀保持为 C-c SPC
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package isearch
@@ -610,18 +579,20 @@
 
 (use-package deadgrep
   :defer t
-  :bind (("C-c s" . deadgrep)
+  :bind (("C-c SPC s" . deadgrep)
 	 :map deadgrep-mode-map
          ("v" . pp/deadgrep-view-file)))
 
 (use-package counsel
-  :bind (("C-c SPC" . counsel-imenu) ;; 搜索 imenu list
-	 ("C-c c SPC" . counsel-rg) ;; 搜索项目内关键字
-         ("C-c r" . counsel-recentf))) ;; 打开最近的文件
-
-(use-package swiper
-  :defer t
-  :bind (("C-c b" . swiper-isearch))) ;; 搜索 buffer 内关键字
+  :config
+  (setq ivy-use-virtual-buffers t)
+  :bind (("C-c SPC i" . counsel-imenu)     ;; 搜索 imenu list
+	 ("C-c SPC k" . counsel-rg)        ;; 搜索项目内关键字
+         ("C-c SPC r" . counsel-recentf)   ;; 搜索最近打开的文件
+         ("C-c SPC g" . counsel-git)       ;; 遵循 .gitignore 在项目中搜索文件
+         ("C-c SPC d" . counsel-find-file) ;; 从目录搜索文件
+         ("C-c SPC b" . counsel-grep-or-swiper) ;; 搜索 buffer 内关键字
+         ))
 
 (use-package ivy
   :config
@@ -678,20 +649,6 @@
   ;; Enable recursive minibuffers
   (setq enable-recursive-minibuffers t))
 
-(use-package fzf
-  :defer t
-  :bind (("M-s p" . fzf-find-file)
-	 ("M-s -" . fzf-git)
-	 ("M-s =" . fzf-recentf)
-	 ("M-s b" . fzf-find-in-buffer)
-	 ("M-s d" . fzf-find-file-current-dir))
-  :config (setq fzf/args          "-x --print-query --margin=0,0"
-		fzf/executable    "fzf"
-		fzf/git-grep-args "-i --line-number %s"
-		fzf/grep-command  "rg --no-heading -nH"
-		fzf/position-bottom t
-		fzf/window-height 15))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 主题配置插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -738,7 +695,7 @@
 (use-package goto-line-preview
   :load-path "~/.emacs.d/plugins/goto-line-preview"
   :demand t
-  :bind (("M-g g" . goto-line-preview)))
+  :bind (("C-c g" . goto-line-preview)))
 
 ;; ivy-push-view/ivy-pop-view/ivy-switch-view 功能类似
 (use-package better-jumper
@@ -765,11 +722,22 @@
   (add-hook 'kill-emacs-hook	    #'(lambda nil
 					(bm-buffer-save-all)
 					(bm-repository-save)))
-  :bind (("M-<right>" . bm-next)
-	 ("M-<left>"  . bm-previous)
-	 ("<f2>"      . bm-toggle)
-	 ("M-<up>"    . bm-show-all)
-	 ("M-<down>"  . bm-show-quit-window)))
+  :bind (("C-c b <right>" . bm-next)
+	 ("C-c b <left>"  . bm-previous)
+	 ("C-c b SPC"     . bm-toggle)
+	 ("C-c b <up>"    . bm-show-all)
+	 ("C-c b <down>"  . bm-show-quit-window)))
+
+(use-package fanyi
+  :ensure t
+  :custom
+  (fanyi-providers
+   '(
+     fanyi-haici-provider ;; 海词
+     fanyi-youdao-thesaurus-provider ;; 有道同义词词典
+     ;; fanyi-etymon-provider ;; Etymonline
+     fanyi-longman-provider)) ;; Longman
+  :bind (("C-c SPC t" . fanyi-dwim2)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 未分类插件
@@ -794,7 +762,10 @@
     (interactive)
     (delete-block-backward)
     (delete-block-forward))
-  :bind (("M-DEL" . delete-block-at-point)))
+  :bind (("M-s DEL" . delete-block-at-point)
+         ;; 删除光标下左右两侧的空侧
+         ;; 这个函数是 Emacs 自带的，放这里只是为了对称
+         ("M-s SPC" . delete-horizontal-space)))
 
 (use-package quickrun
   :config
@@ -809,19 +780,8 @@
     :mode 'python-mode)
   :bind (("<f5>" . quickrun)))
 
-(use-package fanyi
-  :ensure t
-  :custom
-  (fanyi-providers
-   '(
-     fanyi-haici-provider ;; 海词
-     fanyi-youdao-thesaurus-provider ;; 有道同义词词典
-     ;; fanyi-etymon-provider ;; Etymonline
-     fanyi-longman-provider)) ;; Longman
-  :bind (("M-0" . fanyi-dwim2)))
-
 (use-package centaur-tabs
-  :demand
+  :demand t
   :config
   (centaur-tabs-mode t)
   (setq centaur-tabs-cycle-scope 'tabs)
@@ -830,7 +790,6 @@
   (setq centaur-tabs-set-bar 'left)          ;; 被选中 tab 左侧展示特殊标志
   (setq centaur-tabs-set-close-button nil)   ;; 展示关闭 tab 按钮
   (setq centaur-tabs-set-modified-marker t)  ;; 文件修改后显示修改符号
-  ;; (setq centaur-tabs-label-fixed-length 14)  ;; 固定 tab 长度
   :bind
   ("M-h" . centaur-tabs-ace-jump)
   ("M-j" . centaur-tabs-backward)
@@ -847,7 +806,6 @@
 
 ;; 函数折叠
 (use-package hideshow
-  :ensure nil
   :diminish hs-minor-mode
   :bind (:map prog-mode-map
 	      ("C-c (" . hs-toggle-hiding)
@@ -859,6 +817,11 @@
 ;; 自定义函数
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; align-regexp 使用空格而不是 tab 对齐
+(defadvice align-regexp (around align-regexp-with-spaces activate)
+  (let ((indent-tabs-mode nil))
+    ad-do-it))
+
 ;; 一键格式化
 (defun my-indent-whole ()
   (interactive)
@@ -866,32 +829,21 @@
   (message "format success"))
 (global-set-key [f10] 'my-indent-whole)
 
-;; align-regexp 使用空格而不是 tab 对齐
-(defadvice align-regexp (around align-regexp-with-spaces activate)
-  (let ((indent-tabs-mode nil))
-    ad-do-it))
-
-;; 删除光标下左右两侧的空侧
-(define-key global-map (kbd "M-s SPC") 'delete-horizontal-space)
-
 (defun my-show-file-name ()
   "Show the full path file name in the minibuffer."
   (interactive)
   (message (concat "file path: " (buffer-file-name)))
   (kill-new (buffer-file-name))) ;; copy path to clipboard
-(global-set-key (kbd "M-s n") 'my-show-file-name)
 
 (defun my-open-emacs-config ()
   "Open .emacs file."
   (interactive)
   (find-file-read-only "~/.emacs"))
-(global-set-key (kbd "M-s c") 'my-open-emacs-config)
 
 (defun my-fast-note ()
   "open ~/fast-note.md in other window"
   (interactive)
   (find-file-other-window "~/fast-note.md"))
-(global-set-key (kbd "M-n") 'my-fast-note)
 
 (defun my-save-region-to-tmp-file ()
   "save region to ~/.emacs.d/.tmp_copy_region"
@@ -910,7 +862,6 @@
 		     (substring-no-properties (symbol-name sym)))))
     (message (concat "copy symbol: " sym-name))
     (kill-new sym-name)))
-(global-set-key (kbd "M-;") 'my-copy-word-at-point)
 
 (defun my-kill-all-file-buffers ()
   "Kills all buffers that are open to files. Does not kill
@@ -921,16 +872,9 @@ modified buffers or special buffers."
                                         (not (buffer-modified-p buffer)))
                               unless (eq buffer (current-buffer))
                               collect buffer)))
-(global-set-key (kbd "C-c t") 'my-kill-all-file-buffers)
-
-;; auto fullscreen on GUI mode
-(add-hook 'window-setup-hook #'toggle-frame-maximized t)
-
-;; Windows Terminal 下 Ctrl+Space 无效，但是这个很常用，所以映射一下
-(global-set-key [f4] 'set-mark-command)
 
 (defun my-query-and-replace ()
-  "find string im project, then repalce by select."
+  "find string in project, then repalce by select."
   (interactive)
   (let* ((w1 (read-string "query replace: "))
          (w2 (read-string (format "query replace '%s' with: " w1))))
@@ -945,7 +889,31 @@ modified buffers or special buffers."
          (message "deadgrep user-error occur, ignore...")
          (ignore))))
     (query-replace w1 w2)))
-(global-set-key (kbd "C-c C-f") 'my-query-and-replace)
+
+(global-set-key (kbd "C-c m n") 'my-show-file-name)
+(global-set-key (kbd "C-c m c") 'my-open-emacs-config)
+(global-set-key (kbd "C-c m n") 'my-fast-note)
+(global-set-key (kbd "C-c m t") 'my-save-region-to-tmp-file)
+(global-set-key (kbd "C-c m w") 'my-copy-word-at-point)
+(global-set-key (kbd "M-s s")   'my-copy-word-at-point) ;; 额外映射一个方便的按键
+(global-set-key (kbd "C-c m k") 'my-kill-all-file-buffers)
+(global-set-key (kbd "C-c m f") 'my-query-and-replace)
+(global-set-key (kbd "C-c m a") 'align-regexp)
+
+;; auto full screen on GUI mode
+(add-hook 'window-setup-hook #'toggle-frame-maximized t)
+
+;; Windows Terminal 下 Ctrl+Space 无效，但是这个很常用，所以映射一下
+;; TODO: remove this hack when bug fixed: https://github.com/PowerShell/Win32-OpenSSH/issues/1842
+;; Add this to your Windows Terminal settings.json
+;; {
+;;   "command":
+;;   { "action": "sendInput",
+;;     "input": "\u001b[9~"
+;;   },
+;;   "keys": "ctrl+space"
+;; }
+(global-set-key "\e[9~" 'set-mark-command)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 外观配置

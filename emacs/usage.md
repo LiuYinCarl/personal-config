@@ -19,7 +19,24 @@
 | C-c ! s	 | Change Flycheck checker				|
 | C-c ! v	 | Verifies the Flycheck checker works	|
 | C-c ! x	 | Disable Flycheck checker in buffer	|
+| | |
 
+;; C-x (        开启宏记录
+;; C-x )        关闭宏记录
+;; C-x e        执行刚刚录制的宏
+;; C-u n C-x e  循环执行n次刚刚录制的宏
+;; C-u n C-x e  循环执行n次刚刚录制的宏
+;; C-u n C-x e  循环执行n次刚刚录制的宏
+
+;; Occur-mode
+;; M-s o 或者 M-x occur 进入
+;; 在 Occur buffer 中按 C-c C-f 开启 next-error-follow-mirror-mode
+;; 在 Occur buffer 中使用 M-p/M-n 切换上一个/下一个匹配项目
+;; 配置在 Occur Buffer 中展示匹配项的前后 n 行
+;; (setq list-matching-lines-default-context-lines n)
+
+;; Usage package 文档
+;; https://phenix3443.github.io/notebook/emacs/modes/use-package-manual.html
 
 
 
