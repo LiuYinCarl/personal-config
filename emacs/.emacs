@@ -929,6 +929,7 @@ modified buffers or special buffers."
  '(bm-fringe-face ((t (:background "DimGray"))))
  '(bm-fringe-persistent-face ((t (:background "DimGray"))))
  '(bm-persistent-face ((t (:background "DimGray"))))
+ '(centaur-tabs-selected ((t (:inherit bold :foreground "yellow"))))
  '(deadgrep-filename-face ((t (:foreground "Orange"))))
  '(deadgrep-match-face ((t (:foreground "Green"))))
  '(font-lock-comment-face ((t (:foreground "Green" :inherit nil))))
