@@ -388,7 +388,7 @@
 ;; 在窗口间移动
 (use-package ace-window
   :defer t
-  :bind ("M-p" . ace-window))
+  :bind ("M-s p" . ace-window))
 
 ;; 资源管理器 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
 ;; neotree 窗口有效
