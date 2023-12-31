@@ -181,6 +181,8 @@
       syntax-wholeline-max 1000)
 ;; kill current buffer without verify
 (global-set-key (kbd "C-x k") 'kill-current-buffer)
+;; 去掉行尾的续行符号
+(set-display-table-slot standard-display-table 'wrap ?\ )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs 优化插件
