@@ -38,6 +38,9 @@
 ;; 2. 执行 deadgrep-edit-mode, 使得可以编辑 deadgrep buffer
 ;; 3. 执行 query-replace 对 deadgrep 内文本进行替换，? 查看快捷键
 
+;; 筛选/过滤文件中的指定行
+;; keep-lines/flush-lines
+
 ;; Dired Mode
 ;; C-x d 进入Dired Mode
 ;; q 退出Dired Mode
@@ -687,6 +690,12 @@
          ("M-s <right>" . git-gutter:mark-hunk)
          ("M-s g <up>" . git-gutter:stage-hunk)
          ("M-s g <down>" . git-gutter:revert-hunk)))
+
+;; 文本居中，专注模式
+(use-package olivetti
+  :ensure t
+  :init (setq olivetti-body-width 0.6) ;; 设置页面宽度比例
+  :bind (("C-c m o" . olivetti-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 跳转插件
