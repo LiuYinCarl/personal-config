@@ -231,6 +231,12 @@
 ;; 查看和管理 minor-mode
 (use-package manage-minor-mode)
 
+;; 文件保存时删除编辑过的行的行尾空格
+(use-package ws-butler
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook #'ws-butler-mode))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 编程语言插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -346,6 +352,7 @@
 
 ;; 注释/反注释
 (use-package newcomment
+  :ensure nil
   :defer t
   :bind ([remap comment-dwim] . #'comment-or-uncomment)
   :config
