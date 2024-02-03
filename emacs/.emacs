@@ -64,7 +64,7 @@
 ;; 此配置的外部程序依赖
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; apt install clang clangd fzf
+;; apt install clang clangd
 ;; npm install -g pyright  dont use pip3 install pyright, it's not a good choose
 ;; for update pyright: npm update -g pyright
 
@@ -149,15 +149,11 @@
 (setq c-basic-offset 4)
 ;; 设置 C 语言注释格式为 // 而不是 /* */
 (add-hook 'c-mode-hook (lambda () (c-toggle-comment-style -1)))
-;; 设置每行最大长度
-(setq-default display-fill-column-indicator-column 80)
 ;; 显示行尾空格
 (setq-default show-trailing-whitespace t)
 (add-hook 'term-mode-hook (lambda () (setq show-trailing-whitespace nil)))
 ;; 行号展示，26以下可以使用 linum
 (global-display-line-numbers-mode)
-;; 高亮当前行
-;; (global-hl-line-mode 1)
 ;; 括号补全
 (electric-pair-mode t)
 ;; 字符编码优先级设置，优先选择的编码类型
@@ -216,8 +212,8 @@
 ;; 保存最近打开的文件
 (use-package recentf
   :config
-  (setq recentf-max-menu-items 150
-	recentf-max-saved-items 150)
+  (setq recentf-max-menu-items 50
+	recentf-max-saved-items 50)
   :hook (after-init . recentf-mode))
 
 ;; 选中文本后直接输入可删除选中文本并输入，省去删除被选中文本的操作
