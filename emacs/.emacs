@@ -628,10 +628,15 @@
         completion-category-overrides '((file (styles partial-completion)))))
 
 ;; for company mode
-(defun just-one-face (fn &rest args)
-  (let ((orderless-match-faces [completions-common-part]))
-    (apply fn args)))
-(advice-add 'company-capf--candidates :around #'just-one-face)
+;; (defun just-one-face (fn &rest args)
+;;   (let ((orderless-match-faces [completions-common-part]))
+;;     (apply fn args)))
+;; (advice-add 'company-capf--candidates :around #'just-one-face)
+
+(defun company-completion-styles (capf-fn &rest args)
+  (let ((completion-styles '(basic partial-completion)))
+    (apply capf-fn args)))
+(advice-add 'company-capf :around #'company-completion-styles)
 
 ;; need by vertico
 (use-package emacs
@@ -951,6 +956,7 @@ modified buffers or special buffers."
  '(deadgrep-match-face ((t (:foreground "Green"))))
  '(font-lock-comment-face ((t (:foreground "Green" :inherit nil))))
  '(font-lock-doc-face ((t (:foreground "Blue" :inherit nil))))
+ '(goto-line-preview-hl ((t (:background "DimGray"))))
  '(hl-fill-column-face ((t (:background "DimGray")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
