@@ -673,7 +673,7 @@
 
 (use-package doom-themes
   :demand t
-  :config (load-theme 'doom-bluloco-dark t))
+  :config (load-theme 'doom-tokyo-night t))
 
 ;; 让括号变得不显眼
 (use-package parenface
