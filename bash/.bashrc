@@ -72,6 +72,7 @@ alias em='emacs -nw'
 alias ec='cat ~/.emacs.d/.tmp_copy_region'
 alias g='glances'
 alias gs='git status'
+alias gb='git branch'
 alias gcp='git commit -m "update" && git push'
 alias gu="guile --no-auto-compile"
 alias cz="chezscheme"
