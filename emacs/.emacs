@@ -31,7 +31,7 @@
 ;; |C-u C-spc                           | 回到上一个 makr 的位置                      |
 ;; | M-s .                              | isearch-forward-symbol 开始搜索当前符号     |
 ;; | C-s/C-r                            | isearch-forward/backward 向后查找/向前查找  |
-;;
+;; | M-x tabify/untabify                | 将选中区域空格转换为Tab/Tab转换为空格       |
 
 ;; 项目内进行全局搜索替换
 ;; 1. 执行 deadgrep 进行搜索，搜索结果都展示在 deadgrep buffer
@@ -142,8 +142,7 @@
 ;; 关闭自动保存文件功能
 (setq auto-save-default nil)
 ;; 设置 tab 宽度
-(setq default-tab-width 4)
-;; (setq-default tab-width 4)
+(setq-default tab-width 4)
 ;; 设置将 tab 替换为空格
 (setq-default indent-tabs-mode nil)
 ;; 设置 c 语言缩进
@@ -214,7 +213,7 @@
 (use-package recentf
   :config
   (setq recentf-max-menu-items 50
-	recentf-max-saved-items 50)
+    recentf-max-saved-items 50)
   :hook (after-init . recentf-mode))
 
 ;; 选中文本后直接输入可删除选中文本并输入，省去删除被选中文本的操作
@@ -374,14 +373,14 @@
 (use-package move-dup
   :defer t
   :bind (("C-c <up>"     . move-dup-move-lines-up)
-	 ("C-c <down>"   . move-dup-move-lines-down)
-	 ("C-c c <up>"   . move-dup-duplicate-up)
-	 ("C-c c <down>" . move-dup-duplicate-down)))
+     ("C-c <down>"   . move-dup-move-lines-down)
+     ("C-c c <up>"   . move-dup-duplicate-up)
+     ("C-c c <down>" . move-dup-duplicate-down)))
 
 (use-package multiple-cursors
   :bind(("C-c l" . mc/edit-lines)
-	("C-c j" . mc/mark-previous-like-this)
-	("C-c k" . mc/mark-next-like-this)))
+    ("C-c j" . mc/mark-previous-like-this)
+    ("C-c k" . mc/mark-next-like-this)))
 
 ;; 自动找到当前光标下的关键字并进行编辑
 (use-package iedit
@@ -420,7 +419,7 @@
   (setq neo-hidden-regexp-list '("\\.pyc" "~$" "^#.*#$" "\\.elc$" "__pycache__" "\\.o$" "\\.git" "\\.clangd" "\\.gdb.*$"))
   :bind (("C-c =" . neotree-toggle)
          ("C-c -" . neotree-find)
-	 ("C-c d" . neotree-dir)))
+     ("C-c d" . neotree-dir)))
 
 ;; 将代码结构展示在右侧窗口
 (use-package imenu-list
@@ -442,7 +441,7 @@
 (use-package winner-mode
   :ensure nil
   :bind (("C-c <left>"  . winner-undo)
-	 ("C-c <right>" . winner-redo))
+     ("C-c <right>" . winner-redo))
   :hook (after-init . winner-mode))
 
 (use-package ediff
@@ -460,15 +459,15 @@
   :demand t
   :init
   (setq shell-pop-default-directory "./"
-	shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell))))
-	shell-pop-term-shell "/bin/bash"
-	shell-pop-universal-key "C-t"
-	shell-pop-window-size 50
-	shell-pop-full-span t
-	shell-pop-window-position "bottom"
-	shell-pop-autocd-to-working-dir t
-	shell-pop-restore-window-configuration t
-	shell-pop-cleanup-buffer-at-process-exit t))
+    shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell))))
+    shell-pop-term-shell "/bin/bash"
+    shell-pop-universal-key "C-t"
+    shell-pop-window-size 50
+    shell-pop-full-span t
+    shell-pop-window-position "bottom"
+    shell-pop-autocd-to-working-dir t
+    shell-pop-restore-window-configuration t
+    shell-pop-cleanup-buffer-at-process-exit t))
 
 ;; 使用 shell-pop 的时候避免退出 Emacs 时再确认一次
 (require 'cl-lib)
@@ -483,23 +482,23 @@
 (use-package symbol-overlay
   :defer t
   :bind (("M-s i" . symbol-overlay-put)
-	 ("M-s k" . symbol-overlay-switch-forward)
-	 ("M-s j" . symbol-overlay-switch-backward)
-	 ("M-s 9" . symbol-overlay-mode)
-	 ("M-s 0" . symbol-overlay-remove-all))
+     ("M-s k" . symbol-overlay-switch-forward)
+     ("M-s j" . symbol-overlay-switch-backward)
+     ("M-s 9" . symbol-overlay-mode)
+     ("M-s 0" . symbol-overlay-remove-all))
   :bind
   (:map symbol-overlay-map
-	("i" . symbol-overlay-put)                ; 高亮或取消高亮当前symbol
-	("n" . symbol-overlay-jump-next)          ; 跳转到下一个位置
-	("p" . symbol-overlay-jump-prev)	  ; 跳转到上一个位置
-	("w" . symbol-overlay-save-symbol)        ; 复制当前symbol
-	("t" . symbol-overlay-toggle-in-scope)    ; 切换高亮范围到作用域
-	("e" . symbol-overlay-echo-mark)	  ; 撤销上一次跳转
-	("d" . symbol-overlay-jump-to-definition) ; 跳转到定义
-	("s" . symbol-overlay-isearch-literally)  ; 切换为isearch并搜索当前symbol
-	("q" . symbol-overlay-query-replace)      ; 查找替换当前symbol
-	("r" . symbol-overlay-rename)             ; 对symbol直接重命名
-	))
+    ("i" . symbol-overlay-put)                ; 高亮或取消高亮当前symbol
+    ("n" . symbol-overlay-jump-next)          ; 跳转到下一个位置
+    ("p" . symbol-overlay-jump-prev)      ; 跳转到上一个位置
+    ("w" . symbol-overlay-save-symbol)        ; 复制当前symbol
+    ("t" . symbol-overlay-toggle-in-scope)    ; 切换高亮范围到作用域
+    ("e" . symbol-overlay-echo-mark)      ; 撤销上一次跳转
+    ("d" . symbol-overlay-jump-to-definition) ; 跳转到定义
+    ("s" . symbol-overlay-isearch-literally)  ; 切换为isearch并搜索当前symbol
+    ("q" . symbol-overlay-query-replace)      ; 查找替换当前symbol
+    ("r" . symbol-overlay-rename)             ; 对symbol直接重命名
+    ))
 
 (use-package hl-todo
   :load-path "~/.emacs.d/plugins/hl-todo"
@@ -558,8 +557,8 @@
   :demand t
   :bind (("C-c TAB" . company-complete-common))
   :config (setq company-idle-delay       0     ;; 延迟补全时间
-		company-mode             t
-		company-dabbrev-downcase nil)  ;; 补全区分大小写
+        company-mode             t
+        company-dabbrev-downcase nil)  ;; 补全区分大小写
   (add-hook 'after-init-hook 'global-company-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -569,9 +568,9 @@
 (use-package isearch
   :ensure nil
   :config (setq isearch-lazy-highlight t
-		isearch-lazy-count t
-		lazy-count-prefix-format "[%s/%s] "
-		lazy-count-suffix-format ""))
+        isearch-lazy-count t
+        lazy-count-prefix-format "[%s/%s] "
+        lazy-count-suffix-format ""))
 
 ;; RET     ; 在当前窗口打开文件
 ;; o       ; 在其他窗口打开文件
@@ -595,14 +594,14 @@
 (use-package deadgrep
   :defer t
   :bind (("C-c SPC s" . deadgrep)
-	 :map deadgrep-mode-map
+     :map deadgrep-mode-map
          ("v" . pp/deadgrep-view-file)))
 
 (use-package counsel
   :config
   (setq ivy-use-virtual-buffers t)
   :bind (("C-c SPC i" . counsel-imenu)     ;; 搜索 imenu list
-	 ("C-c SPC k" . counsel-rg)        ;; 搜索项目内关键字
+     ("C-c SPC k" . counsel-rg)        ;; 搜索项目内关键字
          ("C-c SPC r" . counsel-recentf)   ;; 搜索最近打开的文件
          ("C-c SPC g" . counsel-git)       ;; 遵循 .gitignore 在项目中搜索文件
          ("C-c SPC d" . counsel-find-file) ;; 从目录搜索文件
@@ -620,7 +619,7 @@
   (use-package vertico
     :init (vertico-mode 1)
     :config (setq vertico-scroll-margin 0
-		  vertico-count 20)))
+          vertico-count 20)))
 
 ;; need by vertico
 (use-package savehist
@@ -743,19 +742,19 @@
   (setq bm-repository-file "~/.emacs.d/bm-repository")
   (setq-default bm-buffer-persistence t)
   (add-hook 'after-init-hook        'bm-repository-load)
-  (add-hook 'kill-buffer-hook	    #'bm-buffer-save)
-  (add-hook 'after-save-hook	    #'bm-buffer-save)
-  (add-hook 'find-file-hooks	    #'bm-buffer-restore)
-  (add-hook 'after-revert-hook	    #'bm-buffer-restore)
+  (add-hook 'kill-buffer-hook       #'bm-buffer-save)
+  (add-hook 'after-save-hook        #'bm-buffer-save)
+  (add-hook 'find-file-hooks        #'bm-buffer-restore)
+  (add-hook 'after-revert-hook      #'bm-buffer-restore)
   (add-hook 'vc-before-checkin-hook #'bm-buffer-save)
-  (add-hook 'kill-emacs-hook	    #'(lambda nil
-					(bm-buffer-save-all)
-					(bm-repository-save)))
+  (add-hook 'kill-emacs-hook        #'(lambda nil
+                    (bm-buffer-save-all)
+                    (bm-repository-save)))
   :bind (("C-c b <right>" . bm-next)
-	 ("C-c b <left>"  . bm-previous)
-	 ("C-c b SPC"     . bm-toggle)
-	 ("C-c b <up>"    . bm-show-all)
-	 ("C-c b <down>"  . bm-show-quit-window)))
+     ("C-c b <left>"  . bm-previous)
+     ("C-c b SPC"     . bm-toggle)
+     ("C-c b <up>"    . bm-show-all)
+     ("C-c b <down>"  . bm-show-quit-window)))
 
 (use-package fanyi
   :ensure t
@@ -827,7 +826,7 @@
 (defun hideshow-folded-overlay-fn (ov)
   (when (eq 'code (overlay-get ov 'hs))
     (let* ((nlines (count-lines (overlay-start ov) (overlay-end ov)))
-	   (info (format " #[%d]... " nlines)))
+       (info (format " #[%d]... " nlines)))
       (overlay-put ov 'display (propertize info 'face hideshow-folded-face)))))
 
 ;; 显示被折叠的行数 这里额外启用了 :box t 属性使得提示更加明显
@@ -837,8 +836,8 @@
 (use-package hideshow
   :diminish hs-minor-mode
   :bind (:map prog-mode-map
-	      ("C-c (" . hs-toggle-hiding)
-	      ("C-c )" . hs-show-all))
+          ("C-c (" . hs-toggle-hiding)
+          ("C-c )" . hs-show-all))
   :hook (prog-mode . hs-minor-mode)
   :config (setq hs-set-up-overlay 'hideshow-folded-overlay-fn))
 
@@ -887,8 +886,8 @@
   "copy word at point"
   (interactive)
   (let* ((sym (symbol-at-point))
-	 (sym-name (when sym
-		     (substring-no-properties (symbol-name sym)))))
+     (sym-name (when sym
+             (substring-no-properties (symbol-name sym)))))
     (message (concat "copy symbol: " sym-name))
     (kill-new sym-name)))
 
