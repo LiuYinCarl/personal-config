@@ -540,7 +540,7 @@
   (add-hook 'haskell-mode-hook 'eglot-ensure)
   (add-hook 'rust-mode-hook    'eglot-ensure)
   (add-hook 'dart-mode-hook    'eglot-ensure)
-  ;; (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1))) ;; 关闭行内函数参数展示
+  (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1))) ;; 关闭行内函数参数展示
   (setq eldoc-idle-delay 1000000)  ;; 修改 eldoc-mode 的展示延迟时间
   (setq completion-ignore-case t)  ;; company-capf匹配时不区分大小写
   (setq-default eglot-workspace-configuration
@@ -711,7 +711,7 @@
 ;; 文本居中，专注模式
 (use-package olivetti
   :ensure t
-  :init (setq olivetti-body-width 0.6) ;; 设置页面宽度比例
+  :init (setq olivetti-body-width 0.75) ;; 设置页面宽度比例
   :bind (("C-c m o" . olivetti-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -916,6 +916,13 @@ modified buffers or special buffers."
          (ignore))))
     (query-replace w1 w2)))
 
+(defun my-show-trailing-whitespace ()
+  "close whow trailing whitespaces"
+  (interactive)
+  (if show-trailing-whitespace
+      (setq show-trailing-whitespace nil)
+    (setq show-trailing-whitespace t)))
+
 (global-set-key (kbd "C-c m n") 'my-show-file-name)
 (global-set-key (kbd "C-c m c") 'my-open-emacs-config)
 (global-set-key (kbd "C-c m n") 'my-fast-note)
@@ -925,6 +932,7 @@ modified buffers or special buffers."
 (global-set-key (kbd "C-c m k") 'my-kill-all-file-buffers)
 (global-set-key (kbd "C-c m f") 'my-query-and-replace)
 (global-set-key (kbd "C-c m a") 'align-regexp)
+(global-set-key (kbd "C-c m SPC") 'my-show-trailing-whitespace)
 
 ;; auto full screen on GUI mode
 (add-hook 'window-setup-hook #'toggle-frame-maximized t)
