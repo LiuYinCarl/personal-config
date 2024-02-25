@@ -142,7 +142,7 @@
 ;; 关闭自动保存文件功能
 (setq auto-save-default nil)
 ;; 设置 tab 宽度
-(setq default-tab-width 4)
+(setq-default tab-width 4)
 ;; 设置将 tab 替换为空格
 (setq-default indent-tabs-mode nil)
 ;; 设置 c 语言缩进
@@ -347,7 +347,8 @@
 (use-package ace-pinyin
   :defer t
   :init (ace-pinyin-global-mode 1)
-  :bind ("M-c" . avy-goto-word-1))
+  :bind ("M-c" . avy-goto-word-1)
+  ("M-n" . avy-goto-line))
 
 ;; 注释/反注释
 (use-package newcomment
