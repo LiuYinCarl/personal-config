@@ -142,7 +142,8 @@
 ;; 关闭自动保存文件功能
 (setq auto-save-default nil)
 ;; 设置 tab 宽度
-(setq-default tab-width 4)
+(setq default-tab-width 4)
+;; (setq-default tab-width 4)
 ;; 设置将 tab 替换为空格
 (setq-default indent-tabs-mode nil)
 ;; 设置 c 语言缩进
@@ -347,8 +348,8 @@
 (use-package ace-pinyin
   :defer t
   :init (ace-pinyin-global-mode 1)
-  :bind ("M-c" . avy-goto-word-1)
-  ("M-n" . avy-goto-line))
+  :bind (("M-c" . avy-goto-word-1)
+         ("M-n" . avy-goto-line)))
 
 ;; 注释/反注释
 (use-package newcomment
@@ -400,7 +401,8 @@
 ;; 在窗口间移动
 (use-package ace-window
   :defer t
-  :bind ("M-s p" . ace-window))
+  :bind (("M-s p" . ace-window)
+         ("M-p" . ace-window)))
 
 ;; 资源管理器 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
 ;; neotree 窗口有效
