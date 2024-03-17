@@ -16,6 +16,7 @@
 ;; | M-=                                | 查看选中的区域内的行数,单词数,字符数        |
 ;; | M-x customize-themes               | 更换主题配色                                |
 ;; | M-x package-list-packages RET Ux   | 全量更新 melpa 包                           |
+;; | M-x package-upgrade                | 选择可以更新的单个包(推荐)                  |
 ;; | set-frame-font                     | 设置字体                                    |
 ;; | M-x project-switch-project/C-x p p | 打开最近的项目                              |
 ;; | C-u 10 C-x TAB                     | 整体右移 10 个字符,要先选中文本区域         |
@@ -28,7 +29,7 @@
 ;; | C-x r c                            | 清除矩形块(使其变成空白),要先选中文本区域   |
 ;; | C-x r t                            | 在选定区域所有列前插入字符,要先选中文本区域 |
 ;; | C-spc C-spc                        | 设置一个 mark, 第二次是为了去掉高亮         |
-;; |C-u C-spc                           | 回到上一个 makr 的位置                      |
+;; | C-u C-spc                          | 回到上一个 makr 的位置                      |
 ;; | M-s .                              | isearch-forward-symbol 开始搜索当前符号     |
 ;; | C-s/C-r                            | isearch-forward/backward 向后查找/向前查找  |
 ;; | M-x tabify/untabify                | 将选中区域空格转换为Tab/Tab转换为空格       |
