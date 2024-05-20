@@ -82,10 +82,6 @@
 ;; 启动优化配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; 避免启动时 GC
-(setq gc-cons-threshold most-positive-fixnum ; 2^61 bytes
-      gc-cons-percentage 0.6)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 包管理配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -267,7 +263,7 @@
   :defer t)
 
 ;; needed only if ocamlmerlin not already in your PATH
-(setq merlin-command "~/.opam/5.0.0/bin/ocamlmerlin")
+;; (setq merlin-command "~/.opam/5.0.0/bin/ocamlmerlin")
 (add-hook 'tuareg-mode-hook #'merlin-mode)
 (add-hook 'caml-mode-hook #'merlin-mode)
 
@@ -789,13 +785,6 @@
   :demand t
   :config (which-key-mode))
 
-(use-package auto-save
-  :demand t
-  :load-path "~/.emacs.d/plugins/auto-save"
-  :config
-  (auto-save-enable)
-  (setq auto-save-silent t))
-
 (use-package delete-block
   :demand t
   :load-path "~/.emacs.d/plugins/delete-block"
@@ -987,11 +976,11 @@ modified buffers or special buffers."
  '(font-lock-comment-face ((t (:foreground "Green" :inherit nil))))
  '(font-lock-doc-face ((t (:foreground "Blue" :inherit nil))))
  '(goto-line-preview-hl ((t (:background "DimGray"))))
+ '(hl-fill-column-face ((t (:background "DimGray"))))
  '(symbol-overlay-face-1 ((t (:background "Dimgray"))))
  '(symbol-overlay-face-2 ((t (:background "Red"))))
  '(symbol-overlay-face-3 ((t (:background "Grey"))))
- '(symbol-overlay-face-4 ((t (:background "Orange"))))
- '(hl-fill-column-face ((t (:background "DimGray")))))
+ '(symbol-overlay-face-4 ((t (:background "Orange")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 工具生成的配置，不同机器差异不大
