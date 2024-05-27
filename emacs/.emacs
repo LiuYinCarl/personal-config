@@ -528,6 +528,10 @@
              (file-name-extension (buffer-name)) t))))
   :bind (("C-c y" . yas-expand)))
 
+(use-package magit
+  :defer t
+  :ensure t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LSP
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -803,7 +807,7 @@
   :config
   (quickrun-add-command "c++/c17"
     '((:command . "g++")
-      (:exec    . ("%c -std=c++17 %o -o %e %s" "%e %a"))
+      (:exec    . ("%c -std=c++17 -Wall %o -o %e %s" "%e %a"))
       (:remove  . ("%e")))
     :default "c++")
   (quickrun-add-command "python"
