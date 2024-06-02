@@ -934,7 +934,7 @@ modified buffers or special buffers."
       (setq show-trailing-whitespace nil)
     (setq show-trailing-whitespace t)))
 
-(global-set-key (kbd "C-c m n") 'my-show-file-name)
+(global-set-key (kbd "C-c m p") 'my-show-file-name)
 (global-set-key (kbd "C-c m c") 'my-open-emacs-config)
 (global-set-key (kbd "C-c m n") 'my-fast-note)
 (global-set-key (kbd "C-c m t") 'my-save-region-to-tmp-file)
