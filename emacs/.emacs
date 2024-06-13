@@ -251,6 +251,15 @@
 (use-package dart-mode
   :defer t)
 
+(use-package llvm-mode
+  :load-path "~/.emacs.d/plugins/llvm-mode")
+
+(use-package tablegen-mode
+  :load-path "~/.emacs.d/plugins/llvm-mode")
+
+(use-package llvm-mir-mode
+  :load-path "~/.emacs.d/plugins/llvm-mode")
+
 (use-package markdown-mode
   :defer t
   :config
@@ -527,6 +536,8 @@
              "yas"
              (file-name-extension (buffer-name)) t))))
   :bind (("C-c y" . yas-expand)))
+
+(use-package yasnippet-snippets)
 
 (use-package magit
   :defer t
