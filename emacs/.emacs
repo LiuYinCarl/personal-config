@@ -22,6 +22,7 @@
 ;; | C-u 10 C-x TAB                     | 整体右移 10 个字符,要先选中文本区域         |
 ;; | C-u -2 C-x TAB                     | 整体左移 2 个字符,要先选中文本区域          |
 ;; | C-x TAB [left/right]               | 向左/右移动一个字符位置,要先选中文本区域    |
+;; | C-x SPC                            | 选中矩形                                    |
 ;; | C-x r r                            | 复制矩形区域到寄存器,要先选中文本区域       |
 ;; | C-x r k                            | 剪切矩形块,要先选中文本区域                 |
 ;; | C-x r y                            | 粘贴矩形块,要先选中文本区域                 |
@@ -199,13 +200,6 @@
   (when (daemonp)
     (exec-path-from-shell-initialize)))
 
-;; 展示匹配的括号
-(use-package paren
-  :hook (after-init . show-paren-mode)
-  :config
-  (setq show-paren-when-point-inside-paren t
-        show-paren-when-point-in-periphery t))
-
 ;; 保存最近打开的文件
 (use-package recentf
   :config
@@ -328,18 +322,37 @@
   :defer t
   :bind ("M-o" . er/expand-region))
 
-(use-package smartparens
-  :defer t
+;; 让括号变得不显眼
+;; (use-package parenface
+;;   :load-path "~/.emacs.d/plugins/parenface"
+;;   :config (set-face-foreground 'paren-face "#909595"))
+
+;; 展示匹配的括号
+(use-package paren
+  :ensure t
+  :demand t
+  :init (show-paren-mode t)
+  :hook (after-init . show-paren-mode)
   :config
-  (require 'smartparens-config)
-  (add-hook 'js-mode-hook     #'smartparens-mode)
-  (add-hook 'c-mode-hook      #'smartparens-mode)
-  (add-hook 'c++-mode-hook    #'smartparens-mode)
-  (add-hook 'go-mode-hook     #'smartparens-mode)
-  (add-hook 'python-mode-hook #'smartparens-mode)
-  :bind
-  (("M-s [" . beginning-of-defun)
-   ("M-s ]" . end-of-defun)))
+  (setq show-paren-when-point-inside-paren t
+        show-paren-when-point-in-periphery t
+        show-paren-delay 0.0))
+
+;; 输入时自动补全括号
+(use-package smartparens-mode
+  :ensure smartparens
+  :defer t
+  :hook (prog-mode text-mode markdown-mode)
+  :config
+  (require 'smartparens-config))
+
+;; 彩虹括号
+(use-package rainbow-delimiters-mode
+  :ensure rainbow-delimiters
+  :init (rainbow-delimiters-mode t)
+  :hook (prog-mode text-mode markdown-mode)
+  :config
+  (setq rainbow-delimiters-depth-N-face 8))
 
 ;; (use-package avy
 ;;   :defer t
@@ -430,6 +443,7 @@
   :defer t
   :config
   (setq neo-hidden-regexp-list '("\\.pyc" "~$" "^#.*#$" "\\.elc$" "__pycache__" "\\.o$" "\\.git" "\\.clangd" "\\.gdb.*$"))
+  (define-key neotree-mode-map "?" neotree-mode-map)
   :bind
   (("C-c =" . neotree-toggle)
    ("C-c -" . neotree-find)
@@ -460,6 +474,11 @@
 
 (use-package ediff
   :hook (ediff-quit . winner-undo))
+
+(use-package dired
+  :ensure nil
+  :config ;; 在 dired buffer 中使用提示
+  (define-key dired-mode-map "?" dired-mode-map))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 程序交互插件
@@ -500,19 +519,8 @@
          ("M-s j" . symbol-overlay-switch-backward)
          ("M-s 9" . symbol-overlay-mode)
          ("M-s 0" . symbol-overlay-remove-all))
-  :bind
-  (:map symbol-overlay-map
-        ("i" . symbol-overlay-put)                ; 高亮或取消高亮当前symbol
-        ("n" . symbol-overlay-jump-next)          ; 跳转到下一个位置
-        ("p" . symbol-overlay-jump-prev)      ; 跳转到上一个位置
-        ("w" . symbol-overlay-save-symbol)        ; 复制当前symbol
-        ("t" . symbol-overlay-toggle-in-scope)    ; 切换高亮范围到作用域
-        ("e" . symbol-overlay-echo-mark)      ; 撤销上一次跳转
-        ("d" . symbol-overlay-jump-to-definition) ; 跳转到定义
-        ("s" . symbol-overlay-isearch-literally)  ; 切换为isearch并搜索当前symbol
-        ("q" . symbol-overlay-query-replace)      ; 查找替换当前symbol
-        ("r" . symbol-overlay-rename)             ; 对symbol直接重命名
-        ))
+  :config
+  (define-key symbol-overlay-map "?" symbol-overlay-map))
 
 (use-package hl-todo
   :load-path "~/.emacs.d/plugins/hl-todo"
@@ -655,12 +663,6 @@
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
 
-;; for company mode
-;; (defun just-one-face (fn &rest args)
-;;   (let ((orderless-match-faces [completions-common-part]))
-;;     (apply fn args)))
-;; (advice-add 'company-capf--candidates :around #'just-one-face)
-
 (defun company-completion-styles (capf-fn &rest args)
   (let ((completion-styles '(basic partial-completion)))
     (apply capf-fn args)))
@@ -669,8 +671,6 @@
 ;; need by vertico
 (use-package emacs
   :init
-  ;; Add prompt indicator to `completing-read-multiple'.
-  ;; We display [CRM<separator>], e.g., [CRM,] if the separator is a comma.
   (defun crm-indicator (args)
     (cons (format "[CRM%s] %s"
                   (replace-regexp-in-string
@@ -695,18 +695,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;; (load-theme 'misterioso)
-;; (use-package ef-themes
-;;   :demand t
-;;   :config (load-theme 'ef-dark t))
-
 (use-package doom-themes
   :demand t
   :config (load-theme 'doom-tokyo-night t))
-
-;; 让括号变得不显眼
-(use-package parenface
-  :load-path "~/.emacs.d/plugins/parenface"
-  :config (set-face-foreground 'paren-face "#909595"))
 
 ;; 切换窗口时未获得焦点的窗口失去高光
 (use-package dimmer
@@ -790,7 +781,7 @@
      fanyi-youdao-thesaurus-provider ;; 有道同义词词典
      ;; fanyi-etymon-provider ;; Etymonline
      fanyi-longman-provider)) ;; Longman
-  :bind (("C-c SPC t" . fanyi-dwim2)))
+  :bind (("C-c SPC SPC" . fanyi-dwim2)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 未分类插件
@@ -798,7 +789,10 @@
 
 (use-package which-key
   :demand t
-  :config (which-key-mode))
+  :config
+  (setq which-key-side-window-max-height 0.35)
+  (setq which-key-frame-max-height 20)
+  (which-key-mode))
 
 (use-package delete-block
   :demand t
@@ -960,15 +954,6 @@ modified buffers or special buffers."
 (add-hook 'window-setup-hook #'toggle-frame-maximized t)
 
 ;; Windows Terminal 下 Ctrl+Space 无效，但是这个很常用，所以映射一下
-;; TODO: remove this hack when bug fixed: https://github.com/PowerShell/Win32-OpenSSH/issues/1842
-;; Add this to your Windows Terminal settings.json
-;; {
-;;   "command":
-;;   { "action": "sendInput",
-;;     "input": "\u001b[9~"
-;;   },
-;;   "keys": "ctrl+space"
-;; }
 (global-set-key "\e[9~" 'set-mark-command)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

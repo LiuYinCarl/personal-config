@@ -353,4 +353,20 @@ https://github.com/rizsotto/Bear
   (setq indent-bars-color-by-depth nil)) ;; 不按照嵌套深度改变颜色
 
 
+;; 让括号变得不显眼
+(use-package parenface
+  :load-path "~/.emacs.d/plugins/parenface"
+  :config (set-face-foreground 'paren-face "#909595"))
+
+
+;; TODO: remove this hack when bug fixed: https://github.com/PowerShell/Win32-OpenSSH/issues/1842
+;; Add this to your Windows Terminal settings.json
+;; {
+;;   "command":
+;;   { "action": "sendInput",
+;;     "input": "\u001b[9~"
+;;   },
+;;   "keys": "ctrl+space"
+;; }
+
 ```
