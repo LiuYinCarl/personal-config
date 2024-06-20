@@ -621,6 +621,8 @@
 
 (use-package deadgrep
   :defer t
+  :config
+  (define-key deadgrep-mode-map "?" deadgrep-mode-map)
   :bind
   (("C-c SPC s" . deadgrep)
    :map deadgrep-mode-map
