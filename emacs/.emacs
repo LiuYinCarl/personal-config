@@ -338,14 +338,6 @@
         show-paren-when-point-in-periphery t
         show-paren-delay 0.0))
 
-;; 输入时自动补全括号
-(use-package smartparens-mode
-  :ensure smartparens
-  :defer t
-  :hook (prog-mode text-mode markdown-mode)
-  :config
-  (require 'smartparens-config))
-
 ;; 彩虹括号
 (use-package rainbow-delimiters-mode
   :ensure rainbow-delimiters
