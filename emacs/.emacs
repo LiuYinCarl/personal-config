@@ -89,15 +89,15 @@
 
 (require 'package)
 ;; 官方源 安装 Emacs 的机器在外网时使用
-;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 ;; 腾讯源 安装 Emacs 的机器在国内时使用
 ;; (add-to-list 'package-archives '("gnu" . "http://mirrors.cloud.tencent.com/elpa/gnu/"))
 ;; (add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
 ;; USTC 源
-(setq package-archives '(("gnu" . "http://mirrors.ustc.edu.cn/elpa/gnu/")
-                         ("melpa" . "http://mirrors.ustc.edu.cn/elpa/melpa/")
-                         ("nongnu" . "http://mirrors.ustc.edu.cn/elpa/nongnu/")))
+;; (setq package-archives '(("gnu" . "http://mirrors.ustc.edu.cn/elpa/gnu/")
+;;                          ("melpa" . "http://mirrors.ustc.edu.cn/elpa/melpa/")
+;;                          ("nongnu" . "http://mirrors.ustc.edu.cn/elpa/nongnu/")))
 
 (setq package-check-signature nil) ;;个别时候会出现签名校验失败
 (unless (bound-and-true-p package--initialized)
@@ -118,6 +118,11 @@
 (if (display-graphic-p)
     (set-face-attribute 'default nil :height 180) ;; GUI
   (set-face-attribute 'default nil :height 130))  ;; 终端
+
+;; GC 信息展示在 modeline
+(setq-default
+ mode-line-misc-info
+ '("GC " (:eval (number-to-string gcs-done)) ":" (:eval (format "%.2f" gc-elapsed)) "s"))
 
 ;; 设置光标颜色
 (set-cursor-color "white")
@@ -693,6 +698,20 @@
   :demand t
   :config (load-theme 'doom-tokyo-night t))
 
+(use-package doom-modeline
+  :ensure t
+  :init (doom-modeline-mode 1)
+  :config
+  (setq doom-modeline-highlight-modified-buffer-name t)
+  (setq doom-modeline-buffer-encoding t)
+  (setq doom-modeline-unicode-fallback t)
+  (setq doom-modeline-indent-info t)
+  (setq doom-modeline-total-line-number t)
+  (setq doom-modeline-icon t)
+  (setq doom-modeline-minor-modes nil)
+  (setq doom-modeline-persp-name t)
+  (setq doom-modeline-lsp t))
+
 ;; 切换窗口时未获得焦点的窗口失去高光
 (use-package dimmer
   :load-path "~/.emacs.d/plugins/dimmer.el"
@@ -723,6 +742,11 @@
   :ensure t
   :init (setq olivetti-body-width 0.75) ;; 设置页面宽度比例
   :bind (("C-c m o" . olivetti-mode)))
+
+(use-package highlight-numbers
+  :ensure t
+  :config
+  (add-hook 'prog-mode-hook 'highlight-numbers-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 跳转插件
@@ -970,6 +994,7 @@ modified buffers or special buffers."
  '(font-lock-comment-face ((t (:foreground "Green" :inherit nil))))
  '(font-lock-doc-face ((t (:foreground "Blue" :inherit nil))))
  '(goto-line-preview-hl ((t (:background "DimGray"))))
+ '(highlight-numbers-number ((t (:foreground "Red"))))
  '(hl-fill-column-face ((t (:background "DimGray"))))
  '(symbol-overlay-face-1 ((t (:background "Dimgray"))))
  '(symbol-overlay-face-2 ((t (:background "Red"))))
