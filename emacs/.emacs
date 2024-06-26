@@ -611,30 +611,45 @@
   (deadgrep-visit-result-other-window)
   (other-window 1))
 
-(defadvice deadgrep (around deadgrep-with-spaces activate)
-  "Save current position before call deadgrep"
-  (better-jumper-set-jump)
-  ad-do-it)
-
 (use-package deadgrep
-  :defer t
+  :init
+  (which-key-add-key-based-replacements
+    "C-c SPC s" "deadgrep")
   :config
   (define-key deadgrep-mode-map "?" deadgrep-mode-map)
   :bind
-  (("C-c SPC s" . deadgrep)
+  (("C-c SPC s" . (lambda () (interactive)
+                    (better-jumper-set-jump) (call-interactively 'deadgrep)))
    :map deadgrep-mode-map
    ("v" . pp/deadgrep-view-file)))
 
+(use-package consult
+  :init
+  (which-key-add-key-based-replacements
+    "C-c SPC ." "consult-ripgrep"
+    "C-c SPC B" "consult-buffer")
+  :bind
+  (("C-c SPC ." . (lambda () (interactive) (better-jumper-set-jump) (consult-ripgrep)))
+   ("C-c SPC B" . (lambda () (interactive) (better-jumper-set-jump) (consult-buffer)))))
+
 (use-package counsel
+  :init
+  (which-key-add-key-based-replacements ;; 为了让 which-key 知道 lambda 具体绑定的函数
+    "C-c SPC i" "counsel-imenu"
+    "C-c SPC k" "counsel-rg"
+    "C-c SPC r" "counsel-recentf"
+    "C-c SPC g" "counsel-git"
+    "C-c SPC d" "counsel-find-file"
+    "C-c SPC b" "counsel-grep-or-swiper")
   :config
   (setq ivy-use-virtual-buffers t)
   :bind
-  (("C-c SPC i" . counsel-imenu)     ;; 搜索 imenu list
-   ("C-c SPC k" . counsel-rg)        ;; 搜索项目内关键字
-   ("C-c SPC r" . counsel-recentf)   ;; 搜索最近打开的文件
-   ("C-c SPC g" . counsel-git)       ;; 遵循 .gitignore 在项目中搜索文件
-   ("C-c SPC d" . counsel-find-file) ;; 从目录搜索文件
-   ("C-c SPC b" . counsel-grep-or-swiper) ;; 搜索 buffer 内关键字
+  (("C-c SPC i" . (lambda () (interactive) (better-jumper-set-jump) (counsel-imenu)))     ;; 搜索 imenu list
+   ("C-c SPC k" . (lambda () (interactive) (better-jumper-set-jump) (counsel-rg)))        ;; 搜索项目内关键字
+   ("C-c SPC r" . (lambda () (interactive) (better-jumper-set-jump) (counsel-recentf)))   ;; 搜索最近打开的文件
+   ("C-c SPC g" . (lambda () (interactive) (better-jumper-set-jump) (counsel-git)))       ;; 遵循 .gitignore 在项目中搜索文件
+   ("C-c SPC d" . (lambda () (interactive) (better-jumper-set-jump) (counsel-find-file))) ;; 从目录搜索文件
+   ("C-c SPC b" . (lambda () (interactive) (better-jumper-set-jump) (counsel-grep-or-swiper))) ;; 搜索 buffer 内关键字
    ))
 
 (use-package ivy
