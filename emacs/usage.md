@@ -369,4 +369,12 @@ https://github.com/rizsotto/Bear
 ;;   "keys": "ctrl+space"
 ;; }
 
+
+;; 面包屑导航
+(use-package breadcrumb
+  :demand t
+  :load-path "~/.emacs.d/plugins/breadcrumb"
+  :config
+  (breadcrumb-mode t))
+
 ```
