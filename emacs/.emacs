@@ -439,7 +439,11 @@
 (use-package neotree
   :defer t
   :config
-  (setq neo-hidden-regexp-list '("\\.pyc" "~$" "^#.*#$" "\\.elc$" "__pycache__" "\\.o$" "\\.git" "\\.clangd" "\\.gdb.*$"))
+  (setq neo-hidden-regexp-list '("\\.pyc" "~$" "^#.*#$" "\\.elc$"
+                                 "__pycache__" "\\.o$" "\\.git"
+                                 "\\.clangd" "\\.gdb.*$"
+                                 "\\.sln" "\\.vcproj" "\\.vcxproj"
+                                 ))
   (define-key neotree-mode-map "?" neotree-mode-map)
   :bind
   (("C-c =" . neotree-toggle)
