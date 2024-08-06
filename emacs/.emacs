@@ -556,6 +556,9 @@
 ;; LSP
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; special c++ file extension name
+(add-to-list 'auto-mode-alist '("\\.ipp\\'" . c++-mode))
+
 (use-package eglot
   :if (not (version<= emacs-version "26.1"))
   :ensure t
