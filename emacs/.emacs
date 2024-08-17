@@ -529,7 +529,7 @@
   (global-hl-todo-mode t))
 
 (use-package yasnippet
-  :demand t
+  :defer t
   :config
   (yas-global-mode t)
   (setq auto-save-disable-predicates
@@ -539,7 +539,8 @@
              (file-name-extension (buffer-name)) t))))
   :bind (("C-c y" . yas-expand)))
 
-(use-package yasnippet-snippets)
+(use-package yasnippet-snippets
+  :defer t)
 
 (use-package magit
   :defer t
