@@ -377,4 +377,28 @@ https://github.com/rizsotto/Bear
   :config
   (breadcrumb-mode t))
 
+;; 资源管理器 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
+;; neotree 窗口有效
+;; U       进入上层目录
+;; g       刷新树。
+;; A       最大/最小化 NeoTree 窗口
+;; H       切换显示隐藏文件。
+;; C-c C-n 创建文件，若以 / 结尾则表示创建文件夹。
+;; C-c C-d 删除文件或目录。
+;; C-c C-r 重命名文件或目录。
+;; C-c C-c 改变根目录
+(use-package neotree
+  :defer t
+  :config
+  (setq neo-hidden-regexp-list '("\\.pyc" "~$" "^#.*#$" "\\.elc$"
+                                 "__pycache__" "\\.o$" "\\.git"
+                                 "\\.clangd" "\\.gdb.*$"
+                                 "\\.sln" "\\.vcproj" "\\.vcxproj"
+                                 ))
+  (define-key neotree-mode-map "?" neotree-mode-map)
+  :bind
+  (("C-c =" . neotree-toggle)
+   ("C-c -" . neotree-find)
+   ("C-c d" . neotree-dir)))
+
 ```
