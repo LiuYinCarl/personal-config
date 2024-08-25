@@ -229,9 +229,6 @@
   :config
   (add-hook 'prog-mode-hook #'ws-butler-mode))
 
-;; 图标插件 for doom-modeline/treemacs-nerd-icons
-(use-package nerd-icons)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 编程语言插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -428,6 +425,13 @@
   :bind
   (("M-s p" . ace-window)
    ("M-p" . ace-window)))
+
+;; 图标插件 for doom-modeline/treemacs-nerd-icons
+(use-package nerd-icons
+  :demand t
+  ;; :custom
+  ;; (nerd-icons-font-family "FiraCode Nerd Font")
+)
 
 ;; 文件树 安装字体 https://www.nerdfonts.com/font-downloads
 (use-package treemacs-nerd-icons
@@ -1004,7 +1008,7 @@ modified buffers or special buffers."
  '(font-lock-comment-face ((t (:foreground "Green" :inherit nil))))
  '(font-lock-doc-face ((t (:foreground "Blue" :inherit nil))))
  '(goto-line-preview-hl ((t (:background "DimGray"))))
- '(highlight-numbers-number ((t (:foreground "Red"))))
+ '(highlight-numbers-number ((t (:foreground "Orange"))))
  '(hl-fill-column-face ((t (:background "DimGray"))))
  '(symbol-overlay-face-1 ((t (:background "Dimgray"))))
  '(symbol-overlay-face-2 ((t (:background "Red"))))
