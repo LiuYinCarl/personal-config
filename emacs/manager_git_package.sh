@@ -25,7 +25,8 @@ repos=(
     "git@github.com:jdtsmith/indent-bars.git"             \
     "git@github.com:manateelazycat/auto-save.git"         \
     "git@github.com:manateelazycat/delete-block.git"      \
-    "git@github.com:nverno/llvm-mode.git"
+    "git@github.com:nverno/llvm-mode.git"                 \
+    "git@github.com:eval-exec/super-hint.el.git"
 )
 
 ############################################################

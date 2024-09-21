@@ -431,7 +431,7 @@
   :demand t
   ;; :custom
   ;; (nerd-icons-font-family "FiraCode Nerd Font")
-)
+  )
 
 ;; 文件树 安装字体 https://www.nerdfonts.com/font-downloads
 (use-package treemacs-nerd-icons
@@ -650,6 +650,18 @@
    ("C-c SPC d" . (lambda () (interactive) (better-jumper-set-jump) (counsel-find-file))) ;; 从目录搜索文件
    ("C-c SPC b" . (lambda () (interactive) (better-jumper-set-jump) (counsel-grep-or-swiper))) ;; 搜索 buffer 内关键字
    ))
+
+
+;; need by super-hint
+(use-package rg)
+
+(use-package super-hint
+  :load-path "~/.emacs.d/plugins/super-hint.el/"
+  :config
+  (require 'super-hint-rg)
+  (require 'super-hint-xref)
+  (super-hint-enable-xref) ;; then M-x xref-find-references to enjoy super-hint
+  (which-function-mode t)) ;; need open which-function mode
 
 (use-package ivy
   :config
