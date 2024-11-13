@@ -89,15 +89,15 @@
 
 (require 'package)
 ;; 官方源 安装 Emacs 的机器在外网时使用
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
+;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 ;; 腾讯源 安装 Emacs 的机器在国内时使用
 ;; (add-to-list 'package-archives '("gnu" . "http://mirrors.cloud.tencent.com/elpa/gnu/"))
 ;; (add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
 ;; USTC 源
-;; (setq package-archives '(("gnu" . "http://mirrors.ustc.edu.cn/elpa/gnu/")
-;;                          ("melpa" . "http://mirrors.ustc.edu.cn/elpa/melpa/")
-;;                          ("nongnu" . "http://mirrors.ustc.edu.cn/elpa/nongnu/")))
+(setq package-archives '(("gnu" . "http://mirrors.ustc.edu.cn/elpa/gnu/")
+                          ("melpa" . "http://mirrors.ustc.edu.cn/elpa/melpa/")
+                          ("nongnu" . "http://mirrors.ustc.edu.cn/elpa/nongnu/")))
 
 (setq package-check-signature nil) ;;个别时候会出现签名校验失败
 (unless (bound-and-true-p package--initialized)
@@ -690,8 +690,8 @@
   :config
   (require 'super-hint-rg)
   (require 'super-hint-xref)
-  (super-hint-enable-xref) ;; then M-x xref-find-references to enjoy super-hint
-  (which-function-mode t)) ;; need open which-function mode
+  (which-function-mode t) ;; need open which-function mode
+  (super-hint-xref-mode t)) ;; then M-x xref-find-references to enjoy super-hint
 
 (use-package ivy
   :config
