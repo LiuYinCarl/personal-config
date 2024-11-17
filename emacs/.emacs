@@ -96,8 +96,13 @@
 ;; (add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
 ;; USTC 源
 (setq package-archives '(("gnu" . "http://mirrors.ustc.edu.cn/elpa/gnu/")
+<<<<<<< HEAD
                           ("melpa" . "http://mirrors.ustc.edu.cn/elpa/melpa/")
                           ("nongnu" . "http://mirrors.ustc.edu.cn/elpa/nongnu/")))
+=======
+                         ("melpa" . "http://mirrors.ustc.edu.cn/elpa/melpa/")
+                         ("nongnu" . "http://mirrors.ustc.edu.cn/elpa/nongnu/")))
+>>>>>>> ccf8345 ([Emacs] update line-numbers-mode setting)
 
 (setq package-check-signature nil) ;;个别时候会出现签名校验失败
 (unless (bound-and-true-p package--initialized)
@@ -155,8 +160,6 @@
 ;; 显示行尾空格
 (setq-default show-trailing-whitespace t)
 (add-hook 'term-mode-hook (lambda () (setq show-trailing-whitespace nil)))
-;; 行号展示，26以下可以使用 linum
-(global-display-line-numbers-mode)
 ;; 括号补全
 (electric-pair-mode t)
 ;; 字符编码优先级设置，优先选择的编码类型
@@ -185,6 +188,31 @@
 
 ;; MacOS set option as meta
 (setq mac-option-key-is-meta t)
+
+;; 行号展示，26以下可以使用 linum 插件
+;; (global-display-line-numbers-mode)
+;; 需要展示行号的 mode
+(dolist (hook (list
+               'bash-mode-hook
+               'c++-mode-hook
+               'c-mode-common-hook
+               'c-mode-hook
+               'cmake-mode-hook
+               'emacs-lisp-mode-hook
+               'go-mode-hook
+               'lisp-mode-hook
+               'llvm-mode-hook
+               'lua-mode-hook
+               'makefile-gmake-mode-hook
+               'markdown-ts-mode-hook
+               'ocaml-mode-hook
+               'python-mode-hook
+               'rust-mode-hook
+               'sh-mode-hook
+               'text-mode-hook
+               ))
+  (add-hook hook (lambda () (display-line-numbers-mode))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs 优化插件
@@ -690,8 +718,8 @@
   :config
   (require 'super-hint-rg)
   (require 'super-hint-xref)
-  (which-function-mode t) ;; need open which-function mode
-  (super-hint-xref-mode t)) ;; then M-x xref-find-references to enjoy super-hint
+  ;; (super-hint-enable-xref) ;; then M-x xref-find-references to enjoy super-hint
+  (which-function-mode t)) ;; need open which-function mode
 
 (use-package ivy
   :config
