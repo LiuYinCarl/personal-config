@@ -190,6 +190,7 @@
 ;; 需要展示行号的 mode
 (dolist (hook (list
                'bash-mode-hook
+               'caml-mode-hook
                'c++-mode-hook
                'c-mode-common-hook
                'c-mode-hook
@@ -201,11 +202,11 @@
                'lua-mode-hook
                'makefile-gmake-mode-hook
                'markdown-ts-mode-hook
-               'ocaml-mode-hook
                'python-mode-hook
                'rust-mode-hook
                'sh-mode-hook
                'text-mode-hook
+               'tuareg-mode-hook
                ))
   (add-hook hook (lambda () (display-line-numbers-mode))))
 
