@@ -96,13 +96,9 @@
 ;; (add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
 ;; USTC 源
 (setq package-archives '(("gnu" . "http://mirrors.ustc.edu.cn/elpa/gnu/")
-<<<<<<< HEAD
-                          ("melpa" . "http://mirrors.ustc.edu.cn/elpa/melpa/")
-                          ("nongnu" . "http://mirrors.ustc.edu.cn/elpa/nongnu/")))
-=======
                          ("melpa" . "http://mirrors.ustc.edu.cn/elpa/melpa/")
                          ("nongnu" . "http://mirrors.ustc.edu.cn/elpa/nongnu/")))
->>>>>>> ccf8345 ([Emacs] update line-numbers-mode setting)
+
 
 (setq package-check-signature nil) ;;个别时候会出现签名校验失败
 (unless (bound-and-true-p package--initialized)
@@ -212,7 +208,6 @@
                'text-mode-hook
                ))
   (add-hook hook (lambda () (display-line-numbers-mode))))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Emacs 优化插件
