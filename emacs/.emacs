@@ -100,6 +100,21 @@
 (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
 (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
 
+;; if you don't use RTL ever, this could improve perf
+(setq-default bidi-display-reordering 'left-to-right
+              bidi-paragraph-direction 'left-to-right
+              bidi-inhibit-bpa t)
+
+;; improves terminal emulator (vterm/eat) throughput
+(setq read-process-output-max (* 4 1024 1024)
+      process-adaptive-read-buffering nil)
+
+(setq fast-but-imprecise-scrolling t
+      redisplay-skip-fontification-on-input t
+      inhibit-compacting-font-caches t)
+
+(setq idle-update-delay 1.0)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 包管理配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
