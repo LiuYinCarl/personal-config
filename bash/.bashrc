@@ -80,7 +80,9 @@ alias cs="chezscheme --script"
 alias rgf="rg -F" # 不使用正则
 alias g++v="g++ -dM -E -x c++  /dev/null | grep -F __cplusplus"
 alias clang++v="clang++ -dM -E -x c++  /dev/null | grep -F __cplusplus"
-
+alias cloc="tokei"
+alias delta="delta --side-by-side --syntax-theme 1337"
+alias tspin="tspin" # tool to highlight log
 ############################################################
 ## local machine alias
 ############################################################
