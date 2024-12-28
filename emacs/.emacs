@@ -83,6 +83,13 @@
 ;; 启动优化配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(setq gc-cons-threshold (* 512 1024 1024))        ;; 512 MB
+(setq gcmh-high-cons-threshold (* 512 1024 1024)) ;; 512 MB
+(setq gcmh-idle-delay-factor 20)
+(setq jit-lock-defer-time 0.05)
+(setq read-process-output-max (* 1024 1024))
+(setq package-native-compile t)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 包管理配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -146,7 +153,7 @@
 ;; 关闭自动保存文件功能
 (setq auto-save-default nil)
 ;; 设置 tab 宽度
-(setq-default tab-width 4)
+(setq-default tab-width 8)
 ;; 设置将 tab 替换为空格
 (setq-default indent-tabs-mode nil)
 ;; 设置 c 语言缩进
@@ -494,6 +501,12 @@
    ("C-c -" . neotree-find)
    ("C-c 0" . neotree-dir)))
 
+;; 面包屑导航
+(use-package breadcrumb
+  :demand t
+  :load-path "~/.emacs.d/plugins/breadcrumb"
+  :config
+  (breadcrumb-mode t))
 
 ;; 将代码结构展示在右侧窗口
 (use-package imenu-list
