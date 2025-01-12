@@ -83,8 +83,8 @@
 ;; 启动优化配置
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq gc-cons-threshold (* 512 1024 1024))        ;; 512 MB
-(setq gcmh-high-cons-threshold (* 512 1024 1024)) ;; 512 MB
+(setq gc-cons-threshold (* 64 1024 1024))        ;; 64 MB
+(setq gcmh-high-cons-threshold (* 64 1024 1024)) ;; 64 MB
 (setq gcmh-idle-delay-factor 20)
 (setq jit-lock-defer-time 0.05)
 (setq read-process-output-max (* 1024 1024))
@@ -95,7 +95,7 @@
   (setq gc-cons-threshold most-positive-fixnum))
 
 (defun my-minibuffer-exit-hook ()
-  (setq gc-cons-threshold (* 512 1024 1024)))
+  (setq gc-cons-threshold (* 64 1024 1024)))
 
 (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
 (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
