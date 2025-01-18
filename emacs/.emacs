@@ -486,6 +486,18 @@
   (("M-s p" . ace-window)
    ("M-p" . ace-window)))
 
+;; 窗口跳转
+(use-package windmove
+  :defer t
+  :bind
+  (("M-s <up>"    . windmove-up)
+   ("M-s <down>"  . windmove-down)
+   ("M-s <left>"  . windmove-left)
+   ("M-s <right>" . windmove-right))
+  ;; 在边缘的窗口进行循环跳转，最左窗口跳到最右窗口等
+  :config
+  (setq windmove-wrap-around t))
+
 ;; 图标插件 for doom-modeline/treemacs-nerd-icons
 (use-package nerd-icons
   :demand t
@@ -856,10 +868,10 @@
   (custom-set-variables
    '(git-gutter:update-interval 1.0))
   :bind
-  (("M-s <up>" . git-gutter:previous-hunk)
-   ("M-s <down>" . git-gutter:next-hunk)
-   ("M-s <left>" . git-gutter:popup-hunk)
-   ("M-s <right>" . git-gutter:mark-hunk)
+  (("M-s M-<up>" . git-gutter:previous-hunk)
+   ("M-s M-<down>" . git-gutter:next-hunk)
+   ("M-s M-<left>" . git-gutter:popup-hunk)
+   ("M-s M-<right>" . git-gutter:mark-hunk)
    ("M-s g <up>" . git-gutter:stage-hunk)
    ("M-s g <down>" . git-gutter:revert-hunk)))
 
@@ -1109,23 +1121,23 @@ modified buffers or special buffers."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(aw-leading-char-face      ((t (:background "Black" :foreground "Orange" :height 180.0))))
- '(bm-face                   ((t (:background "DimGray"))))
- '(bm-fringe-face            ((t (:background "DimGray"))))
- '(bm-fringe-persistent-face ((t (:background "DimGray"))))
- '(bm-persistent-face        ((t (:background "DimGray"))))
- '(centaur-tabs-selected     ((t (:inherit bold :foreground "yellow"))))
- '(deadgrep-filename-face    ((t (:foreground "Orange"))))
- '(deadgrep-match-face       ((t (:foreground "Green"))))
- '(font-lock-comment-face    ((t (:foreground "Green" :inherit nil))))
- '(font-lock-doc-face        ((t (:foreground "Blue"  :inherit nil))))
- '(goto-line-preview-hl      ((t (:background "DimGray"))))
- '(highlight-numbers-number  ((t (:foreground "Orange"))))
- '(hl-fill-column-face       ((t (:background "DimGray"))))
- '(avy-lead-face   ((t (:background "White" :foreground "Red"))))
+ '(avy-lead-face ((t (:background "White" :foreground "Red"))))
  '(avy-lead-face-0 ((t (:background "White" :foreground "Red"))))
  '(avy-lead-face-1 ((t (:background "White" :foreground "Red"))))
  '(avy-lead-face-2 ((t (:background "White" :foreground "Red"))))
+ '(aw-leading-char-face ((t (:background "Black" :foreground "Orange" :height 180.0))))
+ '(bm-face ((t (:background "DimGray"))))
+ '(bm-fringe-face ((t (:background "DimGray"))))
+ '(bm-fringe-persistent-face ((t (:background "DimGray"))))
+ '(bm-persistent-face ((t (:background "DimGray"))))
+ '(centaur-tabs-selected ((t (:inherit bold :foreground "yellow"))))
+ '(deadgrep-filename-face ((t (:foreground "Orange"))))
+ '(deadgrep-match-face ((t (:foreground "Green"))))
+ '(font-lock-comment-face ((t (:foreground "Green" :inherit nil))))
+ '(font-lock-doc-face ((t (:foreground "Blue" :inherit nil))))
+ '(goto-line-preview-hl ((t (:background "DimGray"))))
+ '(highlight-numbers-number ((t (:foreground "Orange"))))
+ '(hl-fill-column-face ((t (:background "DimGray"))))
  '(symbol-overlay-face-1 ((t (:background "DimGray"))))
  '(symbol-overlay-face-2 ((t (:background "Red"))))
  '(symbol-overlay-face-3 ((t (:background "Grey"))))
