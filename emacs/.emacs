@@ -484,7 +484,8 @@
   :defer t
   :bind
   (("M-s p" . ace-window)
-   ("M-p" . ace-window)))
+   ("M-p" . ace-window)
+   ("M-s M-s" . ace-swap-window))) ;; 交换窗口
 
 ;; 窗口跳转
 (use-package windmove
