@@ -415,11 +415,6 @@
 ;;   :defer t
 ;;   :bind ("M-c" . avy-goto-word-1))
 
-;; 代替 switch-to-buffer
-(use-package ace-jump-buffer
-  :defer t
-  :bind ("C-x b" . ace-jump-buffer))
-
 ;; 替代 avy, 可以跳转中文
 (use-package ace-pinyin
   :defer t
@@ -501,10 +496,7 @@
 
 ;; 图标插件 for doom-modeline/treemacs-nerd-icons
 (use-package nerd-icons
-  :demand t
-  ;; :custom
-  ;; (nerd-icons-font-family "FiraCode Nerd Font")
-  )
+  :demand t)
 
 (use-package treemacs)
 
