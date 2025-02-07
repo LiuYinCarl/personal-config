@@ -214,6 +214,16 @@
 ;; 去掉行尾的续行符号
 (set-display-table-slot standard-display-table 'wrap ?\ )
 
+;; 设置滚动边距
+(setq scroll-margin 4)
+;; 设置保守滚动
+(setq scroll-conservatively 100)
+;; 设置平滑滚动
+(setq scroll-step 1)
+;; 设置滚动积极性
+(setq scroll-up-aggressively 0.02)
+(setq scroll-down-aggressively 0.02)
+
 ;; MacOS set option as meta
 (setq mac-option-key-is-meta t)
 
