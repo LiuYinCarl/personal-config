@@ -572,9 +572,6 @@
          ("C-c <right>" . winner-redo))
   :hook (after-init . winner-mode))
 
-(use-package ediff
-  :hook (ediff-quit . winner-undo))
-
 (use-package dired
   :ensure nil
   :config ;; 在 dired buffer 中使用提示
@@ -626,24 +623,6 @@
   :load-path "~/.emacs.d/plugins/hl-todo"
   :config
   (global-hl-todo-mode t))
-
-(use-package yasnippet
-  :defer t
-  :config
-  (yas-global-mode t)
-  (setq auto-save-disable-predicates
-        '((lambda ()
-            (string-suffix-p
-             "yas"
-             (file-name-extension (buffer-name)) t))))
-  :bind (("C-c y" . yas-expand)))
-
-(use-package yasnippet-snippets
-  :defer t)
-
-(use-package magit
-  :defer t
-  :ensure t)
 
 (use-package sideline-flymake
   :hook (flymake-mode . sideline-mode)
