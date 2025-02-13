@@ -401,4 +401,18 @@ https://github.com/rizsotto/Bear
    ("C-c -" . neotree-find)
    ("C-c d" . neotree-dir)))
 
+
+;; 展示行尾空格
+;; (setq-default show-trailing-whitespace t)
+;; (add-hook 'term-mode-hook (lambda () (setq show-trailing-whitespace nil)))
+
+(defun my-show-trailing-whitespace ()
+  "close show trailing whitespaces"
+  (interactive)
+  (if show-trailing-whitespace
+      (setq show-trailing-whitespace nil)
+    (setq show-trailing-whitespace t)))
+
+(global-set-key (kbd "C-c m SPC") 'my-show-trailing-whitespace)
+
 ```

@@ -186,8 +186,9 @@
 ;; 设置 C 语言注释格式为 // 而不是 /* */
 (add-hook 'c-mode-hook (lambda () (c-toggle-comment-style -1)))
 ;; 显示行尾空格
-(setq-default show-trailing-whitespace t)
-(add-hook 'term-mode-hook (lambda () (setq show-trailing-whitespace nil)))
+(dolist (hook (list 'prog-mode-hook))
+  (add-hook hook (lambda () (setq show-trailing-whitespace t))))
+
 ;; 括号补全
 (electric-pair-mode t)
 ;; 字符编码优先级设置，优先选择的编码类型
@@ -580,6 +581,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 程序交互插件
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Emacs 终端，C-c C-c 发送 Ctrl-c
+(use-package mistty
+  :bind (("C-c s" . mistty)
+         ;; 注册希望让 shell 而不是 Emacs 处理的按键
+         :map mistty-prompt-map
+         ("<up>" . mistty-send-key)
+         ("<down>" . mistty-send-key)))
 
 ;; shell-pop 是在 Term Mode 之下的 term-char-mode
 ;; 如果想要操作 buffer，比如看历史记录，需要切换到 term-line-mode
@@ -1063,12 +1072,6 @@ modified buffers or special buffers."
          (ignore))))
     (query-replace w1 w2)))
 
-(defun my-show-trailing-whitespace ()
-  "close whow trailing whitespaces"
-  (interactive)
-  (if show-trailing-whitespace
-      (setq show-trailing-whitespace nil)
-    (setq show-trailing-whitespace t)))
 
 (global-set-key (kbd "C-c m p") 'my-show-file-name)
 (global-set-key (kbd "C-c m c") 'my-open-emacs-config)
@@ -1079,7 +1082,6 @@ modified buffers or special buffers."
 (global-set-key (kbd "C-c m k") 'my-kill-all-file-buffers)
 (global-set-key (kbd "C-c m f") 'my-query-and-replace)
 (global-set-key (kbd "C-c m a") 'align-regexp)
-(global-set-key (kbd "C-c m SPC") 'my-show-trailing-whitespace)
 
 ;; auto full screen on GUI mode
 (add-hook 'window-setup-hook #'toggle-frame-maximized t)
