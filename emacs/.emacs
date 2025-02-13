@@ -509,7 +509,9 @@
 (use-package nerd-icons
   :demand t)
 
-(use-package treemacs)
+(use-package treemacs
+  :config
+  (setq treemacs-expand-after-init nil))
 
 ;; 文件树 安装字体 https://www.nerdfonts.com/font-downloads
 (use-package treemacs-nerd-icons
