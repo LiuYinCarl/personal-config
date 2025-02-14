@@ -846,6 +846,8 @@
   (dimmer-configure-posframe)
   (dimmer-mode t))
 
+(use-package magit)
+
 ;; 显示被编辑过的行和 git 操作
 (use-package git-gutter
   :init
