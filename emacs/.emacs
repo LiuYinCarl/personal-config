@@ -186,7 +186,7 @@
 ;; 设置 C 语言注释格式为 // 而不是 /* */
 (add-hook 'c-mode-hook (lambda () (c-toggle-comment-style -1)))
 ;; 显示行尾空格
-(dolist (hook (list 'prog-mode-hook))
+(dolist (hook (list 'prog-mode-hook 'markdown-mode-hook))
   (add-hook hook (lambda () (setq show-trailing-whitespace t))))
 
 ;; 括号补全
