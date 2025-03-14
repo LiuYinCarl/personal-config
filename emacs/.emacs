@@ -481,6 +481,20 @@
 ;;;; 窗口布局，文件管理，buffer 管理插件
 ;;------------------------------------------------------------------------------
 
+;; 保存桌面环境
+(use-package easysession
+  :ensure t
+  :commands (easysession-switch-to
+             easysession-save-as
+             easysession-save-mode
+             easysession-load-including-geometry)
+  :custom
+  (easysession-mode-line-misc-info t)  ; Display the session in the modeline
+  (easysession-save-interval (* 10 60))  ; Save every 10 minutes
+  :init
+  (add-hook 'emacs-startup-hook #'easysession-load-including-geometry 102)
+  (add-hook 'emacs-startup-hook #'easysession-save-mode 103))
+
 ;; M-x windresize 启动，然后使用方向键调整窗口大小
 ;; 用 i 调整步长，o键或者M-S-<up>/<left>跳到其它窗口，? 显示帮助，调整完了按RET退出即可
 (use-package windresize
@@ -1093,6 +1107,49 @@ modified buffers or special buffers."
 
 ;; Windows Terminal 下 Ctrl+Space 无效，但是这个很常用，所以映射一下
 (global-set-key "\e[9~" 'set-mark-command)
+
+;; 修改光标所在括号内的块的背景颜色
+(use-package highlight-blocks
+  :config
+  (setq highlight-blocks-delay 0.05
+	;; 设置背景颜色，第一个是显示的颜色
+	highlight-blocks--rainbow-colors '("#606060" "#000000" "#464641")
+	highlight-blocks-max-face-count (length highlight-blocks--rainbow-colors)))
+
+(defun highlight-blocks--get-bounds ()
+  (let ((result '())
+	(parse-sexp-ignore-comments t))
+    (condition-case nil
+	(let* ((parse-state (syntax-ppss))
+	       (starting-pos (if (or (nth 3 parse-state)
+				     (nth 4 parse-state))
+				 (nth 8 parse-state)
+			       (point)))
+	       (begins (nreverse (nth 9 parse-state)))
+	       (end starting-pos)
+	       (i 0))
+	  (while (or (eq highlight-blocks-max-innermost-block-count t)
+		     (< i highlight-blocks-max-innermost-block-count))
+	    (setq end (scan-lists end 1 1))
+	    (push (cons (pop begins) end) result)
+	    (setq i (1+ i))))
+      (scan-error))
+    (last result)))
+
+(defun highlight-blocks--define-rainbow-colors (colors)
+  (dotimes (i (length colors))
+    (face-spec-set
+     (intern (format "highlight-blocks-depth-%d-face" (1+ i)))
+     `((((class color) (background dark))  :background ,(nth i colors))
+       (((class color) (background light)) :background ,(nth i colors)))
+     'face-defface-spec)))
+
+(highlight-blocks--define-rainbow-colors highlight-blocks--rainbow-colors)
+
+(add-hook 'emacs-lisp-mode-hook       'highlight-blocks-mode)
+(add-hook 'lisp-interaction-mode-hook 'highlight-blocks-mode)
+(add-hook 'lisp-mode-hook             'highlight-blocks-mode)
+(add-hook 'scheme-mode-hook           'highlight-blocks-mode)
 
 ;;------------------------------------------------------------------------------
 ;;;; 外观配置
