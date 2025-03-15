@@ -155,7 +155,7 @@
 ;; GC 信息展示在 modeline
 (setq-default
  mode-line-misc-info
- '("GC " (:eval (number-to-string gcs-done)) ":" (:eval (format "%.2f" gc-elapsed)) "s"))
+ '("[GC " (:eval (number-to-string gcs-done)) "|" (:eval (format "%.2f" gc-elapsed)) "s]"))
 
 ;; 设置光标颜色
 (set-cursor-color "white")
@@ -491,9 +491,14 @@
   :custom
   (easysession-mode-line-misc-info t)  ; Display the session in the modeline
   (easysession-save-interval (* 10 60))  ; Save every 10 minutes
-  :init
-  (add-hook 'emacs-startup-hook #'easysession-load-including-geometry 102)
-  (add-hook 'emacs-startup-hook #'easysession-save-mode 103))
+  ;; :init
+  ;; (add-hook 'emacs-startup-hook #'easysession-load-including-geometry 102)
+  ;; (add-hook 'emacs-startup-hook #'easysession-save-mode 103)
+  )
+
+(global-set-key (kbd "C-c m l") 'easysession-switch-to)
+(global-set-key (kbd "C-c m s") 'easysession-save-as)
+
 
 ;; M-x windresize 启动，然后使用方向键调整窗口大小
 ;; 用 i 调整步长，o键或者M-S-<up>/<left>跳到其它窗口，? 显示帮助，调整完了按RET退出即可
