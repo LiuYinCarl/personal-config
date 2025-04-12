@@ -531,6 +531,9 @@
 
 (use-package treemacs
   :config
+  (treemacs-follow-mode t)
+  (treemacs-hide-gitignored-files-mode t)
+  (treemacs-git-mode 'deferred)
   (setq treemacs-expand-after-init nil))
 
 ;; 文件树 安装字体 https://www.nerdfonts.com/font-downloads
@@ -840,7 +843,7 @@
 ;; (load-theme 'misterioso)
 (use-package doom-themes
   :demand t
-  :config (load-theme 'doom-tokyo-night t))
+  :config (load-theme 'doom-tokyo-night t)) ;; doom-nova is ok.
 
 (use-package doom-modeline
   :ensure t
