@@ -1181,7 +1181,7 @@ modified buffers or special buffers."
  '(deadgrep-filename-face ((t (:foreground "Orange"))))
  '(deadgrep-match-face ((t (:foreground "Green"))))
  '(font-lock-comment-face ((t (:foreground "Green" :inherit nil))))
- '(font-lock-doc-face ((t (:foreground "Blue" :inherit nil))))
+ '(font-lock-doc-face ((t (:foreground "Cyan" :inherit nil))))
  '(goto-line-preview-hl ((t (:background "DimGray"))))
  '(highlight-numbers-number ((t (:foreground "Orange"))))
  '(hl-fill-column-face ((t (:background "DimGray"))))
