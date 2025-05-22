@@ -339,6 +339,9 @@
   (add-to-list 'auto-mode-alist '("\\.md\\'"       . markdown-mode)))
 
 ;; OCaml
+;; C-c C-t 查询类型
+;; C-c C-l 定位标识符位置
+;; C-c C-n/C-c C-p 前后跳转定义
 (use-package tuareg
   :defer t)
 
@@ -534,6 +537,7 @@
   (treemacs-follow-mode t)
   (treemacs-hide-gitignored-files-mode t)
   (treemacs-git-mode 'deferred)
+  (setq treemacs-width 30)
   (setq treemacs-expand-after-init nil))
 
 ;; 文件树 安装字体 https://www.nerdfonts.com/font-downloads
