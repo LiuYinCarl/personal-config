@@ -535,8 +535,8 @@
 (use-package treemacs
   :config
   (treemacs-follow-mode t)
+  (treemacs-git-mode 'simple)
   (treemacs-hide-gitignored-files-mode t)
-  (treemacs-git-mode 'deferred)
   (setq treemacs-width 30)
   (setq treemacs-expand-after-init nil))
 
