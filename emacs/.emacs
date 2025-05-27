@@ -769,13 +769,15 @@
   (setq ivy-use-virtual-buffers t)
   :bind
   (("C-c SPC i" . (lambda () (interactive) (better-jumper-set-jump) (counsel-imenu)))     ;; 搜索 imenu list
-   ("C-c SPC k" . (lambda () (interactive) (better-jumper-set-jump) (counsel-rg)))        ;; 搜索项目内关键字
    ("C-c SPC r" . (lambda () (interactive) (better-jumper-set-jump) (counsel-recentf)))   ;; 搜索最近打开的文件
    ("C-c SPC g" . (lambda () (interactive) (better-jumper-set-jump) (counsel-git)))       ;; 遵循 .gitignore 在项目中搜索文件
    ("C-c SPC d" . (lambda () (interactive) (better-jumper-set-jump) (counsel-find-file))) ;; 从目录搜索文件
-   ("C-c SPC b" . (lambda () (interactive) (better-jumper-set-jump) (counsel-grep-or-swiper))) ;; 搜索 buffer 内关键字
+   ;; 下面的命令特殊处理，默认输入当前光标下的关键字作为参数
+   ("C-c SPC k" . (lambda () (interactive) (better-jumper-set-jump)
+                    (counsel-rg (thing-at-point 'symbol)))) ;; 搜索项目内关键字
+   ("C-c SPC b" . (lambda () (interactive) (better-jumper-set-jump)
+                    (counsel-grep-or-swiper (thing-at-point 'symbol)))) ;; 搜索 buffer 内关键字
    ))
-
 
 ;; need by super-hint
 (use-package rg)
