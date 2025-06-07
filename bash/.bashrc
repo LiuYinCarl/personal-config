@@ -1,6 +1,8 @@
 ############################################################
-## color settings
+## global settings
 ############################################################
+export LESSCHARSET=utf-8 # 确保分页工具显示 UTF-8
+export EDITOR='emacs -nw'
 # export TERM=xterm-256color
 export TERM=screen-256color # for tmux
 
@@ -89,6 +91,8 @@ alias cat=batcat
 alias b="basilk" # 终端看板
 alias ls="lla -g"
 alias hex="hex-patch" # 二进制查看
+alias f="fzf --preview 'bat --color always {}' --bind 'enter:execute(emacs -nw {})'"
+alias y="yazi"
 
 # OCaml Toolchain
 alias ocb="ocamlc -dinstr"
