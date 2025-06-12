@@ -338,6 +338,14 @@
   (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.md\\'"       . markdown-mode)))
 
+(use-package disaster
+  :load-path "~/.emacs.d/plugins/disaster"
+  :commands (disaster)
+  :init
+  ;; If you prefer viewing assembly code in `nasm-mode` instead of `asm-mode`
+  ;; (setq disaster-assembly-mode #'nasm-mode)
+  )
+
 ;; OCaml
 ;; C-c C-t 查询类型
 ;; C-c C-l 定位标识符位置
