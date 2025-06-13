@@ -6,7 +6,7 @@ dir="${HOME}/.emacs.d/plugins/lua-lsp"
 
 mkdir -p "${dir}"
 
-cd "${dir}"
+cd "${dir}" || exit
 
 wget https://github.com/LuaLS/lua-language-server/releases/download/3.14.0/lua-language-server-3.14.0-linux-x64.tar.gz
 
