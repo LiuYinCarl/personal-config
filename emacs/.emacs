@@ -692,11 +692,13 @@
   :config
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
   (add-to-list 'eglot-server-programs '((python-mode)  "pyright-langserver" "--stdio"))
+  (add-to-list 'eglot-server-programs '((lua-mode) "~/.emacs.d/plugins/lua-lsp/bin/lua-language-server"))
   (add-hook 'c-mode-hook       'eglot-ensure)
   (add-hook 'c++-mode-hook     'eglot-ensure)
   (add-hook 'python-mode-hook  'eglot-ensure)
   (add-hook 'go-mode-hook      'eglot-ensure)
   (add-hook 'haskell-mode-hook 'eglot-ensure)
+  (add-hook 'lua-mode-hook     'eglot-ensure)
   (add-hook 'rust-mode-hook    'eglot-ensure)
   (add-hook 'dart-mode-hook    'eglot-ensure)
   (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1))) ;; 关闭行内函数参数展示
