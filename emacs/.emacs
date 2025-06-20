@@ -476,6 +476,7 @@
    ("C-c c <down>" . move-dup-duplicate-down)))
 
 (use-package multiple-cursors
+  :defer t
   :bind
   (("C-c l" . mc/edit-lines)
    ("C-c j" . mc/mark-previous-like-this)
@@ -885,7 +886,9 @@
   (dimmer-configure-posframe)
   (dimmer-mode t))
 
-(use-package magit)
+(use-package magit
+  :defer t
+  )
 
 ;; 显示被编辑过的行和 git 操作
 (use-package git-gutter
