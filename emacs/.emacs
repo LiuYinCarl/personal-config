@@ -188,7 +188,9 @@
 ;; 显示行尾空格
 (dolist (hook (list 'prog-mode-hook 'markdown-mode-hook))
   (add-hook hook (lambda () (setq show-trailing-whitespace t))))
-
+;; 高亮当前行
+(global-hl-line-mode 1)
+(set-face-background 'hl-line "#3C3D3B")
 ;; 括号补全
 (electric-pair-mode t)
 ;; 字符编码优先级设置，优先选择的编码类型
