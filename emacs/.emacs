@@ -178,7 +178,7 @@
 ;; 关闭自动保存文件功能
 (setq auto-save-default nil)
 ;; 设置 tab 宽度
-(setq-default tab-width 8)
+(setq-default tab-width 4)
 ;; 设置将 tab 替换为空格
 (setq-default indent-tabs-mode nil)
 ;; 设置 c 语言缩进
@@ -538,6 +538,18 @@
   ;; 在边缘的窗口进行循环跳转，最左窗口跳到最右窗口等
   :config
   (setq windmove-wrap-around t))
+
+;; tab 管理
+(use-package tab-bar
+  :config
+  (setq tab-bar-show nil) ;; 不在最上面展示 tab-bar 条
+  :bind
+  (("C-c v n" . tab-new)
+   ("C-c v c" . tab-close)
+   ("C-c v l" . tab-list)
+   ("C-c v j" . tab-previous)
+   ("C-c v k" . tab-next)
+   ("C-c v r" . tab-bar-rename-tab)))
 
 ;; 图标插件 for doom-modeline/treemacs-nerd-icons
 (use-package nerd-icons
