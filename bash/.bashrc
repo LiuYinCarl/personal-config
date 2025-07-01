@@ -82,6 +82,7 @@ alias cs="chezscheme --script"
 alias rgf="rg -F" # 不使用正则
 alias g++v="g++ -dM -E -x c++  /dev/null | grep -F __cplusplus"
 alias clang++v="clang++ -dM -E -x c++  /dev/null | grep -F __cplusplus"
+alias f="fzf --preview 'bat --color always {}' --bind 'enter:execute(emacs -nw {})'"
 
 # Rust Toolchain
 alias cloc="tokei"
@@ -91,7 +92,8 @@ alias cat=batcat
 alias b="basilk" # 终端看板
 alias ls="lla -g"
 alias hex="hex-patch" # 二进制查看
-alias f="fzf --preview 'bat --color always {}' --bind 'enter:execute(emacs -nw {})'"
+# skim fzf 平替
+alias sk="sk --preview 'batcat --color always {}' --bind 'enter:execute(emacs -nw {})'"
 alias y="yazi"
 
 # OCaml Toolchain
