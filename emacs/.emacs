@@ -551,6 +551,22 @@
    ("C-c v k" . tab-next)
    ("C-c v r" . tab-bar-rename-tab)))
 
+;; 缩进对齐线
+(use-package highlight-indent-guides
+  :config
+  (defun my-highlighter (level responsive display)
+    (if (> 1 level)
+        nil
+      (highlight-indent-guides--highlighter-default level responsive display)))
+  ;; (setq highlight-indent-guides-responsive 'top) # 高亮当前缩进行
+  ;; (set-face-foreground 'highlight-indent-guides-top-character-face "#3C3D34")
+  (set-face-background 'highlight-indent-guides-odd-face "#3C3D3B")
+  (set-face-background 'highlight-indent-guides-even-face "#3C3D3B")
+  (set-face-foreground 'highlight-indent-guides-character-face "#3C3D3B")
+  (setq highlight-indent-guides-highlighter-function 'my-highlighter)
+  (setq highlight-indent-guides-method 'character)
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+
 ;; 图标插件 for doom-modeline/treemacs-nerd-icons
 (use-package nerd-icons
   :demand t)
@@ -1153,27 +1169,27 @@ modified buffers or special buffers."
 (use-package highlight-blocks
   :config
   (setq highlight-blocks-delay 0.05
-	;; 设置背景颜色，第一个是显示的颜色
-	highlight-blocks--rainbow-colors '("#606060" "#000000" "#464641")
-	highlight-blocks-max-face-count (length highlight-blocks--rainbow-colors)))
+        ;;设置背景颜色，第一个是显示的颜色
+        highlight-blocks--rainbow-colors '("#3C3B3A" "#000000" "#464641")
+        highlight-blocks-max-face-count (length highlight-blocks--rainbow-colors)))
 
 (defun highlight-blocks--get-bounds ()
   (let ((result '())
-	(parse-sexp-ignore-comments t))
+	    (parse-sexp-ignore-comments t))
     (condition-case nil
-	(let* ((parse-state (syntax-ppss))
-	       (starting-pos (if (or (nth 3 parse-state)
-				     (nth 4 parse-state))
-				 (nth 8 parse-state)
-			       (point)))
-	       (begins (nreverse (nth 9 parse-state)))
-	       (end starting-pos)
-	       (i 0))
-	  (while (or (eq highlight-blocks-max-innermost-block-count t)
-		     (< i highlight-blocks-max-innermost-block-count))
-	    (setq end (scan-lists end 1 1))
-	    (push (cons (pop begins) end) result)
-	    (setq i (1+ i))))
+	    (let* ((parse-state (syntax-ppss))
+	           (starting-pos (if (or (nth 3 parse-state)
+				                     (nth 4 parse-state))
+				                 (nth 8 parse-state)
+			                   (point)))
+	           (begins (nreverse (nth 9 parse-state)))
+	           (end starting-pos)
+	           (i 0))
+	      (while (or (eq highlight-blocks-max-innermost-block-count t)
+		             (< i highlight-blocks-max-innermost-block-count))
+	        (setq end (scan-lists end 1 1))
+	        (push (cons (pop begins) end) result)
+	        (setq i (1+ i))))
       (scan-error))
     (last result)))
 
