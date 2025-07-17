@@ -651,13 +651,14 @@
 ;;------------------------------------------------------------------------------
 
 ;; Emacs 终端，C-c C-c 发送 Ctrl-c
-(use-package mistty
-  :bind (("C-c s" . mistty)
-         ;; 注册希望让 shell 而不是 Emacs 处理的按键
-         :map mistty-prompt-map
-         ("<up>" . mistty-send-key)
-         ("<down>" . mistty-send-key)))
-
+(if (not (version< emacs-version "29.1"))
+    (use-package mistty
+      :bind (("C-c s" . mistty)
+             ;; 注册希望让 shell 而不是 Emacs 处理的按键
+             :map mistty-prompt-map
+             ("<up>" . mistty-send-key)
+             ("<down>" . mistty-send-key)))
+  )
 ;; shell-pop 是在 Term Mode 之下的 term-char-mode
 ;; 如果想要操作 buffer，比如看历史记录，需要切换到 term-line-mode
 ;; C-c C-j 切换到 term-line-mode
@@ -721,7 +722,7 @@
   :demand t
   :bind (("C-c h" . eldoc))
   :config
-  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd"))
+  (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd" "--background-index"))
   (add-to-list 'eglot-server-programs '((python-mode)  "pyright-langserver" "--stdio"))
   (add-to-list 'eglot-server-programs '((lua-mode) "~/.emacs.d/plugins/lua-lsp/bin/lua-language-server"))
   (add-hook 'c-mode-hook       'eglot-ensure)
