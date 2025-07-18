@@ -1,0 +1,6 @@
+{
+    "hint.enable": true,
+    "hint.paramType": true,
+    "hint.setType": true,
+    "type.inferParamType": true
+}
