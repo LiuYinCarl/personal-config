@@ -95,6 +95,7 @@ alias hex="hex-patch" # 二进制查看
 # skim fzf 平替
 alias sk="sk --preview 'batcat --color always {}' --bind 'enter:execute(emacs -nw {})'"
 alias y="yazi"
+export EDITOR='emacs -nw' # to change yezi default editor
 
 # OCaml Toolchain
 alias ocb="ocamlc -dinstr"
