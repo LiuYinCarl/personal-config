@@ -559,13 +559,13 @@
     (if (> 1 level)
         nil
       (highlight-indent-guides--highlighter-default level responsive display)))
-  ;; (setq highlight-indent-guides-responsive 'top) # 高亮当前缩进行
-  ;; (set-face-foreground 'highlight-indent-guides-top-character-face "#3C3D34")
+  (setq highlight-indent-guides-responsive 'top) ;; 高亮当前缩进行
+  (set-face-foreground 'highlight-indent-guides-top-character-face "#3C3D34")
   (set-face-background 'highlight-indent-guides-odd-face "#3C3D3B")
   (set-face-background 'highlight-indent-guides-even-face "#3C3D3B")
   (set-face-foreground 'highlight-indent-guides-character-face "#3C3D3B")
   (setq highlight-indent-guides-highlighter-function 'my-highlighter)
-  (setq highlight-indent-guides-method 'column) ;; 'column 'character
+  (setq highlight-indent-guides-method 'character)
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
 
 ;; 图标插件 for doom-modeline/treemacs-nerd-icons
@@ -725,8 +725,7 @@
   :config
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd" "--background-index"))
   (add-to-list 'eglot-server-programs '((python-mode)  "pyright-langserver" "--stdio"))
-  (add-to-list 'eglot-server-programs '((lua-mode) "~/.emacs.d/plugins/lua-lsp/bin/lua-language-server"
-                                        "--configpath" "~/.emacs.d/.luarc.json"))
+  (add-to-list 'eglot-server-programs '((lua-mode) "~/.emacs.d/plugins/lua-lsp/bin/lua-language-server"))
   (add-hook 'c-mode-hook       'eglot-ensure)
   (add-hook 'c++-mode-hook     'eglot-ensure)
   (add-hook 'python-mode-hook  'eglot-ensure)
@@ -735,7 +734,7 @@
   (add-hook 'lua-mode-hook     'eglot-ensure)
   (add-hook 'rust-mode-hook    'eglot-ensure)
   (add-hook 'dart-mode-hook    'eglot-ensure)
-  ;; (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1))) ;; 关闭行内函数参数展示
+  (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1))) ;; 关闭行内函数参数展示
   (setq eldoc-idle-delay 1000000)  ;; 修改 eldoc-mode 的展示延迟时间
   (setq completion-ignore-case t)  ;; company-capf匹配时不区分大小写
   (setq-default eglot-workspace-configuration
