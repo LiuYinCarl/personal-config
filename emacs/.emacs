@@ -566,6 +566,8 @@
   (set-face-foreground 'highlight-indent-guides-character-face "#3C3D3B")
   (setq highlight-indent-guides-highlighter-function 'my-highlighter)
   (setq highlight-indent-guides-method 'character)
+  (setq highlight-indent-guides-responsive 'top)
+  (setq highlight-indent-guides-delay 0.05)
   (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
 
 ;; 图标插件 for doom-modeline/treemacs-nerd-icons
