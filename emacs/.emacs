@@ -552,24 +552,6 @@
    ("C-c v k" . tab-next)
    ("C-c v r" . tab-bar-rename-tab)))
 
-;; 缩进对齐线
-(use-package highlight-indent-guides
-  :config
-  (defun my-highlighter (level responsive display)
-    (if (> 1 level)
-        nil
-      (highlight-indent-guides--highlighter-default level responsive display)))
-  (setq highlight-indent-guides-responsive 'top) ;; 高亮当前缩进行
-  (set-face-foreground 'highlight-indent-guides-top-character-face "#3C3D34")
-  (set-face-background 'highlight-indent-guides-odd-face "#3C3D3B")
-  (set-face-background 'highlight-indent-guides-even-face "#3C3D3B")
-  (set-face-foreground 'highlight-indent-guides-character-face "#3C3D3B")
-  (setq highlight-indent-guides-highlighter-function 'my-highlighter)
-  (setq highlight-indent-guides-method 'character)
-  (setq highlight-indent-guides-responsive 'top)
-  (setq highlight-indent-guides-delay 0.05)
-  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
-
 ;; 图标插件 for doom-modeline/treemacs-nerd-icons
 (use-package nerd-icons
   :demand t)
@@ -1259,3 +1241,22 @@ modified buffers or special buffers."
 ;;------------------------------------------------------------------------------
 ;;;; 自动生成的东西
 ;;------------------------------------------------------------------------------
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(git-gutter:update-interval 1.0)
+ '(package-selected-packages
+   '(0blayout ace-jump-buffer ace-pinyin benchmark-init better-jumper bm
+              centaur-tabs cmake-mode company consult counsel
+              dart-mode dashboard deadgrep doom-modeline doom-themes
+              easysession exec-path-from-shell expand-region fanyi
+              git-gutter go-mode helpful highlight-blocks
+              highlight-indent-guides highlight-numbers iedit
+              imenu-list indent-bars lua-mode magit manage-minor-mode
+              markdown-mode mistty move-dup multiple-cursors neotree
+              olivetti orderless quickrun rainbow-delimiters rg
+              rust-mode shell-pop sideline-flymake symbol-overlay
+              tree-sitter-langs treemacs-nerd-icons tuareg vertico
+              vundo which-key windresize ws-butler yasnippet-snippets)))
