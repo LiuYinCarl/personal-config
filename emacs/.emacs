@@ -732,9 +732,12 @@
   :ensure t
   :demand t
   :bind (("C-c TAB" . company-complete-common))
-  :config (setq company-idle-delay       0     ;; 延迟补全时间
+  :config (setq company-idle-delay       0.2     ;; 延迟补全时间
+                company-minimum-prefix-length 2  ;; 触发补全所需的最小前缀字符数
+                company-selection-wrap-around t  ;; 光标到达列表末尾时，是否循环到开头
+                company-show-numbers t           ;; 在候选项前显示数字编号，用 M-0~M-9选择
                 company-mode             t
-                company-dabbrev-downcase nil)  ;; 补全区分大小写
+                company-dabbrev-downcase nil)    ;; 补全区分大小写
   (add-hook 'after-init-hook 'global-company-mode))
 
 ;;------------------------------------------------------------------------------
@@ -1241,22 +1244,3 @@ modified buffers or special buffers."
 ;;------------------------------------------------------------------------------
 ;;;; 自动生成的东西
 ;;------------------------------------------------------------------------------
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(git-gutter:update-interval 1.0)
- '(package-selected-packages
-   '(0blayout ace-jump-buffer ace-pinyin benchmark-init better-jumper bm
-              centaur-tabs cmake-mode company consult counsel
-              dart-mode dashboard deadgrep doom-modeline doom-themes
-              easysession exec-path-from-shell expand-region fanyi
-              git-gutter go-mode helpful highlight-blocks
-              highlight-indent-guides highlight-numbers iedit
-              imenu-list indent-bars lua-mode magit manage-minor-mode
-              markdown-mode mistty move-dup multiple-cursors neotree
-              olivetti orderless quickrun rainbow-delimiters rg
-              rust-mode shell-pop sideline-flymake symbol-overlay
-              tree-sitter-langs treemacs-nerd-icons tuareg vertico
-              vundo which-key windresize ws-butler yasnippet-snippets)))
