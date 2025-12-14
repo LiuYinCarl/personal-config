@@ -487,7 +487,7 @@
 
 ;; 自动找到当前光标下的关键字并进行编辑
 (use-package iedit
-  :demand t
+  :defer t
   :bind
   (("C-c ;" . iedit-mode) ;; 进入和退出编辑
    ("C-c '" . iedit-show/hide-context-lines))) ;; 只展示匹配行
