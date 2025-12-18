@@ -708,7 +708,8 @@
   :bind (("C-c h" . eldoc))
   :config
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd" "--background-index"))
-  (add-to-list 'eglot-server-programs '((python-mode)  "pyright-langserver" "--stdio"))
+  ;; (add-to-list 'eglot-server-programs '((python-mode)  "pyright-langserver" "--stdio"))
+  (add-to-list 'eglot-server-programs '((python-mode) "ty" "server"))
   (add-to-list 'eglot-server-programs '((lua-mode) "~/.emacs.d/plugins/lua-lsp/bin/lua-language-server"))
   (add-hook 'c-mode-hook       'eglot-ensure)
   (add-hook 'c++-mode-hook     'eglot-ensure)
