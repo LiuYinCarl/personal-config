@@ -322,9 +322,6 @@
 (use-package lua-mode
   :defer t)
 
-(use-package dart-mode
-  :defer t)
-
 (use-package llvm-mode
   :load-path "~/.emacs.d/plugins/llvm-mode")
 
@@ -361,23 +358,6 @@
 (add-hook 'tuareg-mode-hook #'merlin-mode)
 (add-hook 'caml-mode-hook #'merlin-mode)
 
-;; (use-package haskell-mode
-;;   :ensure t)
-
-;; ;; haskell 代码补全
-;; (use-package dante
-;;   :ensure t
-;;   :after haskell-mode
-;;   :commands 'dante-mode
-;;   :config
-;;   (flycheck-add-next-checker 'haskell-dante '(info . haskell-hlint))
-;;   :init
-;;   ;; (add-hook 'haskell-mode-hook 'flycheck-mode)
-;;   ;; OR for flymake support:
-;;   (add-hook 'haskell-mode-hook 'flymake-mode)
-;;   (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
-;;   (add-hook 'haskell-mode-hook 'dante-mode))
-
 ;;------------------------------------------------------------------------------
 ;;;; 文本编辑插件
 ;;------------------------------------------------------------------------------
@@ -413,11 +393,6 @@
   :defer t
   :bind ("M-o" . er/expand-region))
 
-;; 让括号变得不显眼
-;; (use-package parenface
-;;   :load-path "~/.emacs.d/plugins/parenface"
-;;   :config (set-face-foreground 'paren-face "#909595"))
-
 ;; 展示匹配的括号
 (use-package paren
   :ensure t
@@ -436,10 +411,6 @@
   :hook (prog-mode text-mode markdown-mode)
   :config
   (setq rainbow-delimiters-depth-N-face 8))
-
-;; (use-package avy
-;;   :defer t
-;;   :bind ("M-c" . avy-goto-word-1))
 
 ;; 替代 avy, 可以跳转中文
 (use-package ace-pinyin
@@ -514,7 +485,6 @@
 (global-set-key (kbd "C-c m l") 'easysession-switch-to)
 (global-set-key (kbd "C-c m s") 'easysession-save-as)
 
-
 ;; M-x windresize 启动，然后使用方向键调整窗口大小
 ;; 用 i 调整步长，o键或者M-S-<up>/<left>跳到其它窗口，? 显示帮助，调整完了按RET退出即可
 (use-package windresize
@@ -540,7 +510,7 @@
   :config
   (setq windmove-wrap-around t))
 
-;; tab 管理
+;; tab 管理，可以同时有多个窗口布局进行切换
 (use-package tab-bar
   :config
   (setq tab-bar-show nil) ;; 不在最上面展示 tab-bar 条
@@ -781,58 +751,41 @@
 (use-package consult
   :init
   (which-key-add-key-based-replacements
+    "C-c g"     "consult-goto-line"
     "C-c SPC ." "consult-ripgrep"
-    "C-c SPC B" "consult-buffer")
-  :bind
-  (("C-c SPC ." . (lambda () (interactive) (better-jumper-set-jump) (consult-ripgrep)))
-   ("C-c SPC B" . (lambda () (interactive) (better-jumper-set-jump) (consult-buffer)))))
+    "C-c SPC B" "consult-buffer"
+    "C-c SPC i" "consult-imenu"
+    "C-c SPC r" "consult-recent-file"
+    "C-c SPC f" "consult-find"
+    "C-c SPC m" "consult-man"
+    "C-c SPC g" "consult-git-grep"
+    "C-c SPC G" "consult-grep"
+    "C-c SPC b" "consult-line"
+    "C-c SPC B" "consult-bookmark"
+    )
 
-(use-package counsel
-  :init
-  (which-key-add-key-based-replacements ;; 为了让 which-key 知道 lambda 具体绑定的函数
-    "C-c SPC i" "counsel-imenu"
-    "C-c SPC k" "counsel-rg"
-    "C-c SPC r" "counsel-recentf"
-    "C-c SPC g" "counsel-git"
-    "C-c SPC d" "counsel-find-file"
-    "C-c SPC b" "counsel-grep-or-swiper")
-  :config
-  (setq ivy-use-virtual-buffers t)
+  ;; Use Consult to select xref locations with preview
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref)
   :bind
-  (("C-c SPC i" . (lambda () (interactive) (better-jumper-set-jump) (counsel-imenu)))     ;; 搜索 imenu list
-   ("C-c SPC r" . (lambda () (interactive) (better-jumper-set-jump) (counsel-recentf)))   ;; 搜索最近打开的文件
-   ("C-c SPC g" . (lambda () (interactive) (better-jumper-set-jump) (counsel-git)))       ;; 遵循 .gitignore 在项目中搜索文件
-   ("C-c SPC d" . (lambda () (interactive) (better-jumper-set-jump) (counsel-find-file))) ;; 从目录搜索文件
-   ;; 下面的命令特殊处理，默认输入当前光标下的关键字作为参数
-   ("C-c SPC k" . (lambda () (interactive) (better-jumper-set-jump)
-                    (counsel-rg (thing-at-point 'symbol)))) ;; 搜索项目内关键字
-   ("C-c SPC b" . (lambda () (interactive) (better-jumper-set-jump)
-                    (counsel-grep-or-swiper (thing-at-point 'symbol)))) ;; 搜索 buffer 内关键字
+  (("C-c g"     . (lambda () (interactive) (better-jumper-set-jump) (consult-goto-line)))
+   ("C-c SPC ." . (lambda () (interactive) (better-jumper-set-jump) (consult-ripgrep nil (thing-at-point 'symbol))))
+   ("C-c SPC B" . (lambda () (interactive) (better-jumper-set-jump) (consult-buffer)))
+   ("C-c SPC i" . (lambda () (interactive) (better-jumper-set-jump) (consult-imenu)))
+   ("C-c SPC r" . (lambda () (interactive) (better-jumper-set-jump) (consult-recent-file))) ;; 搜索最近打开的文件
+   ("C-c SPC f" . (lambda () (interactive) (better-jumper-set-jump) (consult-find))) ;; 在项目中搜索文件
+   ("C-c SPC m" . (lambda () (interactive) (better-jumper-set-jump) (consult-man))) ;; 查找 man 手册
+   ("C-c SPC g" . (lambda () (interactive) (better-jumper-set-jump) (consult-git-grep nil (thing-at-point 'symbol)))) ;; 在项目中搜索
+   ("C-c SPC G" . (lambda () (interactive) (better-jumper-set-jump) (consult-grep nil (thing-at-point 'symbol)))) ;; 在项目中搜索
+   ("C-c SPC b" . (lambda () (interactive) (better-jumper-set-jump) (consult-line (thing-at-point 'symbol)))) ;; 从 buffer 中搜索
+   ("C-c SPC B" .  consult-bookmark) ;; 添加/查看书签
    ))
 
-;; need by super-hint
-(use-package rg)
-
-(use-package super-hint
-  :load-path "~/.emacs.d/plugins/super-hint.el/"
+(use-package vertico
+  :init (vertico-mode 1)
   :config
-  (require 'super-hint-rg)
-  (require 'super-hint-xref)
-  ;; (super-hint-enable-xref) ;; then M-x xref-find-references to enjoy super-hint
-  (which-function-mode t)) ;; need open which-function mode
-
-(use-package ivy
-  :config
-  (ivy-mode 0) ;; just load config, not use
-  (setq ivy-height 20)
-  (setq ivy-count-format "%d/%d "))
-
-(if (version< emacs-version "27.1")
-    (ivy-mode 1)
-  (use-package vertico
-    :init (vertico-mode 1)
-    :config (setq vertico-scroll-margin 0
-                  vertico-count 20)))
+  (setq vertico-scroll-margin 0
+        vertico-count 20))
 
 ;; need by vertico
 (use-package savehist
@@ -940,11 +893,6 @@
 ;;;; 跳转插件
 ;;------------------------------------------------------------------------------
 
-(use-package goto-line-preview
-  :load-path "~/.emacs.d/plugins/goto-line-preview"
-  :demand t
-  :bind (("C-c g" . goto-line-preview)))
-
 ;; ivy-push-view/ivy-pop-view/ivy-switch-view 功能类似
 (use-package better-jumper
   :bind
@@ -952,31 +900,6 @@
    ("C-c [" . better-jumper-jump-backward)
    ("C-c ]" . better-jumper-jump-forward)
    ("C-c \\" . better-jumper-clear-jumps)))
-
-(use-package bm
-  :ensure t
-  :demand t
-  :init
-  (setq bm-restore-repository-on-load t)
-  :config
-  (setq bm-cycle-all-buffers t)
-  (setq bm-repository-file "~/.emacs.d/bm-repository")
-  (setq-default bm-buffer-persistence t)
-  (add-hook 'after-init-hook        'bm-repository-load)
-  (add-hook 'kill-buffer-hook       #'bm-buffer-save)
-  (add-hook 'after-save-hook        #'bm-buffer-save)
-  (add-hook 'find-file-hooks        #'bm-buffer-restore)
-  (add-hook 'after-revert-hook      #'bm-buffer-restore)
-  (add-hook 'vc-before-checkin-hook #'bm-buffer-save)
-  (add-hook 'kill-emacs-hook        #'(lambda nil
-                                        (bm-buffer-save-all)
-                                        (bm-repository-save)))
-  :bind
-  (("C-c b <right>" . bm-next)
-   ("C-c b <left>"  . bm-previous)
-   ("C-c b SPC"     . bm-toggle)
-   ("C-c b <up>"    . bm-show-all)
-   ("C-c b <down>"  . bm-show-quit-window)))
 
 (use-package fanyi
   :ensure t
@@ -1212,16 +1135,11 @@ modified buffers or special buffers."
  '(avy-lead-face-1 ((t (:background "White" :foreground "Red"))))
  '(avy-lead-face-2 ((t (:background "White" :foreground "Red"))))
  '(aw-leading-char-face ((t (:background "Black" :foreground "Orange" :height 180.0))))
- '(bm-face ((t (:background "DimGray"))))
- '(bm-fringe-face ((t (:background "DimGray"))))
- '(bm-fringe-persistent-face ((t (:background "DimGray"))))
- '(bm-persistent-face ((t (:background "DimGray"))))
  '(centaur-tabs-selected ((t (:inherit bold :foreground "Orange"))))
  '(deadgrep-filename-face ((t (:foreground "Orange"))))
  '(deadgrep-match-face ((t (:foreground "Green"))))
  '(font-lock-comment-face ((t (:foreground "Green" :inherit nil))))
  '(font-lock-doc-face ((t (:foreground "Cyan" :inherit nil))))
- '(goto-line-preview-hl ((t (:background "DimGray"))))
  '(highlight-numbers-number ((t (:foreground "Orange"))))
  '(hl-fill-column-face ((t (:background "DimGray"))))
  '(symbol-overlay-face-1 ((t (:background "DimGray"))))

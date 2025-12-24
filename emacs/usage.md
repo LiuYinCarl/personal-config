@@ -415,4 +415,73 @@ https://github.com/rizsotto/Bear
 
 (global-set-key (kbd "C-c m SPC") 'my-show-trailing-whitespace)
 
+(use-package bm
+  :ensure t
+  :demand t
+  :init
+  (setq bm-restore-repository-on-load t)
+  :config
+  (setq bm-cycle-all-buffers t)
+  (setq bm-repository-file "~/.emacs.d/bm-repository")
+  (setq-default bm-buffer-persistence t)
+  (add-hook 'after-init-hook        'bm-repository-load)
+  (add-hook 'kill-buffer-hook       #'bm-buffer-save)
+  (add-hook 'after-save-hook        #'bm-buffer-save)
+  (add-hook 'find-file-hooks        #'bm-buffer-restore)
+  (add-hook 'after-revert-hook      #'bm-buffer-restore)
+  (add-hook 'vc-before-checkin-hook #'bm-buffer-save)
+  (add-hook 'kill-emacs-hook        #'(lambda nil
+                                        (bm-buffer-save-all)
+                                        (bm-repository-save)))
+  :bind
+  (("C-c b <right>" . bm-next)
+   ("C-c b <left>"  . bm-previous)
+   ("C-c b SPC"     . bm-toggle)
+   ("C-c b <up>"    . bm-show-all)
+   ("C-c b <down>"  . bm-show-quit-window)))
+
+
+(use-package goto-line-preview
+    :load-path "~/.emacs.d/plugins/goto-line-preview"
+    :demand t
+    :bind (("C-c g" . goto-line-preview)))
+
+(use-package haskell-mode
+  :ensure t)
+
+;; haskell 代码补全
+(use-package dante
+  :ensure t
+  :after haskell-mode
+  :commands 'dante-mode
+  :config
+  (flycheck-add-next-checker 'haskell-dante '(info . haskell-hlint))
+  :init
+  ;; (add-hook 'haskell-mode-hook 'flycheck-mode)
+  ;; OR for flymake support:
+  (add-hook 'haskell-mode-hook 'flymake-mode)
+  (remove-hook 'flymake-diagnostic-functions 'flymake-proc-legacy-flymake)
+  (add-hook 'haskell-mode-hook 'dante-mode))
+
+
+;; 让括号变得不显眼
+(use-package parenface
+   :load-path "~/.emacs.d/plugins/parenface"
+   :config (set-face-foreground 'paren-face "#909595"))
+
+(use-package avy
+  :defer t
+  :bind ("M-c" . avy-goto-word-1))
+
+;; need by super-hint
+(use-package rg)
+
+(use-package super-hint
+  :load-path "~/.emacs.d/plugins/super-hint.el/"
+  :config
+  (require 'super-hint-rg)
+  (require 'super-hint-xref)
+  ;; (super-hint-enable-xref) ;; then M-x xref-find-references to enjoy super-hint
+  (which-function-mode t)) ;; need open which-function mode
+
 ```
