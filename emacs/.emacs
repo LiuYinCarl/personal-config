@@ -795,7 +795,7 @@
 (use-package orderless
   :init
   (setq completion-styles '(orderless basic)
-        orderless-matching-styles '(orderless-flex orderless-literal)
+        orderless-matching-styles '(orderless-regexp orderless-literal) ;; 选择匹配规则
         completion-category-defaults nil
         completion-category-overrides '((file (styles partial-completion)))))
 
