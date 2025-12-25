@@ -190,8 +190,8 @@
 (dolist (hook (list 'prog-mode-hook 'markdown-mode-hook))
   (add-hook hook (lambda () (setq show-trailing-whitespace t))))
 ;; 高亮当前行
-;; (global-hl-line-mode 1)
-;; (set-face-background 'hl-line "#3C3D3B")
+(global-hl-line-mode 1)
+(set-face-background 'hl-line "#3C3D3B")
 ;; 括号补全
 (electric-pair-mode t)
 ;; 字符编码优先级设置，优先选择的编码类型
@@ -833,7 +833,7 @@
 ;; (load-theme 'misterioso)
 (use-package doom-themes
   :demand t
-  :config (load-theme 'doom-opera t)) ;; doom-nova is ok.
+  :config (load-theme 'doom-opera t)) ;; doom-badger doom-nova, doom-opera is ok.
 
 (use-package doom-modeline
   :ensure t
