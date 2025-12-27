@@ -154,7 +154,7 @@
 
 ;; 设置默认字体大小 1 = 1/10 pt
 (if (display-graphic-p)
-    (set-face-attribute 'default nil :height 180) ;; GUI
+    (set-face-attribute 'default nil :height 240) ;; GUI
   (set-face-attribute 'default nil :height 130))  ;; 终端
 
 ;; GC 信息展示在 modeline
