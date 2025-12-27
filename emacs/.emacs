@@ -84,12 +84,20 @@
 ;;;; 启动优化配置
 ;;------------------------------------------------------------------------------
 
-(setq gc-cons-threshold (* 64 1024 1024))        ;; 64 MB
-(setq gcmh-high-cons-threshold (* 64 1024 1024)) ;; 64 MB
-(setq gcmh-idle-delay-factor 20)
-(setq jit-lock-defer-time 0.05)
-(setq read-process-output-max (* 1024 1024))
-(setq package-native-compile t)
+(if noninteractive ; in CLI session
+    (setq gc-cons-threshold (* 128 1024 1024)
+          gc-cons-percentage 1.0
+          read-process-output-max (* 8 1024 1024)
+          process-adaptive-read-buffering nil)
+  (setq gc-cons-threshold most-positive-fixnum))
+
+;; Garbage Collector Magic Hack
+(use-package gcmh
+  :diminish
+  :hook (emacs-startup . gcmh-mode)
+  :init (setq gcmh-idle-delay 'auto
+              gcmh-auto-idle-delay-factor 10
+              gcmh-high-cons-threshold #x4000000)) ; 64MB
 
 ;; minibuffer 禁用 GC
 (defun my-minibuffer-setup-hook ()
@@ -105,10 +113,6 @@
 (setq-default bidi-display-reordering 'left-to-right
               bidi-paragraph-direction 'left-to-right
               bidi-inhibit-bpa t)
-
-;; improves terminal emulator (vterm/eat) throughput
-(setq read-process-output-max (* 4 1024 1024)
-      process-adaptive-read-buffering nil)
 
 (setq fast-but-imprecise-scrolling t
       redisplay-skip-fontification-on-input t
@@ -830,10 +834,10 @@
 ;;;; 主题配置插件
 ;;------------------------------------------------------------------------------
 
-;; (load-theme 'misterioso)
+(load-theme 'misterioso)
 (use-package doom-themes
   :demand t
-  :config (load-theme 'doom-opera t)) ;; doom-badger doom-nova, doom-opera is ok.
+  :config (load-theme 'doom-nova t)) ;; doom-badger doom-nova, doom-opera is ok.
 
 (use-package doom-modeline
   :ensure t
