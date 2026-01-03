@@ -456,9 +456,9 @@
 (use-package multiple-cursors
   :defer t
   :bind
-  (("C-c l" . mc/edit-lines)
-   ("C-c j" . mc/mark-previous-like-this)
-   ("C-c k" . mc/mark-next-like-this)))
+  (("C-c e l" . mc/edit-lines)
+   ("C-c e j" . mc/mark-previous-like-this)
+   ("C-c e k" . mc/mark-next-like-this)))
 
 ;; 自动找到当前光标下的关键字并进行编辑
 (use-package iedit
@@ -755,7 +755,7 @@
 (use-package consult
   :init
   (which-key-add-key-based-replacements
-    "C-c g"     "consult-goto-line"
+    "C-c l"     "consult-goto-line"
     "C-c SPC ." "consult-ripgrep"
     "C-c SPC B" "consult-buffer"
     "C-c SPC i" "consult-imenu"
@@ -772,7 +772,7 @@
   (setq xref-show-xrefs-function #'consult-xref
         xref-show-definitions-function #'consult-xref)
   :bind
-  (("C-c g"     . (lambda () (interactive) (better-jumper-set-jump) (consult-goto-line)))
+  (("C-c l"     . (lambda () (interactive) (better-jumper-set-jump) (consult-goto-line)))
    ("C-c SPC ." . (lambda () (interactive) (better-jumper-set-jump) (consult-ripgrep nil (thing-at-point 'symbol))))
    ("C-c SPC B" . (lambda () (interactive) (better-jumper-set-jump) (consult-buffer)))
    ("C-c SPC i" . (lambda () (interactive) (better-jumper-set-jump) (consult-imenu)))
