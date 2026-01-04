@@ -757,14 +757,14 @@
   (which-key-add-key-based-replacements
     "C-c l"     "consult-goto-line"
     "C-c SPC ." "consult-ripgrep"
-    "C-c SPC B" "consult-buffer"
+    "C-c SPC b" "consult-buffer"
     "C-c SPC i" "consult-imenu"
     "C-c SPC r" "consult-recent-file"
     "C-c SPC f" "consult-find"
     "C-c SPC m" "consult-man"
     "C-c SPC g" "consult-git-grep"
     "C-c SPC G" "consult-grep"
-    "C-c SPC b" "consult-line"
+    "C-c SPC l" "consult-line"
     "C-c SPC B" "consult-bookmark"
     )
 
@@ -782,7 +782,7 @@
    ("C-c SPC g" . (lambda () (interactive) (better-jumper-set-jump) (consult-git-grep nil (thing-at-point 'symbol)))) ;; 在项目中搜索
    ("C-c SPC G" . (lambda () (interactive) (better-jumper-set-jump) (consult-grep nil (thing-at-point 'symbol)))) ;; 在项目中搜索
    ("C-c SPC b" . (lambda () (interactive) (better-jumper-set-jump) (consult-line (thing-at-point 'symbol)))) ;; 从 buffer 中搜索
-   ("C-c SPC B" .  consult-bookmark) ;; 添加/查看书签
+   ("C-c SPC B" . consult-bookmark) ;; 添加/查看书签
    ))
 
 (use-package vertico
