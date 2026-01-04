@@ -774,14 +774,14 @@
   :bind
   (("C-c l"     . (lambda () (interactive) (better-jumper-set-jump) (consult-goto-line)))
    ("C-c SPC ." . (lambda () (interactive) (better-jumper-set-jump) (consult-ripgrep nil (thing-at-point 'symbol))))
-   ("C-c SPC B" . (lambda () (interactive) (better-jumper-set-jump) (consult-buffer)))
+   ("C-c SPC b" . (lambda () (interactive) (better-jumper-set-jump) (consult-buffer)))
    ("C-c SPC i" . (lambda () (interactive) (better-jumper-set-jump) (consult-imenu)))
    ("C-c SPC r" . (lambda () (interactive) (better-jumper-set-jump) (consult-recent-file))) ;; 搜索最近打开的文件
    ("C-c SPC f" . (lambda () (interactive) (better-jumper-set-jump) (consult-find))) ;; 在项目中搜索文件
    ("C-c SPC m" . (lambda () (interactive) (better-jumper-set-jump) (consult-man))) ;; 查找 man 手册
    ("C-c SPC g" . (lambda () (interactive) (better-jumper-set-jump) (consult-git-grep nil (thing-at-point 'symbol)))) ;; 在项目中搜索
    ("C-c SPC G" . (lambda () (interactive) (better-jumper-set-jump) (consult-grep nil (thing-at-point 'symbol)))) ;; 在项目中搜索
-   ("C-c SPC b" . (lambda () (interactive) (better-jumper-set-jump) (consult-line (thing-at-point 'symbol)))) ;; 从 buffer 中搜索
+   ("C-c SPC l" . (lambda () (interactive) (better-jumper-set-jump) (consult-line (thing-at-point 'symbol)))) ;; 从 buffer 中搜索
    ("C-c SPC B" . consult-bookmark) ;; 添加/查看书签
    ))
 
