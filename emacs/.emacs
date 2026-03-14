@@ -91,14 +91,6 @@
           process-adaptive-read-buffering nil)
   (setq gc-cons-threshold most-positive-fixnum))
 
-;; Garbage Collector Magic Hack
-(use-package gcmh
-  :diminish
-  :hook (emacs-startup . gcmh-mode)
-  :init (setq gcmh-idle-delay 'auto
-              gcmh-auto-idle-delay-factor 10
-              gcmh-high-cons-threshold #x4000000)) ; 64MB
-
 ;; minibuffer 禁用 GC
 (defun my-minibuffer-setup-hook ()
   (setq gc-cons-threshold most-positive-fixnum))
@@ -926,33 +918,6 @@
   (setq which-key-side-window-max-height 0.35)
   (setq which-key-frame-max-height 20)
   (which-key-mode))
-
-(use-package delete-block
-  :demand t
-  :load-path "~/.emacs.d/plugins/delete-block"
-  :config
-  (defun delete-block-at-point ()
-    (interactive)
-    (delete-block-backward)
-    (delete-block-forward))
-  :bind
-  (("M-s DEL" . delete-block-at-point)
-   ;; 删除光标下左右两侧的空侧
-   ;; 这个函数是 Emacs 自带的，放这里只是为了对称
-   ("M-s SPC" . delete-horizontal-space)))
-
-(use-package quickrun
-  :config
-  (quickrun-add-command "c++/c17"
-    '((:command . "g++")
-      (:exec    . ("%c -std=c++17 -Wall %o -o %e %s" "%e %a"))
-      (:remove  . ("%e")))
-    :default "c++")
-  (quickrun-add-command "python"
-    '((:command . "python3")
-      (:exec    . ("%c %s")))
-    :mode 'python-mode)
-  :bind (("<f5>" . quickrun)))
 
 (use-package centaur-tabs
   :demand t

@@ -15,7 +15,7 @@ repo_dir="${HOME}/.emacs.d/plugins"
 
 # which repos you want to manage
 repos=(
-    "git@github.com:manateelazycat/awesome-tab.git"       \
+    # "git@github.com:manateelazycat/awesome-tab.git"       \
     "git@github.com:tarsius/hl-todo.git"                  \
     "git@github.com:scottjad/parenface.git"               \
     "git@github.com:redguardtoo/find-file-in-project.git" \
@@ -24,7 +24,7 @@ repos=(
     "git@github.com:joaotavora/breadcrumb.git"            \
     "git@github.com:jdtsmith/indent-bars.git"             \
     "git@github.com:manateelazycat/auto-save.git"         \
-    "git@github.com:manateelazycat/delete-block.git"      \
+    # "git@github.com:manateelazycat/delete-block.git"      \
     "git@github.com:nverno/llvm-mode.git"                 \
     "git@github.com:eval-exec/super-hint.el.git"          \
     "git@github.com:jart/disaster.git"

@@ -484,4 +484,40 @@ https://github.com/rizsotto/Bear
   ;; (super-hint-enable-xref) ;; then M-x xref-find-references to enjoy super-hint
   (which-function-mode t)) ;; need open which-function mode
 
+
+;; Garbage Collector Magic Hack
+(use-package gcmh
+  :diminish
+  :hook (emacs-startup . gcmh-mode)
+  :init (setq gcmh-idle-delay 'auto
+              gcmh-auto-idle-delay-factor 10
+              gcmh-high-cons-threshold #x4000000)) ; 64MB
+
+(use-package delete-block
+  :demand t
+  :load-path "~/.emacs.d/plugins/delete-block"
+  :config
+  (defun delete-block-at-point ()
+    (interactive)
+    (delete-block-backward)
+    (delete-block-forward))
+  :bind
+  (("M-s DEL" . delete-block-at-point)
+   ;; 删除光标下左右两侧的空侧
+   ;; 这个函数是 Emacs 自带的，放这里只是为了对称
+   ("M-s SPC" . delete-horizontal-space)))
+
+(use-package quickrun
+  :config
+  (quickrun-add-command "c++/c17"
+    '((:command . "g++")
+      (:exec    . ("%c -std=c++17 -Wall %o -o %e %s" "%e %a"))
+      (:remove  . ("%e")))
+    :default "c++")
+  (quickrun-add-command "python"
+    '((:command . "python3")
+      (:exec    . ("%c %s")))
+    :mode 'python-mode)
+  :bind (("<f5>" . quickrun)))
+
 ```
