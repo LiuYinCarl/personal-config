@@ -29,3 +29,7 @@ end
 function y
     yazi
 end
+
+function ec
+    cat ~/.emacs.d/.tmp_copy_region
+end
