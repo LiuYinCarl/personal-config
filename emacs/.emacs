@@ -84,6 +84,9 @@
 ;;;; 启动优化配置
 ;;------------------------------------------------------------------------------
 
+;; 修改告警级别 处理 "Missing lexical-binding cookie" 警告
+;; (setq warning-minimum-level :error)
+
 (if noninteractive ; in CLI session
     (setq gc-cons-threshold (* 128 1024 1024)
           gc-cons-percentage 1.0
