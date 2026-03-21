@@ -257,6 +257,7 @@
                'text-mode-hook
                'tuareg-mode-hook
                'conf-mode-hook
+               'racket-mode-hook
                ))
   (add-hook hook (lambda () (display-line-numbers-mode))))
 
