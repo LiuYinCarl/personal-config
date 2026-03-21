@@ -80,6 +80,9 @@
 ;; opam user-setup install
 ;; 查看 ocamlmerlin path: whereis ocamlmerlin
 
+;; 安装 racket Language Server
+;; raco pkg install racket-langserver
+
 ;;------------------------------------------------------------------------------
 ;;;; 启动优化配置
 ;;------------------------------------------------------------------------------
@@ -329,6 +332,9 @@
 
 (use-package llvm-mir-mode
   :load-path "~/.emacs.d/plugins/llvm-mode")
+
+(use-package racket-mode
+  :defer t)
 
 (use-package markdown-mode
   :defer t
@@ -688,6 +694,7 @@
   (add-hook 'lua-mode-hook     'eglot-ensure)
   (add-hook 'rust-mode-hook    'eglot-ensure)
   (add-hook 'dart-mode-hook    'eglot-ensure)
+  (add-hook 'racket-mode-hook  'eglot-ensure)
   (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1))) ;; 关闭行内函数参数展示
   (setq eldoc-idle-delay 1000000)  ;; 修改 eldoc-mode 的展示延迟时间
   (setq completion-ignore-case t)  ;; company-capf匹配时不区分大小写
