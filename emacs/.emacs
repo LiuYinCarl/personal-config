@@ -84,41 +84,6 @@
 ;; raco pkg install racket-langserver
 
 ;;------------------------------------------------------------------------------
-;;;; 启动优化配置
-;;------------------------------------------------------------------------------
-
-;; 修改告警级别 处理 "Missing lexical-binding cookie" 警告
-;; (setq warning-minimum-level :error)
-
-(if noninteractive ; in CLI session
-    (setq gc-cons-threshold (* 128 1024 1024)
-          gc-cons-percentage 1.0
-          read-process-output-max (* 8 1024 1024)
-          process-adaptive-read-buffering nil)
-  (setq gc-cons-threshold most-positive-fixnum))
-
-;; minibuffer 禁用 GC
-(defun my-minibuffer-setup-hook ()
-  (setq gc-cons-threshold most-positive-fixnum))
-
-(defun my-minibuffer-exit-hook ()
-  (setq gc-cons-threshold (* 64 1024 1024)))
-
-(add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
-(add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
-
-;; if you don't use RTL ever, this could improve perf
-(setq-default bidi-display-reordering 'left-to-right
-              bidi-paragraph-direction 'left-to-right
-              bidi-inhibit-bpa t)
-
-(setq fast-but-imprecise-scrolling t
-      redisplay-skip-fontification-on-input t
-      inhibit-compacting-font-caches t)
-
-(setq idle-update-delay 1.0)
-
-;;------------------------------------------------------------------------------
 ;;;; 包管理配置
 ;;------------------------------------------------------------------------------
 
@@ -209,12 +174,6 @@
 (set-terminal-coding-system 'utf-8)
 (modify-coding-system-alist 'process "*" 'utf-8)
 (setq default-process-coding-system '(utf-8 . utf-8))
-;; 解决大文件打开慢的问题
-(setq-default bidi-display-reordering nil)
-(setq bidi-inhibit-bpa t
-      long-line-threshold 1000
-      large-hscroll-threshold 1000
-      syntax-wholeline-max 1000)
 ;; kill current buffer without verify
 (global-set-key (kbd "C-x k") 'kill-current-buffer)
 ;; 去掉行尾的续行符号
@@ -229,37 +188,10 @@
 ;; 设置滚动积极性
 (setq scroll-up-aggressively 0.02)
 (setq scroll-down-aggressively 0.02)
-
 ;; MacOS set option as meta
 (setq mac-option-key-is-meta t)
-
 ;; 行号展示，26以下可以使用 linum 插件
-;; (global-display-line-numbers-mode)
-;; 需要展示行号的 mode
-(dolist (hook (list
-               'bash-mode-hook
-               'caml-mode-hook
-               'c++-mode-hook
-               'c-mode-common-hook
-               'c-mode-hook
-               'cmake-mode-hook
-               'emacs-lisp-mode-hook
-               'go-mode-hook
-               'lisp-mode-hook
-               'llvm-mode-hook
-               'lua-mode-hook
-               'makefile-gmake-mode-hook
-               'markdown-ts-mode-hook
-               'python-mode-hook
-               'rust-mode-hook
-               'scheme-mode-hook
-               'sh-mode-hook
-               'text-mode-hook
-               'tuareg-mode-hook
-               'conf-mode-hook
-               'racket-mode-hook
-               ))
-  (add-hook hook (lambda () (display-line-numbers-mode))))
+(global-display-line-numbers-mode)
 
 ;;------------------------------------------------------------------------------
 ;;;; Emacs 优化插件
@@ -1047,18 +979,10 @@ modified buffers or special buffers."
   (save-excursion
     (goto-char start)
     (let ((end-pos (copy-marker end)))
-      (dolist (pair '(("（" . "(")
-                      ("）" . ")")
-                      ("【" . "[")
-                      ("】" . "]")
-                      ("｛" . "{")
-                      ("｝" . "}")
-                      ("《" . "<")
-                      ("》" . ">")
-                      ("「" . "\"")
-                      ("」" . "\"")
-                      ("”" . "\"")
-                      ("“" . "\"")))
+      (dolist (pair '(("（" . "(") ("）" . ")") ("【" . "[")
+                      ("】" . "]") ("｛" . "{") ("｝" . "}")
+                      ("《" . "<") ("》" . ">") ("「" . "\"")
+                      ("」" . "\"") ("”" . "\"") ("“" . "\"")))
         (goto-char start)
         (while (search-forward (car pair) end-pos t)
           (replace-match (cdr pair) t t)))
@@ -1089,41 +1013,6 @@ modified buffers or special buffers."
         ;;设置背景颜色，第一个是显示的颜色
         highlight-blocks--rainbow-colors '("#3C3B3A" "#000000" "#464641")
         highlight-blocks-max-face-count (length highlight-blocks--rainbow-colors)))
-
-(defun highlight-blocks--get-bounds ()
-  (let ((result '())
-	    (parse-sexp-ignore-comments t))
-    (condition-case nil
-	    (let* ((parse-state (syntax-ppss))
-	           (starting-pos (if (or (nth 3 parse-state)
-				                     (nth 4 parse-state))
-				                 (nth 8 parse-state)
-			                   (point)))
-	           (begins (nreverse (nth 9 parse-state)))
-	           (end starting-pos)
-	           (i 0))
-	      (while (or (eq highlight-blocks-max-innermost-block-count t)
-		             (< i highlight-blocks-max-innermost-block-count))
-	        (setq end (scan-lists end 1 1))
-	        (push (cons (pop begins) end) result)
-	        (setq i (1+ i))))
-      (scan-error))
-    (last result)))
-
-(defun highlight-blocks--define-rainbow-colors (colors)
-  (dotimes (i (length colors))
-    (face-spec-set
-     (intern (format "highlight-blocks-depth-%d-face" (1+ i)))
-     `((((class color) (background dark))  :background ,(nth i colors))
-       (((class color) (background light)) :background ,(nth i colors)))
-     'face-defface-spec)))
-
-(highlight-blocks--define-rainbow-colors highlight-blocks--rainbow-colors)
-
-(add-hook 'emacs-lisp-mode-hook       'highlight-blocks-mode)
-(add-hook 'lisp-interaction-mode-hook 'highlight-blocks-mode)
-(add-hook 'lisp-mode-hook             'highlight-blocks-mode)
-(add-hook 'scheme-mode-hook           'highlight-blocks-mode)
 
 ;;------------------------------------------------------------------------------
 ;;;; 外观配置
