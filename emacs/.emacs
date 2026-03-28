@@ -1041,6 +1041,28 @@ modified buffers or special buffers."
          (ignore))))
     (query-replace w1 w2)))
 
+(defun chinese-punctuation-to-ascii (start end)
+  "将中文括号和引号转换为英文符号。"
+  (interactive "r")
+  (save-excursion
+    (goto-char start)
+    (let ((end-pos (copy-marker end)))
+      (dolist (pair '(("（" . "(")
+                      ("）" . ")")
+                      ("【" . "[")
+                      ("】" . "]")
+                      ("｛" . "{")
+                      ("｝" . "}")
+                      ("《" . "<")
+                      ("》" . ">")
+                      ("「" . "\"")
+                      ("」" . "\"")
+                      ("”" . "\"")
+                      ("“" . "\"")))
+        (goto-char start)
+        (while (search-forward (car pair) end-pos t)
+          (replace-match (cdr pair) t t)))
+      (set-marker end-pos nil))))
 
 (global-set-key (kbd "C-c m p") 'my-show-file-name)
 (global-set-key (kbd "C-c m c") 'my-open-emacs-config)
@@ -1051,6 +1073,8 @@ modified buffers or special buffers."
 (global-set-key (kbd "C-c m k") 'my-kill-all-file-buffers)
 (global-set-key (kbd "C-c m f") 'my-query-and-replace)
 (global-set-key (kbd "C-c m a") 'align-regexp)
+(global-set-key (kbd "C-c z")   'chinese-punctuation-to-ascii)
+(global-set-key (kbd "M-s SPC")   'delete-horizontal-space)
 
 ;; auto full screen on GUI mode
 (add-hook 'window-setup-hook #'toggle-frame-maximized t)
