@@ -41,6 +41,11 @@
 ;; 2. 执行 deadgrep-edit-mode, 使得可以编辑 deadgrep buffer
 ;; 3. 执行 query-replace 对 deadgrep 内文本进行替换，? 查看快捷键
 
+;; replace-string       纯文本替换
+;; replace-regexp       正则快速替换
+;; query-replace        交互式逐个确认替换（字符串）
+;; query-replace-regexp 交互式逐个确认替换（正则）
+
 ;; 筛选/过滤文件中的指定行
 ;; keep-lines/flush-lines
 
@@ -716,7 +721,7 @@
    ("C-c SPC m" . (lambda () (interactive) (better-jumper-set-jump) (consult-man))) ;; 查找 man 手册
    ("C-c SPC g" . (lambda () (interactive) (better-jumper-set-jump) (consult-git-grep nil (thing-at-point 'symbol)))) ;; 在项目中搜索
    ("C-c SPC G" . (lambda () (interactive) (better-jumper-set-jump) (consult-grep nil (thing-at-point 'symbol)))) ;; 在项目中搜索
-   ("C-c SPC l" . (lambda () (interactive) (better-jumper-set-jump) (consult-line (thing-at-point 'symbol)))) ;; 从 buffer 中搜索
+   ("C-c SPC l" . (lambda () (interactive) (better-jumper-set-jump) (consult-line))) ;; 从 buffer 中搜索
    ("C-c SPC B" . consult-bookmark) ;; 添加/查看书签
    ))
 
