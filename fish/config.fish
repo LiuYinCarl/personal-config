@@ -18,6 +18,10 @@ function em
     emacs -nw $argv
 end
 
+function b
+    basilk
+end
+
 function c
     clear
 end
@@ -28,6 +32,10 @@ end
 
 function y
     yazi
+end
+
+function gs
+    git status
 end
 
 function ec
