@@ -520,4 +520,14 @@ https://github.com/rizsotto/Bear
     :mode 'python-mode)
   :bind (("<f5>" . quickrun)))
 
+;; 切换窗口时未获得焦点的窗口失去高光
+(use-package dimmer
+  :load-path "~/.emacs.d/plugins/dimmer.el"
+  :config
+  (dimmer-configure-which-key)
+  (dimmer-configure-company-box)
+  (dimmer-configure-gnus)
+  (dimmer-configure-posframe)
+  (dimmer-mode t))
+
 ```

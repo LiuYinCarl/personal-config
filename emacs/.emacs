@@ -793,19 +793,8 @@
   (setq doom-modeline-persp-name t)
   (setq doom-modeline-lsp t))
 
-;; 切换窗口时未获得焦点的窗口失去高光
-(use-package dimmer
-  :load-path "~/.emacs.d/plugins/dimmer.el"
-  :config
-  (dimmer-configure-which-key)
-  (dimmer-configure-company-box)
-  (dimmer-configure-gnus)
-  (dimmer-configure-posframe)
-  (dimmer-mode t))
-
 (use-package magit
-  :defer t
-  )
+  :defer t)
 
 ;; 显示被编辑过的行和 git 操作
 (use-package git-gutter
