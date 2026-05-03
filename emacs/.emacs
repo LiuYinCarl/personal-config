@@ -519,7 +519,8 @@
 ;; 将代码结构展示在右侧窗口
 (use-package imenu-list
   :bind ("C-c i" . imenu-list-smart-toggle)
-  :config (setq imenu-list-focus-after-activation t))
+  :config (setq imenu-list-focus-after-activation t
+                imenu-list-size 0.2))
 
 (use-package dashboard
   :ensure t
