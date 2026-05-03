@@ -590,6 +590,8 @@
   :bind (("M-s i" . symbol-overlay-put)
          ("M-s k" . symbol-overlay-switch-forward)
          ("M-s j" . symbol-overlay-switch-backward)
+         ("M-s n" . symbol-overlay-jump-next)
+         ("M-s b" . symbol-overlay-jump-prev)
          ("M-s 9" . symbol-overlay-mode)
          ("M-s 0" . symbol-overlay-remove-all))
   :config
@@ -1029,10 +1031,15 @@ modified buffers or special buffers."
  '(font-lock-doc-face ((t (:foreground "Cyan" :inherit nil))))
  '(highlight-numbers-number ((t (:foreground "Orange"))))
  '(hl-fill-column-face ((t (:background "DimGray"))))
- '(symbol-overlay-face-1 ((t (:background "DimGray"))))
- '(symbol-overlay-face-2 ((t (:background "Red"))))
- '(symbol-overlay-face-3 ((t (:background "Grey"))))
- '(symbol-overlay-face-4 ((t (:background "Orange")))))
+ '(symbol-overlay-default-face ((t (:background "#3D4250" :box (:line-width 1 :color "#4D5260")))))
+ '(symbol-overlay-face-1 ((t (:background "#3A4058" :box (:line-width 1 :color "#5A6080")))))
+ '(symbol-overlay-face-2 ((t (:background "#4A4038" :box (:line-width 1 :color "#6A6050")))))
+ '(symbol-overlay-face-3 ((t (:background "#38483A" :box (:line-width 1 :color "#506852")))))
+ '(symbol-overlay-face-4 ((t (:background "#46384A" :box (:line-width 1 :color "#66506A")))))
+ '(symbol-overlay-face-5 ((t (:background "#384848" :box (:line-width 1 :color "#506868")))))
+ '(symbol-overlay-face-6 ((t (:background "#483A44" :box (:line-width 1 :color "#685A64")))))
+ '(symbol-overlay-face-7 ((t (:background "#484438" :box (:line-width 1 :color "#686450")))))
+ '(symbol-overlay-face-8 ((t (:background "#3A4450" :box (:line-width 1 :color "#5A6470"))))))
 
 ;;------------------------------------------------------------------------------
 ;;;; 工具生成的配置，不同机器差异不大
