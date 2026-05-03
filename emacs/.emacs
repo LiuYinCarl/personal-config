@@ -774,7 +774,7 @@
 ;;;; 主题配置插件
 ;;------------------------------------------------------------------------------
 
-(load-theme 'misterioso)
+;; (load-theme 'misterioso)
 (use-package doom-themes
   :demand t
   :config (load-theme 'doom-nova t)) ;; doom-badger doom-nova, doom-opera is ok.
