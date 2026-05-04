@@ -130,6 +130,8 @@
  mode-line-misc-info
  '("[GC " (:eval (number-to-string gcs-done)) "|" (:eval (format "%.2f" gc-elapsed)) "s]"))
 
+;; 开启鼠标模式
+(xterm-mouse-mode 1)
 ;; 设置光标颜色
 (set-cursor-color "white")
 ;; 选中即复制功能
