@@ -428,7 +428,7 @@
   )
 
 (global-set-key (kbd "C-c m l") 'easysession-switch-to)
-(global-set-key (kbd "C-c m s") 'easysession-save-as)
+(global-set-key (kbd "C-c m s") 'easysession-save)
 
 ;; M-x windresize 启动，然后使用方向键调整窗口大小
 ;; 用 i 调整步长，o键或者M-S-<up>/<left>跳到其它窗口，? 显示帮助，调整完了按RET退出即可
