@@ -41,3 +41,7 @@ end
 function ec
     cat ~/.emacs.d/.tmp_copy_region
 end
+
+function ba
+    bat --theme ansi $argv
+end
