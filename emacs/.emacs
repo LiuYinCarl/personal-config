@@ -776,6 +776,27 @@
   (setq enable-recursive-minibuffers t))
 
 ;;------------------------------------------------------------------------------
+;;;; AI
+;;------------------------------------------------------------------------------
+
+;; 配置 API KEY: 在 ~/.bashrc 或 ~/.zshrc 等配置文件中导出 api-key
+;; export DEEPSEEK_API_KEY="sk-your-key-here"
+(use-package gptel
+  :ensure t
+  :config
+  ;; DeepSeek backend (uses api.deepseek.com)
+  (gptel-make-deepseek "DeepSeek"
+    :stream t
+    :key (lambda () (getenv "DEEPSEEK_API_KEY")))
+  ;; Set as default
+  (setq gptel-model  'deepseek-v4-pro
+        gptel-backend (gptel-get-backend "DeepSeek"))
+  :bind
+  (("C-c SPC 1" . gptel)
+   ("C-c SPC 2" . gptel-menu)
+   ("C-c SPC 3" . gptel-send)))
+
+;;------------------------------------------------------------------------------
 ;;;; 主题配置插件
 ;;------------------------------------------------------------------------------
 
