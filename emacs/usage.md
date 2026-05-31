@@ -530,4 +530,28 @@ https://github.com/rizsotto/Bear
   (dimmer-configure-posframe)
   (dimmer-mode t))
 
+;; shell-pop 是在 Term Mode 之下的 term-char-mode
+;; 如果想要操作 buffer，比如看历史记录，需要切换到 term-line-mode
+;; C-c C-j 切换到 term-line-mode
+;; C-c C-k 切换到 term-char-mode
+(use-package shell-pop
+  :demand t
+  :init
+  (setq shell-pop-default-directory "./"
+        shell-pop-shell-type (quote ("ansi-term" "*ansi-term*" (lambda nil (ansi-term shell-pop-term-shell))))
+        shell-pop-term-shell "/bin/bash"
+        shell-pop-universal-key "C-t"
+        shell-pop-window-size 50
+        shell-pop-full-span t
+        shell-pop-window-position "bottom"
+        shell-pop-autocd-to-working-dir t
+        shell-pop-restore-window-configuration t
+        shell-pop-cleanup-buffer-at-process-exit t))
+
+;; 使用 shell-pop 的时候避免退出 Emacs 时再确认一次
+(require 'cl-lib)
+(defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
+  (cl-letf (((symbol-function #'process-list) (lambda ())))
+    ad-do-it))
+
 ```
