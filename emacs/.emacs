@@ -81,6 +81,9 @@
 ;; go install golang.org/x/tools/gopls@latest
 ;; PATH=$PATH:$(go env GOPATH)/bin # 添加到 .bashrc
 
+;; 安装 Typescript LSP Server
+;; npm install -g typescript-language-server typescript
+
 ;; opam install merlin
 ;; opam user-setup install
 ;; 查看 ocamlmerlin path: whereis ocamlmerlin
