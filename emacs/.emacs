@@ -483,7 +483,8 @@
   (treemacs-git-mode 'simple)
   (treemacs-hide-gitignored-files-mode t)
   (setq treemacs-width 30)
-  (setq treemacs-expand-after-init nil))
+  (setq treemacs-expand-after-init nil)
+  (setq treemacs-space-between-root-nodes nil))
 
 ;; 文件树 安装字体 https://www.nerdfonts.com/font-downloads
 (use-package treemacs-nerd-icons
