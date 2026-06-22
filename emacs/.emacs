@@ -202,6 +202,9 @@
 (setq mac-option-key-is-meta t)
 ;; 行号展示，26以下可以使用 linum 插件
 (global-display-line-numbers-mode)
+;; Emacs 29/30 已知 bug：行号渲染优化与 buffer overlay 冲突导致行错乱
+(setq display-line-numbers-major-tick 0
+      display-line-numbers-minor-tick 0)
 
 ;;------------------------------------------------------------------------------
 ;;;; Emacs 优化插件
