@@ -721,8 +721,12 @@
 (use-package vertico
   :init (vertico-mode 1)
   :config
+  (require 'vertico-directory)
   (setq vertico-scroll-margin 0
-        vertico-count 20))
+        vertico-count 20)
+  (keymap-set vertico-map "RET" #'vertico-directory-enter)
+  (keymap-set vertico-map "DEL" #'vertico-directory-delete-char)
+  (keymap-set vertico-map "M-DEL" #'vertico-directory-delete-word))
 
 ;; need by vertico
 (use-package savehist
