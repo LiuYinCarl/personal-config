@@ -103,9 +103,9 @@
 ;; (add-to-list 'package-archives '("gnu" . "http://mirrors.cloud.tencent.com/elpa/gnu/"))
 ;; (add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
 ;; USTC 源
-(setq package-archives '(("gnu" . "http://mirrors.ustc.edu.cn/elpa/gnu/")
-                         ("melpa" . "http://mirrors.ustc.edu.cn/elpa/melpa/")
-                         ("nongnu" . "http://mirrors.ustc.edu.cn/elpa/nongnu/")))
+(setq package-archives '(("gnu" . "https://mirrors.ustc.edu.cn/elpa/gnu/")
+                         ("melpa" . "https://mirrors.ustc.edu.cn/elpa/melpa/")
+                         ("nongnu" . "https://mirrors.ustc.edu.cn/elpa/nongnu/")))
 
 
 (setq package-check-signature nil) ;;个别时候会出现签名校验失败
@@ -128,17 +128,12 @@
     (set-face-attribute 'default nil :height 230) ;; GUI
   (set-face-attribute 'default nil :height 130))  ;; 终端
 
-;; GC 信息展示在 modeline
-(setq-default
- mode-line-misc-info
- '("[GC " (:eval (number-to-string gcs-done)) "|" (:eval (format "%.2f" gc-elapsed)) "s]"))
-
 ;; 开启鼠标模式
 (xterm-mouse-mode 1)
 ;; 设置光标颜色
 (set-cursor-color "white")
 ;; 选中即复制功能
-(setq x-select-enable-primary t)
+(setq select-enable-primary t)
 ;; 状态栏显示列数
 (column-number-mode 1)
 ;; GUI 不显示工具栏
@@ -148,7 +143,7 @@
 ;; 不显示启动界面
 (setq inhibit-splash-screen t)
 ;; 将yes/no 作为确认改成 y/n
-(fset 'yes-or-no-p 'y-or-n-p)
+(setq use-short-answers t)
 ;; 关闭备份文件功能
 (setq make-backup-files nil)
 ;; 设置备份文件目录
@@ -195,9 +190,6 @@
 (setq scroll-conservatively 100)
 ;; 设置平滑滚动
 (setq scroll-step 1)
-;; 设置滚动积极性
-(setq scroll-up-aggressively 0.02)
-(setq scroll-down-aggressively 0.02)
 ;; MacOS set option as meta
 (setq mac-option-key-is-meta t)
 ;; 行号展示，26以下可以使用 linum 插件
@@ -205,6 +197,10 @@
 ;; Emacs 29/30 已知 bug：行号渲染优化与 buffer overlay 冲突导致行错乱
 (setq display-line-numbers-major-tick 0
       display-line-numbers-minor-tick 0)
+
+;; GUI 下像素级平滑滚动（Emacs 29+）
+(when (fboundp 'pixel-scroll-precision-mode)
+  (pixel-scroll-precision-mode 1))
 
 ;;------------------------------------------------------------------------------
 ;;;; Emacs 优化插件
@@ -349,9 +345,7 @@
 
 ;; 展示匹配的括号
 (use-package paren
-  :ensure t
-  :demand t
-  :init (show-paren-mode t)
+  :ensure nil
   :hook (after-init . show-paren-mode)
   :config
   (setq show-paren-when-point-inside-paren t
@@ -359,12 +353,8 @@
         show-paren-delay 0.0))
 
 ;; 彩虹括号
-(use-package rainbow-delimiters-mode
-  :ensure rainbow-delimiters
-  :init (rainbow-delimiters-mode t)
-  :hook (prog-mode text-mode markdown-mode)
-  :config
-  (setq rainbow-delimiters-depth-N-face 8))
+(use-package rainbow-delimiters
+  :hook (prog-mode text-mode markdown-mode))
 
 ;; 替代 avy, 可以跳转中文
 (use-package ace-pinyin
@@ -538,7 +528,16 @@
   :ensure t
   :config
   (dashboard-setup-startup-hook)
-  (setq dashboard-startup-banner 2)
+  ;; 不显示 banner/Emacs logo：dashboard-startup-banner 的合法取值里没有"无 banner"，
+  ;; 官方 README 的方式是从 dashboard-startupify-list 中去掉 dashboard-insert-banner
+  (setq dashboard-startupify-list
+        '(dashboard-insert-newline
+          dashboard-insert-banner-title
+          dashboard-insert-newline
+          dashboard-insert-init-info
+          dashboard-insert-items
+          dashboard-insert-newline
+          dashboard-insert-footer))
   (setq dashboard-center-content t)
   (setq dashboard-set-footer nil)
   (setq dashboard-items '((recents  . 15)
@@ -564,12 +563,45 @@
 ;; Emacs 终端，C-c C-c 发送 Ctrl-c
 (if (not (version< emacs-version "29.1"))
     (use-package mistty
-      :bind (("C-c s" . mistty)
+      :bind (("C-c s" . my-mistty-toggle)
              ;; 注册希望让 shell 而不是 Emacs 处理的按键
              :map mistty-prompt-map
              ("<up>" . mistty-send-key)
-             ("<down>" . mistty-send-key)))
+             ("<down>" . mistty-send-key)
+             ;; fish 目录历史
+             ("M-<up>" . mistty-send-key)
+             ("M-<down>" . mistty-send-key)
+             ("M-<left>" . mistty-send-key)
+             ("M-<right>" . mistty-send-key))
+      :config
+      (defun my-mistty-toggle ()
+        "在当前窗口下方显示/隐藏 mistty 终端。"
+        (interactive)
+        (if-let ((mistty-win (cl-find-if
+                              (lambda (win)
+                                (string-prefix-p "*mistty" (buffer-name (window-buffer win))))
+                              (window-list))))
+            (if (one-window-p t)
+                (bury-buffer (window-buffer mistty-win))
+              (delete-window mistty-win))
+          (call-interactively 'mistty)))
+      ;; 如果系统有 fish 就用 fish，否则让 mistty 按默认规则兜底
+      (when-let ((fish (executable-find "fish")))
+        (setq mistty-shell-command `(,fish "-i")))
+      ;; 在当前窗口下方打开 mistty（类似 VS Code 终端），高度占 40%
+      (add-to-list 'display-buffer-alist
+                   '("\\*mistty"
+                     (display-buffer-below-selected)
+                     (window-height . 0.4))))
   )
+
+;; 使用 shell-pop 的时候避免退出 Emacs 时再确认一次
+(require 'cl-lib)
+(defun my-no-query-kill-emacs (orig-fun &rest args)
+  (cl-letf (((symbol-function #'process-list) (lambda ())))
+    (apply orig-fun args)))
+(advice-add 'save-buffers-kill-emacs :around #'my-no-query-kill-emacs)
+
 
 ;;------------------------------------------------------------------------------
 ;;;; 符号管理插件
@@ -609,23 +641,24 @@
 (use-package eglot
   :if (not (version<= emacs-version "26.1"))
   :ensure t
-  :demand t
   :bind (("C-c h" . eldoc))
+  ;; 钩子放在 :hook 段，包加载前就注册；
+  ;; 打开对应文件时由 eglot-ensure 的 autoload 拉起 eglot
+  :hook ((c-mode
+          c++-mode
+          python-mode
+          go-mode
+          haskell-mode
+          lua-mode
+          rust-mode
+          dart-mode
+          racket-mode
+          typescript-ts-mode) . eglot-ensure)
   :config
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd" "--background-index"))
   ;; (add-to-list 'eglot-server-programs '((python-mode)  "pyright-langserver" "--stdio"))
   (add-to-list 'eglot-server-programs '((python-mode) "ty" "server"))
   (add-to-list 'eglot-server-programs '((lua-mode) "~/.emacs.d/plugins/lua-lsp/bin/lua-language-server"))
-  (add-hook 'c-mode-hook       'eglot-ensure)
-  (add-hook 'c++-mode-hook     'eglot-ensure)
-  (add-hook 'python-mode-hook  'eglot-ensure)
-  (add-hook 'go-mode-hook      'eglot-ensure)
-  (add-hook 'haskell-mode-hook 'eglot-ensure)
-  (add-hook 'lua-mode-hook     'eglot-ensure)
-  (add-hook 'rust-mode-hook    'eglot-ensure)
-  (add-hook 'dart-mode-hook    'eglot-ensure)
-  (add-hook 'racket-mode-hook  'eglot-ensure)
-  (add-hook 'typescript-ts-mode-hook 'eglot-ensure)
   (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1))) ;; 关闭行内函数参数展示
   (setq eldoc-idle-delay 1000000)  ;; 修改 eldoc-mode 的展示延迟时间
   (setq completion-ignore-case t)  ;; company-capf匹配时不区分大小写
@@ -638,15 +671,16 @@
 ;; 自动补全 https://www.emacswiki.org/emacs/CompanyMode
 (use-package company
   :ensure t
-  :demand t
   :bind (("C-c TAB" . company-complete-common))
+  ;; 放在 :init，包加载前就注册；after-init 时由 autoload 拉起 company
+  :init (add-hook 'after-init-hook 'global-company-mode)
   :config (setq company-idle-delay       0.2     ;; 延迟补全时间
                 company-minimum-prefix-length 2  ;; 触发补全所需的最小前缀字符数
                 company-selection-wrap-around t  ;; 光标到达列表末尾时，是否循环到开头
                 company-show-numbers t           ;; 在候选项前显示数字编号，用 M-0~M-9选择
                 company-mode             t
                 company-dabbrev-downcase nil)    ;; 补全区分大小写
-  (add-hook 'after-init-hook 'global-company-mode))
+  )
 
 ;;------------------------------------------------------------------------------
 ;;;; 搜索功能插件 搜索功能的快捷键前缀保持为 C-c SPC
@@ -717,6 +751,20 @@
    ("C-c SPC l" . (lambda () (interactive) (better-jumper-set-jump) (consult-line))) ;; 从 buffer 中搜索
    ("C-c SPC B" . consult-bookmark) ;; 添加/查看书签
    ))
+
+;; minibuffer 候选注解（vertico 官方搭档）
+(use-package marginalia
+  :init (marginalia-mode))
+
+;; 对当前目标执行动作（consult/vertico 官方搭档）
+;; C-. 唤起动作菜单，C-h B 查看所有可用动作
+(use-package embark
+  :bind
+  (("C-." . embark-act)
+   ("C-h B" . embark-bindings)))
+
+(use-package embark-consult
+  :after (embark consult))
 
 (use-package vertico
   :init (vertico-mode 1)
@@ -794,7 +842,6 @@
 ;;;; 主题配置插件
 ;;------------------------------------------------------------------------------
 
-;; (load-theme 'misterioso)
 (use-package doom-themes
   :demand t
   :config (load-theme 'doom-nova t)) ;; doom-badger doom-nova, doom-opera is ok.
@@ -915,9 +962,10 @@
 ;;------------------------------------------------------------------------------
 
 ;; align-regexp 使用空格而不是 tab 对齐
-(defadvice align-regexp (around align-regexp-with-spaces activate)
+(defun my-align-regexp-with-spaces (orig-fun &rest args)
   (let ((indent-tabs-mode nil))
-    ad-do-it))
+    (apply orig-fun args)))
+(advice-add 'align-regexp :around #'my-align-regexp-with-spaces)
 
 ;; 一键格式化
 (defun my-indent-whole ()
@@ -1007,7 +1055,6 @@ modified buffers or special buffers."
 (global-set-key (kbd "C-c m n") 'my-fast-note)
 (global-set-key (kbd "C-c m t") 'my-save-region-to-tmp-file)
 (global-set-key (kbd "C-c m w") 'my-copy-word-at-point)
-(global-set-key (kbd "M-s s")   'my-copy-word-at-point) ;; 额外映射一个方便的按键
 (global-set-key (kbd "C-c m k") 'my-kill-all-file-buffers)
 (global-set-key (kbd "C-c m f") 'my-query-and-replace)
 (global-set-key (kbd "C-c m a") 'align-regexp)
@@ -1050,7 +1097,6 @@ modified buffers or special buffers."
  '(gptel-prompt-face ((t (:inherit nil :background nil))))
  '(gptel-response-face ((t (:foreground "Green" :inherit nil :background nil))))
  '(highlight-numbers-number ((t (:foreground "Orange"))))
- '(hl-fill-column-face ((t (:background "DimGray"))))
  '(symbol-overlay-default-face ((t (:background "#3D4250" :box (:line-width 1 :color "#4D5260")))))
  '(symbol-overlay-face-1 ((t (:background "#3A4058" :box (:line-width 1 :color "#5A6080")))))
  '(symbol-overlay-face-2 ((t (:background "#4A4038" :box (:line-width 1 :color "#6A6050")))))
