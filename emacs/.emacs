@@ -312,6 +312,16 @@
 ;;;; 文本编辑插件
 ;;------------------------------------------------------------------------------
 
+;; epub 阅读器 https://depp.brause.cc/nov.el/
+;; g       重新排版（调整窗口大小后使用）
+;; t       目录
+;; n/p     下/上一章
+;; l       回到上次位置
+(use-package nov
+  :mode ("\\.epub\\'" . nov-mode)
+  :config
+  (setq nov-text-width 120)) ;; 正文最大列宽
+
 ;; 撤销修改
 ;; f   to go forward
 ;; b   to go backward
