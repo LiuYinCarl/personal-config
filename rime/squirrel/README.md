@@ -3,6 +3,15 @@
 本目录存放 `~/Library/Rime` 下两个 `.custom.yaml` 的备份，配合雾凇拼音（rime-ice）使用。
 修改后复制到 `~/Library/Rime`，然后在菜单栏 Squirrel 图标 → **重新部署** 生效。
 
+## 安装 / 更新雾凇拼音
+
+菜单第 5 项：浅克隆 [iDvel/rime-ice](https://github.com/iDvel/rime-ice) 到临时目录，
+用 rsync 合并复制到 `~/Library/Rime`（不删除已有文件），最后自动触发重新部署。
+
+- `*.custom.yaml`、用户词库、`custom_phrase.txt`（自定义短语）都会保留
+- `default.yaml`、`squirrel.yaml` 等基础文件会被覆盖为新版本（个性化应始终写在 `.custom.yaml` 里）
+- 重复运行 = 更新到 rime-ice 最新版
+
 ## 文件说明
 
 ### default.custom.yaml（全局）
@@ -34,7 +43,7 @@ Squirrel 没有运行时设置界面，常用修改都收进了这个脚本，�
 ./squirrel-config.sh
 ```
 
-主菜单四个功能：
+主菜单五个功能：
 
 1. **切换配色主题** — 列出全部可用皮肤（含显示名，解析自 `~/Library/Rime/build/squirrel.yaml`），
    依次选浅色、深色编号；深色直接回车 = 与浅色相同（固定皮肤），选不同编号 = 跟随系统明暗切换。
@@ -47,6 +56,7 @@ Squirrel 没有运行时设置界面，常用修改都收进了这个脚本，�
    编号多选后重写 `default.custom.yaml` 的 `schema_list`。
    注意：脚本只能决定 **F4 菜单里有哪些方案**；部署后在方案之间切换仍需按
    `F4`（或 `` Control+` ``），Squirrel 没有切换当前方案的命令行接口。
+5. **安装/更新雾凇拼音** — 详见上文「安装 / 更新雾凇拼音」。
 
 ### 关于自动重新部署
 

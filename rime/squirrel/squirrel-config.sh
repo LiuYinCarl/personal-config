@@ -6,6 +6,7 @@
 #   2) 修改字体大小
 #   3) 中英文切换通知开关
 #   4) 管理输入法方案（F4 方案选单）
+#   5) 安装/更新雾凇拼音（rime-ice）
 #
 # 每个功能都会修改 ~/Library/Rime 下对应的 .custom.yaml 并自动重新部署。
 
@@ -21,12 +22,14 @@ BUILD_SQUIRREL="$RIME_DIR/build/squirrel.yaml"
 # deliverImmediately，输入法处于后台时通知会被 AppKit 挂起、部署不触发
 #（master 已修复）。这里用 JXA 直接发送即时通知。
 deploy() {
+  # $() 是 JXA 的 Objective-C 桥语法，不是 shell 命令替换，单引号是有意的
+  # shellcheck disable=SC2016
   osascript -l JavaScript -e \
     'ObjC.import("Foundation"); $.NSDistributedNotificationCenter.defaultCenter.postNotificationNameObjectUserInfoDeliverImmediately("SquirrelReloadNotification", $(), $(), true)'
 }
 
 # 读取并校验一个 1-max 之间的编号，结果存入 PICKED；EOF 时返回失败
-# 用法：pick_number "提示语: " 24 || return 1; num="$PICKED"
+# 用法：if ! pick_number "提示语: " 24; then return 1; fi; num="$PICKED"
 PICKED=""
 pick_number() {
   local prompt="$1"
@@ -191,7 +194,7 @@ manage_schemas() {
   local current
   current=$(sed -n '/^  schema_list:/,$p' "$DEFAULT_CUSTOM" | sed -n 's/.*{schema: *\([A-Za-z0-9_]*\)}.*/\1/p')
 
-  echo "当前启用：$(echo $current | tr '\n' ' ')"
+  echo "当前启用：$(echo "$current" | tr '\n' ' ')"
   echo
   echo "可用方案（* = 已启用）："
   local i mark
@@ -238,6 +241,48 @@ manage_schemas() {
   echo "部署完成后按 F4 即可在方案间切换"
 }
 
+# ---------- 5. 安装 / 更新雾凇拼音 ----------
+
+install_rime_ice() {
+  # 覆盖基础文件前提醒；*.custom.yaml 和 custom_phrase.txt 不受影响
+  local confirm
+  if ! read -r -p "将用 rime-ice 最新版覆盖 default.yaml、squirrel.yaml 等基础文件，继续？[y/N] " confirm; then
+    return 1
+  fi
+  if [ "$confirm" != "y" ] && [ "$confirm" != "Y" ]; then
+    echo "已取消"
+    return 0
+  fi
+
+  local tmp
+  tmp=$(mktemp -d)
+  echo "正在下载 rime-ice ..."
+  # 菜单分发处的 || true 会关闭函数内的 set -e，失败必须显式处理
+  if ! git clone --depth 1 "https://github.com/iDvel/rime-ice" "$tmp/rime-ice"; then
+    echo "下载失败，请检查网络" >&2
+    rm -rf "$tmp"
+    return 1
+  fi
+
+  # 排除：版本控制文件、仓库自带的 build/（部署时会重新生成）、
+  # 以及用户已有的 custom_phrase.txt（自定义短语，不能被覆盖）
+  local excludes=(--exclude=.git --exclude=.github --exclude=.gitignore --exclude=build)
+  if [ -f "$RIME_DIR/custom_phrase.txt" ]; then
+    excludes+=(--exclude=custom_phrase.txt)
+  fi
+
+  if ! rsync -a "${excludes[@]}" "$tmp/rime-ice/" "$RIME_DIR/"; then
+    echo "复制失败" >&2
+    rm -rf "$tmp"
+    return 1
+  fi
+  rm -rf "$tmp"
+  echo "文件已复制到 $RIME_DIR"
+
+  deploy
+  echo "已触发重新部署，稍等几秒即可使用"
+}
+
 # ---------- 主菜单 ----------
 
 for f in "$SQUIRREL_CUSTOM" "$DEFAULT_CUSTOM"; do
@@ -256,6 +301,7 @@ while true; do
   echo "  2) 修改字体大小"
   echo "  3) 中英文切换通知开关"
   echo "  4) 管理输入法方案（F4 方案选单）"
+  echo "  5) 安装/更新雾凇拼音（rime-ice）"
   echo "  q) 退出"
   if ! read -r -p "选择功能: " choice; then
     exit 0
@@ -267,6 +313,7 @@ while true; do
     2) change_font_size || true ;;
     3) toggle_notifications || true ;;
     4) manage_schemas || true ;;
+    5) install_rime_ice || true ;;
     q) exit 0 ;;
     *) echo "无效选择" ;;
   esac
