@@ -1,0 +1,51 @@
+customization:
+  distribution_code_name: Squirrel
+  distribution_version: 1.1.2
+  generator: "Weasel::UIStyleSettings"
+  modified_time: "Tue Aug 11 15:05:45 2026"
+  rime_version: 1.13.1
+# 增加一下下面的 patch 段内容
+patch:
+  show_notifications_when: never # 切换中英文时不弹出提示
+  "preset_color_schemes/liquid_glass_dark":
+    author: "自定义"
+    back_color: 0xC01C1C1E
+    border_color: 0x40FFFFFF
+    candidate_back_color: 0x00000000
+    candidate_text_color: 0xFFF2F2F2
+    comment_text_color: 0xFF808080
+    hilited_back_color: 0x00000000
+    hilited_candidate_back_color: 0xE6E07B3D
+    hilited_candidate_text_color: 0xFFFFFFFF
+    hilited_comment_text_color: 0xFFE4E4E4
+    hilited_candidate_label_color: 0xFFEFEFEF
+    hilited_text_color: 0xFFFFFFFF
+    label_color: 0xFF8A8A8A
+    name: "液态玻璃·暗／Liquid Glass Dark"
+    text_color: 0xFFE8E8E8
+  "preset_color_schemes/liquid_glass_light":
+    author: "自定义"
+    back_color: 0xEAF8F8F8
+    border_color: 0x50000000
+    candidate_back_color: 0x00000000
+    candidate_text_color: 0xFF1C1C1E
+    comment_text_color: 0xFF7E7E83
+    hilited_back_color: 0x00000000
+    hilited_candidate_back_color: 0xE6E88F4E
+    hilited_candidate_text_color: 0xFFFFFFFF
+    hilited_comment_text_color: 0xFFE4E4E4
+    hilited_candidate_label_color: 0xFFEFEFEF
+    hilited_text_color: 0xFF000000
+    label_color: 0xFF6E6E73
+    name: "液态玻璃·亮／Liquid Glass Light"
+    text_color: 0xFF1C1C1E
+  "style/color_scheme": liquid_glass_dark
+  "style/color_scheme_dark": liquid_glass_dark
+  "style/candidate_list_layout": linear # 横向候选
+  "style/inline_preedit": true
+  "style/font_point": 18
+  "style/label_font_point": 13
+  "style/corner_radius": 16
+  "style/hilited_corner_radius": 9
+  "style/border_width": 1
+  "style/line_spacing": 12

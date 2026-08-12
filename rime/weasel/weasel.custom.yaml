@@ -1,0 +1,56 @@
+customization:
+  distribution_code_name: Weasel
+  distribution_version: 0.17.4
+  generator: "Weasel::UIStyleSettings"
+  modified_time: "Tue Aug 11 15:05:45 2026"
+  rime_version: 1.13.1
+patch:
+  show_notifications: false # 切换中英文时不弹出提示
+  "preset_color_schemes/liquid_glass_dark":
+    author: "自定义"
+    back_color: 0xC01C1C1E
+    border_color: 0x40FFFFFF
+    candidate_back_color: 0x00000000
+    candidate_text_color: 0xFFF2F2F2
+    comment_text_color: 0xFF808080
+    hilited_back_color: 0x00000000
+    hilited_candidate_back_color: 0xE6E07B3D
+    hilited_candidate_text_color: 0xFFFFFFFF
+    hilited_comment_text_color: 0xFFE4E4E4
+    hilited_label_color: 0xFFEFEFEF
+    hilited_text_color: 0xFFFFFFFF
+    label_color: 0xFF8A8A8A
+    name: "液态玻璃·暗／Liquid Glass Dark"
+    shadow_color: 0x59000000
+    text_color: 0xFFE8E8E8
+  "preset_color_schemes/liquid_glass_light":
+    author: "自定义"
+    back_color: 0xEAF8F8F8
+    border_color: 0x50000000
+    candidate_back_color: 0x00000000
+    candidate_text_color: 0xFF1C1C1E
+    comment_text_color: 0xFF7E7E83
+    hilited_back_color: 0x00000000
+    hilited_candidate_back_color: 0xE6E88F4E
+    hilited_candidate_text_color: 0xFFFFFFFF
+    hilited_comment_text_color: 0xFFE4E4E4
+    hilited_label_color: 0xFFEFEFEF
+    hilited_text_color: 0xFF000000
+    label_color: 0xFF6E6E73
+    name: "液态玻璃·亮／Liquid Glass Light"
+    shadow_color: 0x33000000
+    text_color: 0xFF1C1C1E
+  "style/color_scheme": liquid_glass_dark
+  "style/horizontal": true # 横向候选
+  "style/inline_preedit": true
+  "style/font_point": 14
+  "style/label_font_point": 11
+  "style/layout/corner_radius": 16 # 外框圆角
+  "style/layout/round_corner": 9 # 高亮框圆角
+  "style/layout/border_width": 1
+  "style/layout/candidate_spacing": 12
+  "style/layout/hilite_padding": 9
+  "style/layout/hilite_spacing": 5
+  "style/layout/margin_x": 16
+  "style/layout/margin_y": 10
+  "style/layout/min_width": 180

@@ -1,0 +1,10 @@
+customization:
+  distribution_code_name: Weasel
+  distribution_version: 0.17.4
+  generator: "Rime::SwitcherSettings"
+  modified_time: "Tue Aug 11 11:46:05 2026"
+  rime_version: 1.13.1
+patch:
+  "menu/page_size": 7 # 改一下这行，最多9个候选
+  schema_list:
+    - {schema: rime_ice}
