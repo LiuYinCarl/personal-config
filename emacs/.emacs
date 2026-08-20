@@ -842,6 +842,52 @@
          ("C-c k a" . kimi-ask)))
 
 ;;------------------------------------------------------------------------------
+;;;; 借鉴 Doom Emacs 的插件
+;;------------------------------------------------------------------------------
+
+;; GC 优化：空闲时才提高 GC 阈值触发回收，减少编辑卡顿
+(use-package gcmh
+  :init (gcmh-mode 1)
+  :config
+  (setq gcmh-idle-delay 5
+        gcmh-high-cons-threshold (* 16 1024 1024)))
+
+;; 增强的 help buffer：显示源码、调用关系等
+(use-package helpful
+  :bind (([remap describe-function] . helpful-callable)
+         ([remap describe-variable] . helpful-variable)
+         ([remap describe-command]  . helpful-command)
+         ([remap describe-symbol]   . helpful-symbol)
+         ([remap describe-key]      . helpful-key)))
+
+;; 直接编辑 grep 结果 buffer：consult-grep 中按 E (embark-export) 导出后，
+;; C-c C-p 进入编辑模式，C-c C-c 应用修改，C-c C-k 放弃
+(use-package wgrep
+  :defer t)
+
+;; 浏览单个文件的 git 历史：p/n 切换上/下个版本，q 退出
+(use-package git-timemachine
+  :bind ("C-c g t" . git-timemachine))
+
+;; 根据文件内容自动探测缩进风格（空格/tab、宽度）
+(use-package dtrt-indent
+  :hook (after-init . dtrt-indent-global-mode))
+
+;; 遵循项目根目录 .editorconfig 文件的缩进设置（Emacs 30 内置）
+(use-package editorconfig
+  :ensure nil
+  :hook (after-init . editorconfig-mode))
+
+;; 将 #RRGGBB 等颜色代码渲染为实际颜色
+(use-package rainbow-mode
+  :bind ("C-c m r" . rainbow-mode))
+
+;; GUI 下补全候选显示在屏幕中央的浮动框
+(use-package vertico-posframe
+  :if (display-graphic-p)
+  :hook (after-init . vertico-posframe-mode))
+
+;;------------------------------------------------------------------------------
 ;;;; 主题配置插件
 ;;------------------------------------------------------------------------------
 
@@ -864,7 +910,10 @@
   (setq doom-modeline-lsp t))
 
 (use-package magit
-  :defer t)
+  :defer t
+  :init
+  (which-key-add-key-based-replacements "C-c g" "git")
+  :bind (("C-c g g" . magit-status)))
 
 ;; 显示被编辑过的行和 git 操作
 (use-package git-gutter
