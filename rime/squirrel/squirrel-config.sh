@@ -4,11 +4,15 @@
 # 交互式菜单：
 #   1) 切换配色主题
 #   2) 修改字体大小
-#   3) 中英文切换通知开关
-#   4) 管理输入法方案（F4 方案选单）
-#   5) 安装/更新雾凇拼音（rime-ice）
+#   3) 修改候选词数量
+#   4) 候选框横竖排切换
+#   5) 中英文切换通知开关
+#   6) 管理输入法方案（F4 方案选单）
+#   7) 安装/更新雾凇拼音（rime-ice）
+#   8) 备份当前配置
+#   9) 同步用户数据
 #
-# 每个功能都会修改 ~/Library/Rime 下对应的 .custom.yaml 并自动重新部署。
+# 除备份、同步外，每个功能都会修改 ~/Library/Rime 下的配置并自动重新部署。
 
 set -euo pipefail
 
@@ -149,7 +153,58 @@ change_font_size() {
   echo "已设置并重新部署：正文字号=$font 序号字号=$label"
 }
 
-# ---------- 3. 中英文切换通知开关 ----------
+# ---------- 3. 修改候选词数量 ----------
+
+change_page_size() {
+  local current num
+  current=$(sed -n 's|^  "menu/page_size": *\([0-9]*\).*|\1|p' "$DEFAULT_CUSTOM")
+  echo "当前候选词数量：${current:-默认（5）}"
+
+  while true; do
+    if ! read -r -p "候选词数量（1-9）: " num; then
+      return 1
+    fi
+    if [[ "$num" =~ ^[1-9]$ ]]; then
+      break
+    fi
+    echo "请输入 1-9 之间的数字" >&2
+  done
+
+  sed -i '' "s|^  \"menu/page_size\":.*|  \"menu/page_size\": $num|" "$DEFAULT_CUSTOM"
+  deploy
+  echo "已设置 page_size: $num 并重新部署"
+}
+
+# ---------- 4. 候选框横竖排切换 ----------
+
+toggle_layout() {
+  local options=("linear" "stacked")
+  local descs=("横向（候选排成一行）" "竖向（每个候选独占一行）")
+
+  local current
+  current=$(sed -n 's|^  "style/candidate_list_layout": *\([a-z]*\).*|\1|p' "$SQUIRREL_CUSTOM")
+  echo "当前排列：${current:-未设置}"
+  echo
+  local i mark
+  for i in "${!options[@]}"; do
+    mark=" "
+    if [ "${options[$i]}" = "$current" ]; then
+      mark="*"
+    fi
+    printf "  %d%s %-10s %s\n" $((i+1)) "$mark" "${options[$i]}" "${descs[$i]}"
+  done
+
+  if ! pick_number "选择编号: " 2; then
+    return 1
+  fi
+  local value="${options[$((PICKED-1))]}"
+
+  sed -i '' "s|^  \"style/candidate_list_layout\":.*|  \"style/candidate_list_layout\": $value|" "$SQUIRREL_CUSTOM"
+  deploy
+  echo "已设置 candidate_list_layout: $value 并重新部署"
+}
+
+# ---------- 5. 中英文切换通知开关 ----------
 
 toggle_notifications() {
   local options=("never" "appropriate" "always")
@@ -178,7 +233,7 @@ toggle_notifications() {
   echo "已设置 show_notifications_when: $value 并重新部署"
 }
 
-# ---------- 4. 管理输入法方案 ----------
+# ---------- 6. 管理输入法方案 ----------
 
 manage_schemas() {
   # 扫描全部方案（文件名即 schema_id），附带显示名
@@ -241,7 +296,7 @@ manage_schemas() {
   echo "部署完成后按 F4 即可在方案间切换"
 }
 
-# ---------- 5. 安装 / 更新雾凇拼音 ----------
+# ---------- 7. 安装 / 更新雾凇拼音 ----------
 
 install_rime_ice() {
   # 覆盖基础文件前提醒；*.custom.yaml 和 custom_phrase.txt 不受影响
@@ -283,6 +338,40 @@ install_rime_ice() {
   echo "已触发重新部署，稍等几秒即可使用"
 }
 
+# ---------- 8. 备份当前配置 ----------
+
+backup_config() {
+  # 备份个性化配置和用户词库；build/（部署产物）、cn_dicts、lua 等
+  # 均可通过菜单第 7 项重装 rime-ice 恢复，不在备份范围内
+  local backup_dir
+  backup_dir="$HOME/rime-backup/$(date +%Y%m%d-%H%M%S)"
+  mkdir -p "$backup_dir"
+
+  shopt -s nullglob
+  local f
+  for f in "$RIME_DIR"/*.yaml "$RIME_DIR"/*.txt; do
+    cp "$f" "$backup_dir/"
+  done
+  for f in "$RIME_DIR"/*.userdb; do
+    cp -R "$f" "$backup_dir/"
+  done
+  shopt -u nullglob
+
+  echo "已备份到 $backup_dir"
+  ls "$backup_dir"
+}
+
+# ---------- 9. 同步用户数据 ----------
+
+sync_user_data() {
+  # 同步目标目录在 installation.yaml 的 sync_dir 中配置
+  # 与 deploy 同理，直接发即时分布式通知
+  # shellcheck disable=SC2016
+  osascript -l JavaScript -e \
+    'ObjC.import("Foundation"); $.NSDistributedNotificationCenter.defaultCenter.postNotificationNameObjectUserInfoDeliverImmediately("SquirrelSyncNotification", $(), $(), true)'
+  echo "已触发用户数据同步（词库等，目标见 installation.yaml 的 sync_dir）"
+}
+
 # ---------- 主菜单 ----------
 
 for f in "$SQUIRREL_CUSTOM" "$DEFAULT_CUSTOM"; do
@@ -299,9 +388,13 @@ while true; do
   echo "Squirrel 配置工具"
   echo "  1) 切换配色主题"
   echo "  2) 修改字体大小"
-  echo "  3) 中英文切换通知开关"
-  echo "  4) 管理输入法方案（F4 方案选单）"
-  echo "  5) 安装/更新雾凇拼音（rime-ice）"
+  echo "  3) 修改候选词数量"
+  echo "  4) 候选框横竖排切换"
+  echo "  5) 中英文切换通知开关"
+  echo "  6) 管理输入法方案（F4 方案选单）"
+  echo "  7) 安装/更新雾凇拼音（rime-ice）"
+  echo "  8) 备份当前配置"
+  echo "  9) 同步用户数据"
   echo "  q) 退出"
   if ! read -r -p "选择功能: " choice; then
     exit 0
@@ -311,9 +404,13 @@ while true; do
     # 功能函数出错（如输入无效）时打印错误后回到菜单，不退出整个工具
     1) switch_theme || true ;;
     2) change_font_size || true ;;
-    3) toggle_notifications || true ;;
-    4) manage_schemas || true ;;
-    5) install_rime_ice || true ;;
+    3) change_page_size || true ;;
+    4) toggle_layout || true ;;
+    5) toggle_notifications || true ;;
+    6) manage_schemas || true ;;
+    7) install_rime_ice || true ;;
+    8) backup_config || true ;;
+    9) sync_user_data || true ;;
     q) exit 0 ;;
     *) echo "无效选择" ;;
   esac
