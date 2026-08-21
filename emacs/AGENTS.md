@@ -69,11 +69,11 @@ The main configuration file is organized into sections:
    - Go, Rust, Lua, Python
    - OCaml (tuareg + merlin)
    - Racket, Haskell
-   - Markdown
+   - Markdown, Typst (typst-ts-mode + tree-sitter)
 
 6. **LSP Configuration** (lines 674-719)
    - `eglot` for LSP support
-   - Servers: clangd, pyright/ty, lua-language-server, gopls
+   - Servers: clangd, rust-analyzer (explicit path `~/.cargo/bin/rust-analyzer`), pyright/ty, lua-language-server, gopls, tinymist (Typst)
    - `company` for completion
 
 7. **Search/Navigation** (lines 722-834)
@@ -199,6 +199,11 @@ Managed repos include: hl-todo, parenface, find-file-in-project, dimmer.el, goto
 - `M-x deadgrep-edit-mode` - Make deadgrep buffer editable for replacements
 - `M-x query-replace` - Interactive replace in deadgrep
 
+**AI:**
+- `C-c k e` - kimi-explain: explain selected code (local plugin at `~/dev/github/kimi-explain`, backend `pi`)
+- `C-c k a` - kimi-explain follow-up question
+- `C-c SPC 1` / `C-c SPC 2` / `C-c SPC 3` - gptel / gptel-menu / gptel-send (DeepSeek backend, needs `DEEPSEEK_API_KEY` env var)
+
 ## Code Patterns & Conventions
 
 ### Elisp Style
@@ -270,6 +275,9 @@ npm install -g pyright  # NOT pip3
 # Go LSP
 go install golang.org/x/tools/gopls@latest
 export PATH=$PATH:$(go env GOPATH)/bin
+
+# Rust LSP
+rustup component add rust-analyzer
 
 # OCaml
 opam install merlin

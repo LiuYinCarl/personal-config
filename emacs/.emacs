@@ -86,6 +86,9 @@
 ;; 安装 Typescript LSP Server
 ;; npm install -g typescript-language-server typescript
 
+;; 安装 Rust LSP Server
+;; rustup component add rust-analyzer
+
 ;; opam install merlin
 ;; opam user-setup install
 ;; 查看 ocamlmerlin path: whereis ocamlmerlin
@@ -287,6 +290,12 @@
 
 (use-package typescript-mode
   :defer t)
+
+(use-package typst-ts-mode
+  :defer t
+  :config
+  (add-to-list 'treesit-language-source-alist
+               '(typst "https://github.com/uben0/tree-sitter-typst")))
 
 (use-package disaster
   :load-path "~/.emacs.d/plugins/disaster"
@@ -663,12 +672,16 @@
           rust-mode
           dart-mode
           racket-mode
-          typescript-ts-mode) . eglot-ensure)
+          typescript-ts-mode
+          typst-ts-mode) . eglot-ensure)
   :config
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd" "--background-index"))
+  ;; rust-analyzer 已通过 rustup 安装，显式指定完整路径（防止 Emacs 未继承 shell PATH）
+  (add-to-list 'eglot-server-programs '((rust-mode rust-ts-mode) "/Users/kenshin/.cargo/bin/rust-analyzer"))
   ;; (add-to-list 'eglot-server-programs '((python-mode)  "pyright-langserver" "--stdio"))
   (add-to-list 'eglot-server-programs '((python-mode) "ty" "server"))
   (add-to-list 'eglot-server-programs '((lua-mode) "~/.emacs.d/plugins/lua-lsp/bin/lua-language-server"))
+  (add-to-list 'eglot-server-programs '(typst-ts-mode "tinymist" "lsp"))
   (add-hook 'eglot-managed-mode-hook (lambda () (eglot-inlay-hints-mode -1))) ;; 关闭行内函数参数展示
   (setq eldoc-idle-delay 1000000)  ;; 修改 eldoc-mode 的展示延迟时间
   (setq completion-ignore-case t)  ;; company-capf匹配时不区分大小写
@@ -832,14 +845,35 @@
 ;; kimi-explain: 选中代码一键让 AI CLI (kimi / pi) 用中文解释，实时流式展示、持续追问
 (use-package kimi-explain
   :ensure nil
-  :load-path "/home/kenshin/github/kimi-explain"
+  :load-path "~/dev/github/kimi-explain"
   :init
   (which-key-add-key-based-replacements   ; 可选，需要 which-key
     "C-c k"   "kimi-explain"
     "C-c k e" "解释选中代码"
     "C-c k a" "追问")
+  :config
+  (setq kimi-explain-backend 'pi)
   :bind (("C-c k e" . kimi-explain-region)
          ("C-c k a" . kimi-ask)))
+
+;; 配置 API KEY: 在 ~/.bashrc 或 ~/.zshrc 等配置文件中导出 api-key
+;; export DEEPSEEK_API_KEY="sk-your-key-here"
+(use-package gptel
+  :ensure t
+  :config
+  ;; DeepSeek backend (uses api.deepseek.com)
+  (gptel-make-deepseek "DeepSeek"
+    :stream t
+    :key (lambda () (getenv "DEEPSEEK_API_KEY")))
+  ;; Set as default
+  (setq gptel-model  'deepseek-v4-pro
+        gptel-backend (gptel-get-backend "DeepSeek"))
+  ;; 关闭回复后的黄色闪烁高亮
+  (remove-hook 'gptel-post-response-functions 'pulse-momentary-highlight-region)
+  :bind
+  (("C-c SPC 1" . gptel)
+   ("C-c SPC 2" . gptel-menu)
+   ("C-c SPC 3" . gptel-send)))
 
 ;;------------------------------------------------------------------------------
 ;;;; 借鉴 Doom Emacs 的插件
@@ -1146,6 +1180,8 @@ modified buffers or special buffers."
  '(deadgrep-match-face ((t (:foreground "Green"))))
  '(font-lock-comment-face ((t (:foreground "Green" :inherit nil))))
  '(font-lock-doc-face ((t (:foreground "Cyan" :inherit nil))))
+ '(gptel-prompt-face ((t (:inherit nil :background nil))))
+ '(gptel-response-face ((t (:foreground "Green" :inherit nil :background nil))))
  '(highlight-numbers-number ((t (:foreground "Orange"))))
  '(symbol-overlay-default-face ((t (:background "#3D4250" :box (:line-width 1 :color "#4D5260")))))
  '(symbol-overlay-face-1 ((t (:background "#3A4058" :box (:line-width 1 :color "#5A6080")))))
