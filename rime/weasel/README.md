@@ -67,6 +67,18 @@ patch:
 | 阴影 | `shadow_color` + `layout/shadow_radius` | `style/shadow_size` |
 | 明暗双主题 | 不支持 | `color_scheme` + `color_scheme_dark` |
 
+## 已知问题：Ctrl+Space 在 Emacs（WSL 终端）中失效
+
+**现象**：小狼毫启用时，Windows Terminal 里的 WSL Emacs 按 `C-SPC` 无法设置 mark——按键被小狼毫拦截，到不了 Emacs；换成微软拼音则正常（微软拼音不占用 Ctrl+Space）。
+
+**原因**：小狼毫 0.16.1+ 前端把 `Ctrl+Space` **写死**为「清除编码 / 中英文切换」，且不可通过 yaml 配置。官方 issue [#1409](https://github.com/rime/weasel/issues/1409) 正在请求把它纳入可配置项；`WeaselSetup.exe /toggleime`、`/toggleascii` 只能切换其行为（一次性写注册表 `HKCU\Software\Rime\weasel\ToggleImeOnOpenClose` = yes/no，不是每次都要执行），且在 Emacs 场景有已知 bug（[#1709](https://github.com/rime/weasel/issues/1709)、[#1571](https://github.com/rime/weasel/issues/1571)）。
+
+**验证**：librime 实际生效配置（`build/default.yaml`）中没有任何 `Control+space` 绑定，`ascii_composer/switch_key` 仅有 `Shift_L: commit_code`（左 Shift 切换中英）。所以问题完全在小狼毫前端，与 librime 配置无关。
+
+**Emacs 侧规避**（不改小狼毫）：
+- 用 `C-x SPC`（Ctrl+x 后按空格，矩形选区）代替 `C-SPC` 选区；
+- 或按 End 键映射的 `set-mark-command`（`~/.emacs` 中已有 `(global-set-key "\e[9~" 'set-mark-command)`）。
+
 ## 参考
 
 - 小狼毫默认配置（全部可用键）：<https://raw.githubusercontent.com/rime/weasel/master/output/data/weasel.yaml>
