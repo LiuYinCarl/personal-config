@@ -677,8 +677,12 @@
           typst-ts-mode) . eglot-ensure)
   :config
   (add-to-list 'eglot-server-programs '((c++-mode c-mode) "clangd" "--background-index"))
-  ;; rust-analyzer 已通过 rustup 安装，显式指定完整路径（防止 Emacs 未继承 shell PATH）
-  (add-to-list 'eglot-server-programs '((rust-mode rust-ts-mode) "/Users/kenshin/.cargo/bin/rust-analyzer"))
+  ;; rust-analyzer 已通过 rustup 安装，按 PATH 自动查找；
+  ;; 找不到时（如 GUI 未继承 shell PATH）回退到 rustup 默认安装位置
+  (add-to-list 'eglot-server-programs
+               `((rust-mode rust-ts-mode)
+                 ,(or (executable-find "rust-analyzer")
+                      (expand-file-name "~/.cargo/bin/rust-analyzer"))))
   ;; (add-to-list 'eglot-server-programs '((python-mode)  "pyright-langserver" "--stdio"))
   (add-to-list 'eglot-server-programs '((python-mode) "ty" "server"))
   (add-to-list 'eglot-server-programs '((lua-mode) "~/.emacs.d/plugins/lua-lsp/bin/lua-language-server"))
@@ -1210,3 +1214,6 @@ modified buffers or special buffers."
 ;;------------------------------------------------------------------------------
 ;;;; 自动生成的东西
 ;;------------------------------------------------------------------------------
+;; Custom 自动写入的配置单独放到仓库外的文件，避免污染 git 历史
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file 'noerror)

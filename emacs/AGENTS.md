@@ -73,7 +73,7 @@ The main configuration file is organized into sections:
 
 6. **LSP Configuration** (lines 674-719)
    - `eglot` for LSP support
-   - Servers: clangd, rust-analyzer (explicit path `~/.cargo/bin/rust-analyzer`), pyright/ty, lua-language-server, gopls, tinymist (Typst)
+   - Servers: clangd, rust-analyzer (auto-located via `executable-find`, fallback `~/.cargo/bin/rust-analyzer`), pyright/ty, lua-language-server, gopls, tinymist (Typst)
    - `company` for completion
 
 7. **Search/Navigation** (lines 722-834)
