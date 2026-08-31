@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t; -*-
 ;;------------------------------------------------------------------------------
 ;;;; 常用快捷键
 ;;------------------------------------------------------------------------------
@@ -596,7 +597,7 @@
       (defun my-mistty-toggle ()
         "在当前窗口下方显示/隐藏 mistty 终端。"
         (interactive)
-        (if-let ((mistty-win (cl-find-if
+        (if-let* ((mistty-win (cl-find-if
                               (lambda (win)
                                 (string-prefix-p "*mistty" (buffer-name (window-buffer win))))
                               (window-list))))
@@ -605,7 +606,7 @@
               (delete-window mistty-win))
           (call-interactively 'mistty)))
       ;; 如果系统有 fish 就用 fish，否则让 mistty 按默认规则兜底
-      (when-let ((fish (executable-find "fish")))
+      (when-let* ((fish (executable-find "fish")))
         (setq mistty-shell-command `(,fish "-i")))
       ;; 在当前窗口下方打开 mistty（类似 VS Code 终端），高度占 40%
       (add-to-list 'display-buffer-alist
