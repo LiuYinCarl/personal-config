@@ -97,6 +97,11 @@
 ;; 安装 racket Language Server
 ;; raco pkg install racket-langserver
 
+;; 安装 Swift LSP Server
+;; yay -S swift-bin  (官方 toolchain 二进制 + Arch 兼容补丁)
+;; 注意: swift.org 官方 tarball 在 Arch 上缺 libxml2.so.2/libncurses.so.6,
+;;       需依赖 AUR 的 libxml2-legacy 并用 patchelf 改 soname, 直接解压跑不起来
+
 ;;------------------------------------------------------------------------------
 ;;;; 包管理配置
 ;;------------------------------------------------------------------------------
@@ -135,7 +140,7 @@
   (set-face-attribute 'default nil :height 130))  ;; 终端
 
 ;; 开启鼠标模式
-(xterm-mouse-mode 1)
+;; (xterm-mouse-mode 1)
 ;; 设置光标颜色
 (set-cursor-color "white")
 ;; 选中即复制功能
@@ -156,6 +161,8 @@
 (setq backup-directory-alist (quote (("." . "~/.emacs.d/backup_files"))))
 ;; 关闭自动保存文件功能
 (setq auto-save-default nil)
+;; 关闭锁文件(.#xxx -> user@host.pid): 遗留的悬空符号链接会被 ruff 等工具当成源文件报错
+(setq create-lockfiles nil)
 ;; 设置 tab 宽度
 (setq-default tab-width 4)
 ;; 设置将 tab 替换为空格
@@ -267,6 +274,11 @@
 (use-package rust-mode
   :defer t)
 
+(use-package swift-mode
+  :defer t
+  :config
+  (add-hook 'swift-mode-hook (lambda () (setq tab-width 4))))
+
 (use-package lua-mode
   :defer t)
 
@@ -286,6 +298,17 @@
   :defer t
   :config
   (setq markdown-fontify-code-blocks-natively t)  ;; 语法高亮
+  ;; markdown-preview 默认调用的 `markdown' 是 Discount。Discount 默认不启用 GFM
+  ;; 围栏代码块（```），会把整段渲染成段落里的行内 <code>，浏览器再折叠空白，
+  ;; 树状图就挤成一行。优先选支持 GFM 的渲染器，退而给 Discount 打开 fencedcode。
+  (setq markdown-command
+        (cond
+         ((executable-find "pandoc") '("pandoc" "-f" "gfm" "-t" "html"))
+         ((executable-find "cmark-gfm")
+          '("cmark-gfm" "-e" "table" "-e" "strikethrough" "-e" "autolink"
+            "-e" "tagfilter" "-e" "tasklist"))
+         ((executable-find "markdown") '("markdown" "-f" "+fencedcode"))
+         (t "markdown")))
   (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.md\\'"       . markdown-mode)))
 
@@ -673,6 +696,7 @@
           rust-mode
           dart-mode
           racket-mode
+          swift-mode
           typescript-ts-mode
           typst-ts-mode) . eglot-ensure)
   :config
@@ -683,6 +707,12 @@
                `((rust-mode rust-ts-mode)
                  ,(or (executable-find "rust-analyzer")
                       (expand-file-name "~/.cargo/bin/rust-analyzer"))))
+  ;; sourcekit-lsp 随 Swift toolchain 提供；swift-bin 装在 /usr/bin 下,
+  ;; 找不到时（如 GUI 未继承 shell PATH）回退到 swift-bin 实际安装位置
+  (add-to-list 'eglot-server-programs
+               `((swift-mode)
+                 ,(or (executable-find "sourcekit-lsp")
+                      (expand-file-name "/usr/lib/swift/bin/sourcekit-lsp"))))
   ;; (add-to-list 'eglot-server-programs '((python-mode)  "pyright-langserver" "--stdio"))
   (add-to-list 'eglot-server-programs '((python-mode) "ty" "server"))
   (add-to-list 'eglot-server-programs '((lua-mode) "~/.emacs.d/plugins/lua-lsp/bin/lua-language-server"))
@@ -847,19 +877,20 @@
 ;;;; AI
 ;;------------------------------------------------------------------------------
 
-;; kimi-explain: 选中代码一键让 AI CLI (kimi / pi) 用中文解释，实时流式展示、持续追问
-(use-package kimi-explain
+;; ai-explain: 选中代码一键让 AI CLI (kimi / pi) 用中文解释，实时流式展示、持续追问
+(use-package ai-explain
   :ensure nil
-  :load-path "~/dev/github/kimi-explain"
+  :vc (:url "https://github.com/LiuYinCarl/ai-explain.git"
+       :rev :newest)
   :init
   (which-key-add-key-based-replacements   ; 可选，需要 which-key
-    "C-c k"   "kimi-explain"
+    "C-c k"   "ai-explain"
     "C-c k e" "解释选中代码"
     "C-c k a" "追问")
   :config
-  (setq kimi-explain-backend 'pi)
-  :bind (("C-c k e" . kimi-explain-region)
-         ("C-c k a" . kimi-ask)))
+  (setq ai-explain-backend 'pi)
+  :bind (("C-c k e" . ai-explain-region)
+         ("C-c k a" . ai-explain-ask)))
 
 ;; 配置 API KEY: 在 ~/.bashrc 或 ~/.zshrc 等配置文件中导出 api-key
 ;; export DEEPSEEK_API_KEY="sk-your-key-here"
@@ -1175,28 +1206,7 @@ modified buffers or special buffers."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(avy-lead-face ((t (:background "White" :foreground "Red"))))
- '(avy-lead-face-0 ((t (:background "White" :foreground "Red"))))
- '(avy-lead-face-1 ((t (:background "White" :foreground "Red"))))
- '(avy-lead-face-2 ((t (:background "White" :foreground "Red"))))
- '(aw-leading-char-face ((t (:background "Black" :foreground "Orange" :height 180.0))))
- '(centaur-tabs-selected ((t (:inherit bold :foreground "Orange"))))
- '(deadgrep-filename-face ((t (:foreground "Orange"))))
- '(deadgrep-match-face ((t (:foreground "Green"))))
- '(font-lock-comment-face ((t (:foreground "Green" :inherit nil))))
- '(font-lock-doc-face ((t (:foreground "Cyan" :inherit nil))))
- '(gptel-prompt-face ((t (:inherit nil :background nil))))
- '(gptel-response-face ((t (:foreground "Green" :inherit nil :background nil))))
- '(highlight-numbers-number ((t (:foreground "Orange"))))
- '(symbol-overlay-default-face ((t (:background "#3D4250" :box (:line-width 1 :color "#4D5260")))))
- '(symbol-overlay-face-1 ((t (:background "#3A4058" :box (:line-width 1 :color "#5A6080")))))
- '(symbol-overlay-face-2 ((t (:background "#4A4038" :box (:line-width 1 :color "#6A6050")))))
- '(symbol-overlay-face-3 ((t (:background "#38483A" :box (:line-width 1 :color "#506852")))))
- '(symbol-overlay-face-4 ((t (:background "#46384A" :box (:line-width 1 :color "#66506A")))))
- '(symbol-overlay-face-5 ((t (:background "#384848" :box (:line-width 1 :color "#506868")))))
- '(symbol-overlay-face-6 ((t (:background "#483A44" :box (:line-width 1 :color "#685A64")))))
- '(symbol-overlay-face-7 ((t (:background "#484438" :box (:line-width 1 :color "#686450")))))
- '(symbol-overlay-face-8 ((t (:background "#3A4450" :box (:line-width 1 :color "#5A6470"))))))
+ )
 
 ;;------------------------------------------------------------------------------
 ;;;; 工具生成的配置，不同机器差异不大
@@ -1217,3 +1227,10 @@ modified buffers or special buffers."
 ;; Custom 自动写入的配置单独放到仓库外的文件，避免污染 git 历史
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-vc-selected-packages
+   '((ai-explain :url "https://github.com/LiuYinCarl/ai-explain.git"))))
