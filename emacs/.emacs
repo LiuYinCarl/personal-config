@@ -157,10 +157,10 @@
 (setq use-short-answers t)
 ;; 关闭备份文件功能
 (setq make-backup-files nil)
-;; 设置备份文件目录
-(setq backup-directory-alist (quote (("." . "~/.emacs.d/backup_files"))))
-;; 关闭自动保存文件功能
-(setq auto-save-default nil)
+;; 自动保存保留（崩溃后可恢复）；#file# 文件统一放到 /tmp，避免污染工作目录
+(setq auto-save-default t)
+(setq auto-save-file-name-transforms '((".*" "/tmp/emacs-autosave/" t)))
+(make-directory "/tmp/emacs-autosave" t)
 ;; 关闭锁文件(.#xxx -> user@host.pid): 遗留的悬空符号链接会被 ruff 等工具当成源文件报错
 (setq create-lockfiles nil)
 ;; 设置 tab 宽度
@@ -201,8 +201,6 @@
 (setq scroll-margin 4)
 ;; 设置保守滚动
 (setq scroll-conservatively 100)
-;; 设置平滑滚动
-(setq scroll-step 1)
 ;; 行号展示，26以下可以使用 linum 插件
 (global-display-line-numbers-mode)
 ;; Emacs 29/30 已知 bug：行号渲染优化与 buffer overlay 冲突导致行错乱
@@ -218,7 +216,10 @@
 ;;------------------------------------------------------------------------------
 
 ;; 统计各个插件的启动消耗时间
-(use-package benchmark-init)
+(use-package benchmark-init
+  :demand t
+  :config (benchmark-init/activate)
+  :hook (after-init . benchmark-init/deactivate))
 
 ;; 防止超长行卡死 emacs
 (use-package so-long
@@ -322,7 +323,6 @@
                '(typst "https://github.com/uben0/tree-sitter-typst")))
 
 (use-package disaster
-  :load-path "~/.emacs.d/plugins/disaster"
   :commands (disaster)
   :init
   ;; If you prefer viewing assembly code in `nasm-mode` instead of `asm-mode`
@@ -369,17 +369,8 @@
   :if (not (version<= emacs-version "28.0"))
   :bind ("M-s u" . vundo))
 
-;; 语法高亮
-(use-package tree-sitter
-  :defer t
-  :if (fboundp 'module-load) ; 需要 Emacs 支持 Dynamic module
-  :config
-  (global-tree-sitter-mode)
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
-
-(use-package tree-sitter-langs
-  :defer t
-  :if (fboundp 'module-load)) ; 需要Emacs 支持 Dynamic Module
+;; 语法高亮：Emacs 29+ 已内置 treesit，不再需要 tree-sitter / tree-sitter-langs 包。
+;; 需要的语言语法用 M-x treesit-install-language-grammar 安装（typst 已装好）。
 
 ;; 快速选中区块 拓展顺序 字符 单词 句子 代码块 函数 全文件，按一次快捷键拓展一次
 (use-package expand-region
@@ -464,9 +455,9 @@
   :custom
   (easysession-mode-line-misc-info t)  ; Display the session in the modeline
   (easysession-save-interval (* 10 60))  ; Save every 10 minutes
-  ;; :init
+  :init
   ;; (add-hook 'emacs-startup-hook #'easysession-load-including-geometry 102)
-  ;; (add-hook 'emacs-startup-hook #'easysession-save-mode 103)
+  (add-hook 'emacs-startup-hook #'easysession-save-mode 103)
   )
 
 (global-set-key (kbd "C-c m l") 'easysession-switch-to)
@@ -514,21 +505,22 @@
   :demand t)
 
 (use-package treemacs
+  :defer t
+  :custom
+  (treemacs-width 30)
+  (treemacs-expand-after-init nil)
+  (treemacs-space-between-root-nodes nil)
+  :hook (treemacs-mode . treemacs-follow-mode)
+  :bind ("C-c d" . treemacs)
   :config
-  (treemacs-follow-mode t)
   (treemacs-git-mode 'simple)
-  (treemacs-hide-gitignored-files-mode t)
-  (setq treemacs-width 30)
-  (setq treemacs-expand-after-init nil)
-  (setq treemacs-space-between-root-nodes nil))
+  (treemacs-hide-gitignored-files-mode t))
 
 ;; 文件树 安装字体 https://www.nerdfonts.com/font-downloads
 (use-package treemacs-nerd-icons
-  :demand t
+  :after treemacs
   :config
-  (treemacs-load-theme "nerd-icons")
-  :bind
-  (("C-c d" . treemacs)))
+  (treemacs-load-theme "nerd-icons"))
 
 ;; 资源管理器 https://www.emacswiki.org/emacs/NeoTree_%E4%B8%AD%E6%96%87wiki
 ;; neotree 窗口有效
@@ -638,12 +630,7 @@
                      (window-height . 0.4))))
   )
 
-;; 使用 shell-pop 的时候避免退出 Emacs 时再确认一次
 (require 'cl-lib)
-(defun my-no-query-kill-emacs (orig-fun &rest args)
-  (cl-letf (((symbol-function #'process-list) (lambda ())))
-    (apply orig-fun args)))
-(advice-add 'save-buffers-kill-emacs :around #'my-no-query-kill-emacs)
 
 
 ;;------------------------------------------------------------------------------
@@ -663,7 +650,6 @@
   (define-key symbol-overlay-map "?" symbol-overlay-map))
 
 (use-package hl-todo
-  :load-path "~/.emacs.d/plugins/hl-todo"
   :config
   (global-hl-todo-mode t))
 
@@ -697,6 +683,7 @@
           dart-mode
           racket-mode
           swift-mode
+          typescript-mode
           typescript-ts-mode
           typst-ts-mode) . eglot-ensure)
   :config
@@ -888,28 +875,11 @@
     "C-c k e" "解释选中代码"
     "C-c k a" "追问")
   :config
-  (setq ai-explain-backend 'pi)
+  (setq ai-explain-backend 'pi
+        ai-explain-hide-markup t)
   :bind (("C-c k e" . ai-explain-region)
          ("C-c k a" . ai-explain-ask)))
 
-;; 配置 API KEY: 在 ~/.bashrc 或 ~/.zshrc 等配置文件中导出 api-key
-;; export DEEPSEEK_API_KEY="sk-your-key-here"
-(use-package gptel
-  :ensure t
-  :config
-  ;; DeepSeek backend (uses api.deepseek.com)
-  (gptel-make-deepseek "DeepSeek"
-    :stream t
-    :key (lambda () (getenv "DEEPSEEK_API_KEY")))
-  ;; Set as default
-  (setq gptel-model  'deepseek-v4-pro
-        gptel-backend (gptel-get-backend "DeepSeek"))
-  ;; 关闭回复后的黄色闪烁高亮
-  (remove-hook 'gptel-post-response-functions 'pulse-momentary-highlight-region)
-  :bind
-  (("C-c SPC 1" . gptel)
-   ("C-c SPC 2" . gptel-menu)
-   ("C-c SPC 3" . gptel-send)))
 
 ;;------------------------------------------------------------------------------
 ;;;; 借鉴 Doom Emacs 的插件
@@ -939,9 +909,7 @@
 (use-package git-timemachine
   :bind ("C-c g t" . git-timemachine))
 
-;; 根据文件内容自动探测缩进风格（空格/tab、宽度）
-(use-package dtrt-indent
-  :hook (after-init . dtrt-indent-global-mode))
+;; 缩进风格统一交给 editorconfig（dtrt-indent 会与它互相覆盖，已移除）
 
 ;; 遵循项目根目录 .editorconfig 文件的缩进设置（Emacs 30 内置）
 (use-package editorconfig
@@ -1092,7 +1060,10 @@
 ;; 一键格式化
 (defun my-indent-whole ()
   (interactive)
-  (indent-region (point-min) (point-max))
+  ;; eglot 连接时用 LSP 格式化，否则退回 indent-region
+  (if (and (fboundp 'eglot-managed-p) (eglot-managed-p))
+      (eglot-format-buffer)
+    (indent-region (point-min) (point-max)))
   (message "format success"))
 (global-set-key [f10] 'my-indent-whole)
 
@@ -1189,13 +1160,13 @@ modified buffers or special buffers."
 ;; Windows Terminal 下 Ctrl+Space 无效，但是这个很常用，所以映射一下
 (global-set-key "\e[9~" 'set-mark-command)
 
-;; 修改光标所在括号内的块的背景颜色
-(use-package highlight-blocks
-  :config
-  (setq highlight-blocks-delay 0.05
-        ;;设置背景颜色，第一个是显示的颜色
-        highlight-blocks--rainbow-colors '("#3C3B3A" "#000000" "#464641")
-        highlight-blocks-max-face-count (length highlight-blocks--rainbow-colors)))
+;; (use-package highlight-blocks
+;;   :hook (prog-mode . highlight-blocks-mode)
+;;   :config
+;;   (setq highlight-blocks-delay 0.05
+;;         ;;设置背景颜色，第一个是显示的颜色
+;;         highlight-blocks--rainbow-colors '("#3C3B3A" "#000000" "#464641")
+;;         highlight-blocks-max-face-count (length highlight-blocks--rainbow-colors)))
 
 ;;------------------------------------------------------------------------------
 ;;;; 外观配置
@@ -1227,10 +1198,3 @@ modified buffers or special buffers."
 ;; Custom 自动写入的配置单独放到仓库外的文件，避免污染 git 历史
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file 'noerror)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-vc-selected-packages
-   '((ai-explain :url "https://github.com/LiuYinCarl/ai-explain.git"))))
