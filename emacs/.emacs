@@ -313,6 +313,39 @@
   (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.md\\'"       . markdown-mode)))
 
+;; 阅读时渲染 Markdown，光标移到哪个元素就跟出该元素的源码 https://github.com/Thysrael/markdown-ts-appear
+;; 依赖：Emacs 31+ 的 markdown-ts-mode + tree-sitter 的 markdown / markdown-inline 语法
+;; 语法已用 M-x treesit-install-language-grammar 装到 ~/.emacs.d/tree-sitter/
+;; 仅作用于 markdown-ts-mode；当前 .md 默认仍是 markdown-mode，用 C-c m d 切换过去体验
+;; 想默认用渲染模式：把上面两条 auto-mode-alist 的 markdown-mode 改成 markdown-ts-mode
+(use-package markdown-ts-appear
+  :ensure t
+  :pin nongnu
+  :hook (markdown-ts-mode . markdown-ts-appear-mode)
+  :config
+  (setq markdown-ts-appear-code-fence-style 'connected  ;; 代码块用 Unicode 连线代替 ```
+        markdown-ts-appear-heading-bullets '("◉" "○" "◆" "◇" "▪" "▫"))
+  ;; 数学公式预览（需要 mathjax/latex-to-svg），默认关闭
+  ;; (setq markdown-ts-appear-enable-math-preview t)
+  )
+
+;; markdown-ts-mode 是 Emacs 31 内置的，但未带 autoload 声明，手动注册一下
+(autoload 'markdown-ts-mode "markdown-ts-mode" "Major mode for Markdown." t)
+
+;; markdown 里的括号“变斜”：不是字体设置，是 face 的 :slant 被设成了 italic
+;; doom-nord 把 font-lock-string-face 设成斜体 -> 链接目的地 (url) 的括号跟着斜；
+;; 内置 markdown-ts-mode 的 emphasis 又是 defface 直接 inherit italic。
+;; 想保留“强调=斜体”的话，把 markdown-ts-emphasis 那行注释掉即可。
+(with-eval-after-load 'markdown-ts-mode
+  (set-face-attribute 'markdown-ts-link-destination nil :slant 'normal)
+  (set-face-attribute 'markdown-ts-emphasis nil :slant 'normal)
+  ;; 下面三个继承 doom-nord 里斜体的 font-lock-string-face / variable-name-face
+  (set-face-attribute 'markdown-ts-latex nil :slant 'normal)
+  (set-face-attribute 'markdown-ts-entity-reference nil :slant 'normal)
+  (set-face-attribute 'markdown-ts-numeric-character-reference nil :slant 'normal))
+(with-eval-after-load 'markdown-mode
+  (set-face-attribute 'markdown-url-face nil :slant 'normal))
+
 (use-package typescript-mode
   :defer t)
 
@@ -1101,6 +1134,14 @@
     (message (concat "copy symbol: " sym-name))
     (kill-new sym-name)))
 
+(defun my-toggle-markdown-ts-mode ()
+  "在当前 buffer 的 markdown-mode 和 markdown-ts-mode 之间切换。"
+  (interactive)
+  (if (derived-mode-p 'markdown-ts-mode)
+      (markdown-mode)
+    (require 'markdown-ts-mode)
+    (markdown-ts-mode)))
+
 (defun my-kill-all-file-buffers ()
   "Kills all buffers that are open to files. Does not kill
 modified buffers or special buffers."
@@ -1151,6 +1192,7 @@ modified buffers or special buffers."
 (global-set-key (kbd "C-c m k") 'my-kill-all-file-buffers)
 (global-set-key (kbd "C-c m f") 'my-query-and-replace)
 (global-set-key (kbd "C-c m a") 'align-regexp)
+(global-set-key (kbd "C-c m d") 'my-toggle-markdown-ts-mode)
 (global-set-key (kbd "C-c z")   'chinese-punctuation-to-ascii)
 (global-set-key (kbd "M-s SPC")   'delete-horizontal-space)
 
