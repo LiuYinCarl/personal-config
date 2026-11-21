@@ -1314,23 +1314,6 @@ modified buffers or special buffers."
 ;;------------------------------------------------------------------------------
 ;;;; 自动生成的东西
 ;;------------------------------------------------------------------------------
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(git-gutter:update-interval 1.0)
- '(package-selected-packages
-   '(0blayout 0x0 2bit ac-emmet ace-pinyin benchmark-init better-jumper
-              bm centaur-tabs cmake-mode company consult counsel
-              dart-mode dashboard deadgrep doom-modeline doom-themes
-              easysession exec-path-from-shell expand-region fanyi
-              git-gutter go-mode gptel highlight-blocks
-              highlight-indent-guides highlight-numbers iedit
-              imenu-list lua-mode magit manage-minor-mode
-              markdown-mode mistty move-dup multiple-cursors neotree
-              olivetti orderless quickrun racket-mode
-              rainbow-delimiters rg rust-mode shell-pop
-              sideline-flymake symbol-overlay tree-sitter-langs
-              treemacs-nerd-icons tuareg typescript-mode vertico vundo
-              which-key windresize ws-butler yasnippet-snippets)))
+;; Custom 自动写入的配置单独放到仓库外的文件，避免污染 git 历史
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file 'noerror)
