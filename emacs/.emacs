@@ -107,16 +107,93 @@
 ;;------------------------------------------------------------------------------
 
 (require 'package)
-;; 官方源 安装 Emacs 的机器在外网时使用
-;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-;; (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
-;; 腾讯源 安装 Emacs 的机器在国内时使用
-;; (add-to-list 'package-archives '("gnu" . "http://mirrors.cloud.tencent.com/elpa/gnu/"))
-;; (add-to-list 'package-archives '("melpa" . "http://mirrors.cloud.tencent.com/elpa/melpa/"))
-;; USTC 源
-(setq package-archives '(("gnu" . "https://mirrors.ustc.edu.cn/elpa/gnu/")
-                         ("melpa" . "https://mirrors.ustc.edu.cn/elpa/melpa/")
-                         ("nongnu" . "https://mirrors.ustc.edu.cn/elpa/nongnu/")))
+
+;; USTC / 清华源目前对本机返回 403(镜像站防火墙拒绝下载 archive-contents), 因此
+;; 这里配置多个国内镜像: 启动时按优先级探测, 用第一个可用的, 结果缓存在
+;; ~/.emacs.d/elpa-mirror 中(之后启动只探测缓存的镜像, 一次 HEAD 请求, 几乎无感)。
+;; 手动换源: M-x my/elpa-switch-mirror
+;; 官方源 安装 Emacs 的机器在外网时使用: (setq my/elpa-use-official t)
+(defvar my/elpa-official-archives
+  '(("gnu"          . "https://elpa.gnu.org/packages/")
+    ("melpa"        . "https://melpa.org/packages/")
+    ("melpa-stable" . "https://stable.melpa.org/packages/")
+    ("nongnu"       . "https://elpa.nongnu.org/nongnu/"))
+  "官方源列表。")
+
+(defvar my/elpa-use-official nil
+  "非 nil 时使用官方源 `my/elpa-official-archives', 不再探测国内镜像。")
+
+(defvar my/elpa-mirrors
+  '("https://mirrors.bfsu.edu.cn/elpa/"         ; 北外, 全量, 快
+    "https://mirror.sjtu.edu.cn/emacs-elpa/"    ; 上交, 全量, 快
+    "https://mirrors.cloud.tencent.com/elpa/"   ; 腾讯云, 快但索引偏旧
+    "https://mirrors.zju.edu.cn/elpa/"          ; 浙大, 全量但略慢
+    "https://mirrors.ustc.edu.cn/elpa/"         ; 中科大(当前 403, 恢复后自动可用)
+    "https://mirrors.tuna.tsinghua.edu.cn/elpa/") ; 清华(当前 403, 同上)
+  "ELPA 镜像列表, 按优先级从高到低排列。")
+
+(defvar my/elpa-mirror-cache-file
+  (expand-file-name "elpa-mirror" user-emacs-directory)
+  "缓存当前使用的 ELPA 镜像。")
+
+(defun my/elpa-mirror-alive-p (mirror)
+  "MIRROR 能取到 archive-contents 时返回非 nil (只发 HEAD, 不下载内容)。"
+  (condition-case nil
+      (let ((url-request-method "HEAD")
+            (url-show-status nil)
+            (url-automatic-caching nil))
+        (with-current-buffer (url-retrieve-synchronously
+                              (concat mirror "gnu/archive-contents") t t 5)
+          (prog1 (eq (bound-and-true-p url-http-response-status) 200)
+            (kill-buffer))))
+    (error nil)))
+
+(defun my/elpa-set-archives (mirror)
+  "把 `package-archives' 全部指向 MIRROR。"
+  (setq package-archives
+        `(("gnu"    . ,(concat mirror "gnu/"))
+          ("melpa"  . ,(concat mirror "melpa/"))
+          ("nongnu" . ,(concat mirror "nongnu/")))))
+
+(defun my/elpa-select-mirror ()
+  "确定 `package-archives': 官方源或探测到的可用镜像。"
+  (if my/elpa-use-official
+      (prog1 "官方源"
+        (setq package-archives my/elpa-official-archives))
+    (let* ((cached (and (file-readable-p my/elpa-mirror-cache-file)
+                        (with-temp-buffer
+                          (insert-file-contents my/elpa-mirror-cache-file)
+                          (string-trim (buffer-string)))))
+           (candidates (if (member cached my/elpa-mirrors)
+                           (cons cached (remove cached my/elpa-mirrors))
+                         my/elpa-mirrors))
+           (mirror (or (catch 'found
+                         (dolist (m candidates)
+                           (when (my/elpa-mirror-alive-p m) (throw 'found m))))
+                       (car my/elpa-mirrors))))
+      (unless (equal mirror cached)
+        (with-temp-file my/elpa-mirror-cache-file (insert mirror)))
+      (my/elpa-set-archives mirror)
+      mirror)))
+
+(defun my/elpa-switch-mirror ()
+  "手动选择 ELPA 源(含官方源)并刷新包索引。"
+  (interactive)
+  (let* ((official "官方源")
+         (choice (completing-read "ELPA 源: " (cons official my/elpa-mirrors) nil t)))
+    (if (equal choice official)
+        (progn
+          (setq my/elpa-use-official t)
+          (setq package-archives my/elpa-official-archives)
+          (message "已切换为官方源(仅本次生效, 要永久生效请在 .emacs 里设置 my/elpa-use-official"))
+      (setq my/elpa-use-official nil)
+      (with-temp-file my/elpa-mirror-cache-file (insert choice))
+      (my/elpa-set-archives choice))
+    (setq package-archive-contents nil)
+    (package-refresh-contents)
+    (message "ELPA 源: %s" choice)))
+
+(message "ELPA 源: %s" (my/elpa-select-mirror))
 
 
 (setq package-check-signature nil) ;;个别时候会出现签名校验失败
@@ -1237,6 +1314,23 @@ modified buffers or special buffers."
 ;;------------------------------------------------------------------------------
 ;;;; 自动生成的东西
 ;;------------------------------------------------------------------------------
-;; Custom 自动写入的配置单独放到仓库外的文件，避免污染 git 历史
-(setq custom-file "~/.emacs.d/custom.el")
-(load custom-file 'noerror)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(git-gutter:update-interval 1.0)
+ '(package-selected-packages
+   '(0blayout 0x0 2bit ac-emmet ace-pinyin benchmark-init better-jumper
+              bm centaur-tabs cmake-mode company consult counsel
+              dart-mode dashboard deadgrep doom-modeline doom-themes
+              easysession exec-path-from-shell expand-region fanyi
+              git-gutter go-mode gptel highlight-blocks
+              highlight-indent-guides highlight-numbers iedit
+              imenu-list lua-mode magit manage-minor-mode
+              markdown-mode mistty move-dup multiple-cursors neotree
+              olivetti orderless quickrun racket-mode
+              rainbow-delimiters rg rust-mode shell-pop
+              sideline-flymake symbol-overlay tree-sitter-langs
+              treemacs-nerd-icons tuareg typescript-mode vertico vundo
+              which-key windresize ws-butler yasnippet-snippets)))
